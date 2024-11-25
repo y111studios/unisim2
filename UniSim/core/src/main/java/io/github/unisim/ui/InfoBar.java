@@ -59,6 +59,8 @@ public class InfoBar {
     buildingCounterCells[2] = buildingCountersTable.add(buildingCounterLabels[2]);
     buildingCounterCells[3] = buildingCountersTable.add(buildingCounterLabels[3]);
 
+    scoreLabel = new Label(world.satisfactionTracker.getSatisfaction() + "%", skin);
+
     // Info Table
     timerLabel = new Label(timer.getRemainingTime(), skin);
     infoTable.center().center();
@@ -97,6 +99,7 @@ public class InfoBar {
    * Called when the UI needs to be updated, usually on every frame.
    */
   public void update() {
+    scoreLabel.setText(world.satisfactionTracker.getSatisfaction() + "%");
     timerLabel.setText(timer.getRemainingTime());
     buildingCounterLabels[0].setText("Recreation: "
         + Integer.toString(world.getBuildingCount(BuildingType.RECREATION)));

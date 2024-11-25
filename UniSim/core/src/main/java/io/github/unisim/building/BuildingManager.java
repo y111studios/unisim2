@@ -222,4 +222,8 @@ public class BuildingManager {
         building.flipped, false
     );
   }
+
+  public Iterable<Building> getBuildings() {
+    return buildings;
+  }
 }

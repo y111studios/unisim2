@@ -19,6 +19,7 @@ import io.github.unisim.Point;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingManager;
 import io.github.unisim.building.BuildingType;
+import io.github.unisim.scoring.SatisfactionTracker;
 
 /**
  * A class that holds all the gameplay elements of the game UniSim.
@@ -51,6 +52,7 @@ public class World {
   private Point topRight;
   public Building selectedBuilding;
   public boolean selectedBuildingUpdated;
+  public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
 
   /**
    * Create a new World.
@@ -70,10 +72,16 @@ public class World {
     map.dispose();
   }
 
+  public void update() {
+    satisfactionTracker.updateSatisfaction(buildingManager.getBuildings());
+  }
+
   /**
    * Steps the world forward by delta time and renders the world.
    */
   public void render() {
+    update();
+
     viewport.apply();
 
     ScreenUtils.clear(0.59f, 0.72f, 1f, 1f);
@@ -333,7 +341,8 @@ public class World {
       new Building(
         selectedBuilding.texture, selectedBuilding.textureScale, selectedBuilding.textureOffset,
         selectedBuilding.location.getNewPoint(), selectedBuilding.size.getNewPoint(),
-        selectedBuilding.flipped, selectedBuilding.type, selectedBuilding.name
+        selectedBuilding.flipped, selectedBuilding.type, selectedBuilding.name,
+        selectedBuilding.capacity
       )
     );
     selectedBuilding = null;
