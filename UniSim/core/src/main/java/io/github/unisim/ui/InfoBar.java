@@ -27,7 +27,7 @@ public class InfoBar {
   private Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
   private Label scoreLabel = new Label("86%", skin);
   private Label titleLabel = new Label("UniSim", skin);
-  private Label moneyLabel = new Label("Money: $1000", skin);
+  private Label moneyLabel;
   private Label timerLabel;
   private Texture pauseTexture = new Texture("ui/pause.png");
   private Texture playTexture = new Texture("ui/play.png");
@@ -62,6 +62,7 @@ public class InfoBar {
     buildingCounterCells[3] = buildingCountersTable.add(buildingCounterLabels[3]);
 
     scoreLabel = new Label(world.satisfactionTracker.getSatisfaction() + "%", skin);
+    moneyLabel = new Label("Money: $" + world.moneyTracker.getMoney(), skin);
 
     // Info Table
     timerLabel = new Label(timer.getRemainingTime(), skin);
@@ -103,6 +104,7 @@ public class InfoBar {
    */
   public void update() {
     scoreLabel.setText(world.satisfactionTracker.getSatisfaction() + "%");
+    moneyLabel = new Label("Money: $" + world.moneyTracker.getMoney(), skin);
     timerLabel.setText(timer.getRemainingTime());
     buildingCounterLabels[0].setText("Recreation: "
         + Integer.toString(world.getBuildingCount(BuildingType.RECREATION)));
