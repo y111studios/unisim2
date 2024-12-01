@@ -20,6 +20,14 @@ public class MoneyTracker {
         return money;
     }
 
+    public boolean subtractMoney(int amount) {
+        if (money < amount) {
+            return false;
+        }
+        money -= amount;
+        return true;
+    }
+
     public void updateMoney() {
         if (GameState.paused) {
             return;

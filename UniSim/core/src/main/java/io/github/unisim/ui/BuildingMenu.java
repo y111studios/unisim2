@@ -54,7 +54,8 @@ public class BuildingMenu {
         false,
         BuildingType.EATING,
         "Canteen",
-        15
+        15,
+        100
     ));
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/library.png")),
@@ -65,7 +66,8 @@ public class BuildingMenu {
         false,
         BuildingType.LEARNING,
         "Library",
-        100
+        100,
+        1000
     ));
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/basketballCourt.png")),
@@ -76,7 +78,8 @@ public class BuildingMenu {
         false,
         BuildingType.RECREATION,
         "Basketball Court",
-        10
+        10,
+        500
     ));
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/studentHousing.png")),
@@ -87,7 +90,8 @@ public class BuildingMenu {
         false,
         BuildingType.SLEEPING,
         "Student Accomodation",
-        100
+        100,
+        1000
     ));
 
     table = new Table();
