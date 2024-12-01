@@ -19,6 +19,7 @@ import io.github.unisim.Point;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingManager;
 import io.github.unisim.building.BuildingType;
+import io.github.unisim.finance.MoneyTracker;
 import io.github.unisim.scoring.SatisfactionTracker;
 
 /**
@@ -53,6 +54,7 @@ public class World {
   public Building selectedBuilding;
   public boolean selectedBuildingUpdated;
   public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
+  public MoneyTracker moneyTracker = new MoneyTracker(500);
 
   /**
    * Create a new World.
