@@ -104,7 +104,7 @@ public class InfoBar {
    */
   public void update() {
     scoreLabel.setText(world.satisfactionTracker.getSatisfaction() + "%");
-    moneyLabel = new Label("Money: $" + world.moneyTracker.getMoney(), skin);
+    moneyLabel.setText("Money: $" + world.moneyTracker.getMoney());
     timerLabel.setText(timer.getRemainingTime());
     buildingCounterLabels[0].setText("Recreation: "
         + Integer.toString(world.getBuildingCount(BuildingType.RECREATION)));

@@ -75,6 +75,7 @@ public class World {
   }
 
   public void update() {
+    moneyTracker.updateMoney();
     satisfactionTracker.updateSatisfaction(buildingManager.getBuildings());
   }
 
