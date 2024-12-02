@@ -243,4 +243,17 @@ public class BuildingManager {
   public Iterable<Building> getBuildings() {
     return buildings;
   }
+
+  public Building getBuildingAt(Point location) {
+    for (Building building : buildings) {
+        if (building.location.x > location.x || building.location.x + building.size.x < location.x) {
+            continue;
+        }
+        if (building.location.y > location.y || building.location.y + building.size.y < location.y) {
+            continue;
+        }
+        return building;
+    }
+    return null;
+  }
 }

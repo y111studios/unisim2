@@ -132,6 +132,19 @@ public class World {
       highlightRegion(btmLeft, topRight, canBuild ? tileHighlight : errTileHighlight);
       tileHighlightBatch.end();
     }
+    if (isRemovalMode) {
+        Building building = buildingManager.getBuildingAt(mouseGridPos);
+        if (building != null) {
+            Point topRight = new Point(
+                building.location.x + building.size.x - 1,
+                building.location.y + building.size.y - 1
+            );
+            tileHighlightBatch.setProjectionMatrix(camera.combined);
+            tileHighlightBatch.begin();
+            highlightRegion(building.location, topRight, errTileHighlight);
+            tileHighlightBatch.end();
+        }
+    }
 
     // render buildings after all map related rendering
     buildingBatch.setProjectionMatrix(camera.combined);
@@ -351,17 +364,7 @@ public class World {
   }
 
   public boolean removeBuilding(Point location) {
-    Building building = null;
-    for (Building b : buildingManager.getBuildings()) {
-        if (b.location.x > location.x || b.location.x + b.size.x < location.x) {
-            continue;
-        }
-        if (b.location.y > location.y || b.location.y + b.size.y < location.y) {
-            continue;
-        }
-        building = b;
-        break;
-    }
+    Building building = buildingManager.getBuildingAt(location);
     if (building == null) {
         return false;
     }
