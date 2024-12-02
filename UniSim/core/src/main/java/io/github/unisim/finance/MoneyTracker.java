@@ -35,10 +35,12 @@ public class MoneyTracker {
         Instant currentTime = Instant.now();
         Duration timeSinceLastUpdate = Duration.between(lastUpdateTime, currentTime);
         if (timeSinceLastUpdate.compareTo(MONEY_UPDATE_INTERVAL) >= 0) {
-            System.out.println("Updating money");
-            money += MONEY_UPDATE_AMOUNT;
-            System.out.println("Money: " + money);
+            addMoney(MONEY_UPDATE_AMOUNT);
             lastUpdateTime = currentTime;
         }
+    }
+
+    public void addMoney(int amount) {
+        money += amount;
     }
 }

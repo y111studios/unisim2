@@ -373,6 +373,7 @@ public class World {
     if (building == null) {
         return false;
     }
+    moneyTracker.addMoney((int) (building.cost * 0.25f));
     boolean removed = buildingManager.removeBuilding(building);
     if (!removed) {
         return false;
