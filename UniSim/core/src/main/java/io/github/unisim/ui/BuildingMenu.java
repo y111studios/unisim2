@@ -105,6 +105,9 @@ public class BuildingMenu {
           if (world.selectedBuilding == buildings.get(buildingIndex)) {
             world.selectedBuilding = null;
           } else {
+            if (world.isRemovalMode) {
+                return;
+            }
             world.selectedBuilding = buildings.get(buildingIndex);
             buildingInfoLabel.setText(world.selectedBuilding.name + " - Press 'R' to rotate");
             if (world.selectedBuilding.flipped) {
