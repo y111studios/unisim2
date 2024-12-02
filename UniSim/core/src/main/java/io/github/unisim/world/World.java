@@ -55,6 +55,7 @@ public class World {
   public boolean selectedBuildingUpdated;
   public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
   public MoneyTracker moneyTracker = new MoneyTracker(500);
+  public boolean isRemovalMode = false;
 
   /**
    * Create a new World.
@@ -134,6 +135,19 @@ public class World {
       tileHighlightBatch.begin();
       highlightRegion(btmLeft, topRight, canBuild ? tileHighlight : errTileHighlight);
       tileHighlightBatch.end();
+    }
+    if (isRemovalMode) {
+        Building building = buildingManager.getBuildingAt(mouseGridPos);
+        if (building != null) {
+            Point topRight = new Point(
+                building.location.x + building.size.x - 1,
+                building.location.y + building.size.y - 1
+            );
+            tileHighlightBatch.setProjectionMatrix(camera.combined);
+            tileHighlightBatch.begin();
+            highlightRegion(building.location, topRight, errTileHighlight);
+            tileHighlightBatch.end();
+        }
     }
 
     // render buildings after all map related rendering
@@ -351,6 +365,24 @@ public class World {
       )
     );
     selectedBuilding = null;
+    return true;
+  }
+
+  public boolean removeBuilding(Point location) {
+    Building building = buildingManager.getBuildingAt(location);
+    if (building == null) {
+        return false;
+    }
+    boolean removed = buildingManager.removeBuilding(building);
+    if (!removed) {
+        return false;
+    }
+    TiledMapTileLayer mapTiles = getMapTiles();
+    for (int x = building.location.x; x < building.location.x + building.size.x; x++) {
+      for (int y = building.location.y; y < building.location.y + building.size.y; y++) {
+        GameState.buildableTiles.add(mapTiles.getCell(x, y).getTile().getId());
+      }
+    }
     return true;
   }
 
