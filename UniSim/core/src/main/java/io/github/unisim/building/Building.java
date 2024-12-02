@@ -33,6 +33,8 @@ public class Building {
    * @param flipped - Whether to render a flipped variant of the building
    * @param type - The category of building, must be a BuildingType
    * @param name - The name of the building to display when selected
+   * @param capacity - The number of people the building can hold
+   * @param cost - The cost of the building in currency
    */
   public Building(Texture texture, float textureScale, Vector2 textureOffset, Point location,
       Point size, Boolean flipped, BuildingType type, String name, int capacity, int cost) {
