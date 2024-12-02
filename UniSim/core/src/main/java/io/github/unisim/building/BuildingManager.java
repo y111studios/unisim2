@@ -147,6 +147,15 @@ public class BuildingManager {
     return i;
   }
 
+  public boolean removeBuilding(Building building) {
+    boolean removed = buildings.remove(building);
+    if (!removed) {
+      return false;
+    }
+    decrementCounters(building);
+    return true;
+  }
+
   /**
    * Creates a counter for the building's type if it is the first to be placed,
    * otherwise increments the counter for that type by one.
@@ -162,6 +171,14 @@ public class BuildingManager {
       return;
     }
     buildingCounts.put(building.type, buildingCounts.get(building.type) + 1);
+  }
+
+  private void decrementCounters(Building building) {
+    Integer count = buildingCounts.get(building.type);
+    if (count == null) {
+        return;
+    }
+    buildingCounts.put(building.type, count - 1);
   }
 
   /**

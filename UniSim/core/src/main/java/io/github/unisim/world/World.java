@@ -53,6 +53,7 @@ public class World {
   public Building selectedBuilding;
   public boolean selectedBuildingUpdated;
   public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
+  public boolean isRemovalMode = false;
 
   /**
    * Create a new World.
@@ -346,6 +347,34 @@ public class World {
       )
     );
     selectedBuilding = null;
+    return true;
+  }
+
+  public boolean removeBuilding(Point location) {
+    Building building = null;
+    for (Building b : buildingManager.getBuildings()) {
+        if (b.location.x > location.x || b.location.x + b.size.x < location.x) {
+            continue;
+        }
+        if (b.location.y > location.y || b.location.y + b.size.y < location.y) {
+            continue;
+        }
+        building = b;
+        break;
+    }
+    if (building == null) {
+        return false;
+    }
+    boolean removed = buildingManager.removeBuilding(building);
+    if (!removed) {
+        return false;
+    }
+    TiledMapTileLayer mapTiles = getMapTiles();
+    for (int x = building.location.x; x < building.location.x + building.size.x; x++) {
+      for (int y = building.location.y; y < building.location.y + building.size.y; y++) {
+        GameState.buildableTiles.add(mapTiles.getCell(x, y).getTile().getId());
+      }
+    }
     return true;
   }
 
