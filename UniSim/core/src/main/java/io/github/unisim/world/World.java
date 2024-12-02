@@ -19,6 +19,7 @@ import io.github.unisim.Point;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingManager;
 import io.github.unisim.building.BuildingType;
+import io.github.unisim.finance.MoneyTracker;
 import io.github.unisim.scoring.SatisfactionTracker;
 
 /**
@@ -53,6 +54,7 @@ public class World {
   public Building selectedBuilding;
   public boolean selectedBuildingUpdated;
   public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
+  public MoneyTracker moneyTracker = new MoneyTracker(500);
   public boolean isRemovalMode = false;
 
   /**
@@ -74,6 +76,7 @@ public class World {
   }
 
   public void update() {
+    moneyTracker.updateMoney();
     satisfactionTracker.updateSatisfaction(buildingManager.getBuildings());
   }
 
@@ -120,6 +123,7 @@ public class World {
       topRight = new Point(btmLeft.x + buildingSize.x - 1, btmLeft.y + buildingSize.y - 1);
       canBuild = buildingManager.isBuildable(btmLeft, topRight, getMapTiles());
       if (selectedBuilding != null) {
+        canBuild &= moneyTracker.getMoney() >= selectedBuilding.cost;
         selectedBuilding.location = btmLeft;
       }
       buildingManager.setPreviewBuilding(selectedBuilding);
@@ -351,12 +355,13 @@ public class World {
     if (!canBuild) {
       return false;
     }
+    moneyTracker.subtractMoney(selectedBuilding.cost);
     buildingManager.placeBuilding(
       new Building(
         selectedBuilding.texture, selectedBuilding.textureScale, selectedBuilding.textureOffset,
         selectedBuilding.location.getNewPoint(), selectedBuilding.size.getNewPoint(),
         selectedBuilding.flipped, selectedBuilding.type, selectedBuilding.name,
-        selectedBuilding.capacity
+        selectedBuilding.capacity, selectedBuilding.cost
       )
     );
     selectedBuilding = null;
