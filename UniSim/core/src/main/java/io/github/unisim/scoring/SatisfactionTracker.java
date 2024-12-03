@@ -1,11 +1,12 @@
 package io.github.unisim.scoring;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingType;
 
-public class SatisfactionTracker {
+public class SatisfactionTracker implements ScoringObject {
     private float satisfaction;
 
     public SatisfactionTracker() {
@@ -41,5 +42,18 @@ public class SatisfactionTracker {
                 / buildingCounts.getOrDefault(BuildingType.SLEEPING, 1.0f);
         float intermediateSatisfaction = (teachFactor + eatingFactor + funFactor) / 3;
         satisfaction = 10000f * intermediateSatisfaction / sumStudents;
+    }
+
+    @Override
+    public float getScore() {
+        if (Float.isFinite(satisfaction)) {
+            return satisfaction;
+        }
+        return 0;
+    }
+
+    @Override
+    public Duration getUpdateInterval() {
+        return Duration.ofSeconds(1);
     }
 }

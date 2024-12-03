@@ -21,6 +21,7 @@ import io.github.unisim.building.BuildingManager;
 import io.github.unisim.building.BuildingType;
 import io.github.unisim.finance.MoneyTracker;
 import io.github.unisim.scoring.SatisfactionTracker;
+import io.github.unisim.scoring.ScoreTracker;
 
 /**
  * A class that holds all the gameplay elements of the game UniSim.
@@ -55,6 +56,7 @@ public class World {
   public boolean selectedBuildingUpdated;
   public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
   public MoneyTracker moneyTracker = new MoneyTracker(500);
+  public ScoreTracker scoreTracker = new ScoreTracker();
   public boolean isRemovalMode = false;
 
   /**
@@ -65,6 +67,7 @@ public class World {
     initIsometricTransform();
     buildingManager = new BuildingManager(isoTransform);
     selectedBuilding = null;
+    scoreTracker.addScoreObject(satisfactionTracker);
   }
 
   /**
@@ -78,6 +81,8 @@ public class World {
   public void update() {
     moneyTracker.updateMoney();
     satisfactionTracker.updateSatisfaction(buildingManager.getBuildings());
+    scoreTracker.update();
+    System.out.println("Score: " + scoreTracker.getScore());
   }
 
   /**
