@@ -15,10 +15,13 @@ public class Leaderboard {
     private List<LeaderboardEntry> entries;
 
     public Leaderboard() {
-        if (!fileExists()) {
+        if (fileExists()) {
+            load();
+        } else {
             createFile();
+            entries = new ArrayList<>(MAX_ENTRIES);
+            save();
         }
-        load();
     }
 
     public void save() {
