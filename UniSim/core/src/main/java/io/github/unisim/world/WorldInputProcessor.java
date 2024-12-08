@@ -13,6 +13,10 @@ public class WorldInputProcessor implements InputProcessor {
   private int[] cursorPosWhenClicked = new int[2];
   private boolean clickedOnWorld = false;
   private boolean draggedSinceClick = true;
+  private boolean moveUp = false;
+  private boolean moveDown = false;
+  private boolean moveLeft = false;
+  private boolean moveRight = false;
 
   public WorldInputProcessor(World world) {
     this.world = world;
@@ -40,6 +44,18 @@ public class WorldInputProcessor implements InputProcessor {
         world.isRemovalMode ^= true;
         world.selectedBuilding = null;
         break;
+      case Keys.W:
+        moveUp = true;
+        break;
+      case Keys.S:
+        moveDown = true;
+        break;
+      case Keys.A: 
+        moveLeft = true;
+        break;
+      case Keys.D: 
+        moveRight = true;
+        break;
       default:
         break;
     }
@@ -49,6 +65,22 @@ public class WorldInputProcessor implements InputProcessor {
 
   @Override
   public boolean keyUp(int keycode) {
+    switch (keycode) {
+      case Keys.W:
+        moveUp = false;
+        break;
+      case Keys.S:
+        moveDown = false;
+        break;
+      case Keys.A: 
+        moveLeft = false;
+        break;
+      case Keys.D: 
+        moveRight = false;
+        break;
+      default:
+        break;
+    }
     return false;
   }
 
@@ -126,5 +158,21 @@ public class WorldInputProcessor implements InputProcessor {
   public boolean scrolled(float amountX, float amountY) {
     world.zoom(amountY);
     return true;
+  }
+
+
+  public void update(float dt){
+    if (moveUp) {
+      world.pan(0, 5);
+    }
+    if (moveDown) {
+      world.pan(0, -5);
+    }
+    if (moveLeft) {
+      world.pan(-5, 0);
+    }
+    if (moveRight) {
+      world.pan(5, 0);
+    }
   }
 }

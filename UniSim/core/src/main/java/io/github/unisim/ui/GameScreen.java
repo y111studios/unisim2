@@ -55,6 +55,7 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(gameOverMenu.getInputProcessor());
       }
     }
+    ((WorldInputProcessor) worldInputProcessor).update(dt);
     stage.act(dt);
     infoBar.update();
     buildingMenu.update();
@@ -64,6 +65,7 @@ public class GameScreen implements Screen {
       world.pan((150 - world.getCameraPos().x) / 10, -world.getCameraPos().y / 10);
       gameOverMenu.render(delta);
     }
+    
   }
 
   @Override
