@@ -55,7 +55,6 @@ public class World {
   public boolean selectedBuildingUpdated;
   public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
   public MoneyTracker moneyTracker = new MoneyTracker(500);
-  public boolean isRemovalMode = false;
 
   /**
    * Create a new World.
@@ -136,18 +135,16 @@ public class World {
       highlightRegion(btmLeft, topRight, canBuild ? tileHighlight : errTileHighlight);
       tileHighlightBatch.end();
     }
-    if (isRemovalMode) {
-        Building building = buildingManager.getBuildingAt(mouseGridPos);
-        if (building != null) {
-            Point topRight = new Point(
-                building.location.x + building.size.x - 1,
-                building.location.y + building.size.y - 1
-            );
-            tileHighlightBatch.setProjectionMatrix(camera.combined);
-            tileHighlightBatch.begin();
-            highlightRegion(building.location, topRight, errTileHighlight);
-            tileHighlightBatch.end();
-        }
+    Building building = buildingManager.getBuildingAt(mouseGridPos);
+    if (building != null && selectedBuilding == null) {
+        Point topRight = new Point(
+            building.location.x + building.size.x - 1,
+            building.location.y + building.size.y - 1
+        );
+        tileHighlightBatch.setProjectionMatrix(camera.combined);
+        tileHighlightBatch.begin();
+        highlightRegion(building.location, topRight, errTileHighlight);
+        tileHighlightBatch.end();
     }
 
     // render buildings after all map related rendering
@@ -412,5 +409,13 @@ public class World {
     initIsometricTransform();
     buildingManager = new BuildingManager(isoTransform);
     selectedBuilding = null;
+  }
+
+  /**
+   * Detects if the cursor is over a building in the game
+   * @return true if the cursor is over a building
+   */
+  public boolean cursorOverBuilding() {
+    return buildingManager.getBuildingAt(getCursorGridPos()) != null;
   }
 }
