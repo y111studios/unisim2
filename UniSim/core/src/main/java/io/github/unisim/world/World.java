@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
 import io.github.unisim.building.Building;
@@ -56,6 +57,10 @@ public class World {
   public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
   public MoneyTracker moneyTracker = new MoneyTracker(500);
   public boolean isRemovalMode = false;
+  private float minX = 0f; //* Camera bounds for panning and zooming */
+  private float maxX = 300f;
+  private float minY = -75f;
+  private float maxY = 75f;
 
   /**
    * Create a new World.
@@ -173,6 +178,28 @@ public class World {
     maxZoom = 100f / camera.viewportHeight;
   }
 
+
+  /**
+   * Limits the camera position to ensure it stays within the defined minimum and maximum bounds.
+   * 
+   * Adjusts the camera's x and y coordinates so that they do not exceed the specified
+   * minimum (minX, minY) and maximum (maxX, maxY) boundaries. If the camera's position is outside
+   * these bounds, it will be set to the nearest boundary value.
+   */
+  private void clampCameraPosition() {
+    if (camPosition.x < minX) {
+        camPosition.x = minX;
+    } else if (camPosition.x > maxX) {
+        camPosition.x = maxX;
+    }
+
+    if (camPosition.y < minY) {
+        camPosition.y = minY;
+    } else if (camPosition.y > maxY) {
+        camPosition.y = maxY;
+    }
+  }
+
   /**
    * Pans the view of the game by translating the camera by a multiple of the
    * vector (x, y).
@@ -184,6 +211,7 @@ public class World {
    */
   public void pan(float x, float y) {
     camPosition.add(x * camera.zoom, y * camera.zoom);
+    clampCameraPosition();
     if (Gdx.input.isButtonPressed(0) || Gdx.input.isButtonPressed(1)
         || Gdx.input.isButtonPressed(2)) {
       panVelocity.set(x * timeStepSize / Gdx.graphics.getDeltaTime(),
@@ -200,6 +228,7 @@ public class World {
    */
   public void panWithoutInertia(float x, float y) {
     camPosition.add(x * camera.zoom, y * camera.zoom);
+    clampCameraPosition();
   }
 
   /**
