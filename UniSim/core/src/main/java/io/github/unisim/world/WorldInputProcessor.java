@@ -17,6 +17,9 @@ public class WorldInputProcessor implements InputProcessor {
   private boolean moveDown = false;
   private boolean moveLeft = false;
   private boolean moveRight = false;
+  private boolean zoomIn = false;
+  private boolean zoomOut = false;
+  
 
   public WorldInputProcessor(World world) {
     this.world = world;
@@ -45,17 +48,27 @@ public class WorldInputProcessor implements InputProcessor {
         world.selectedBuilding = null;
         break;
       case Keys.W:
+      case Keys.UP:
         moveUp = true;
         break;
       case Keys.S:
+      case Keys.DOWN:
         moveDown = true;
         break;
-      case Keys.A: 
+      case Keys.A:
+      case Keys.LEFT:
         moveLeft = true;
         break;
-      case Keys.D: 
+      case Keys.D:
+      case Keys.RIGHT:
         moveRight = true;
         break;
+      case Keys.Z:
+        zoomIn = true;
+        break;
+      case Keys.X:
+        zoomOut = true;
+        break;        
       default:
         break;
     }
@@ -67,17 +80,26 @@ public class WorldInputProcessor implements InputProcessor {
   public boolean keyUp(int keycode) {
     switch (keycode) {
       case Keys.W:
+      case Keys.UP:
         moveUp = false;
         break;
       case Keys.S:
+      case Keys.DOWN:
         moveDown = false;
         break;
-      case Keys.A: 
+      case Keys.A:
+      case Keys.LEFT:
         moveLeft = false;
         break;
-      case Keys.D: 
+      case Keys.D:
+      case Keys.RIGHT:
         moveRight = false;
         break;
+      case Keys.Z:
+        zoomIn = false;
+        break;
+      case Keys.X:
+        zoomOut = false;
       default:
         break;
     }
@@ -161,18 +183,25 @@ public class WorldInputProcessor implements InputProcessor {
   }
 
 
-  public void update(float dt){
+  public void update(float dt) {
     if (moveUp) {
-      world.pan(0, 5);
+      world.pan(0, 8);
     }
     if (moveDown) {
-      world.pan(0, -5);
+      world.pan(0, -8);
     }
     if (moveLeft) {
-      world.pan(-5, 0);
+      world.pan(-8, 0);
     }
     if (moveRight) {
-      world.pan(5, 0);
+      world.pan(8, 0);
+    }
+
+    if (zoomIn) {
+      world.zoom(-1);
+    }
+    if (zoomOut) {
+      world.zoom(1);
     }
   }
 }
