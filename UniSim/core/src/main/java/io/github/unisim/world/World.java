@@ -55,7 +55,6 @@ public class World {
   public boolean selectedBuildingUpdated;
   public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
   public MoneyTracker moneyTracker = new MoneyTracker(500);
-  public boolean isRemovalMode = false;
 
   /**
    * Create a new World.
