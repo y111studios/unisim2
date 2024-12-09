@@ -68,7 +68,7 @@ public class WorldInputProcessor implements InputProcessor {
     draggedSinceClick = false;
     cursorPos[0] = cursorPosWhenClicked[0] = x;
     cursorPos[1] = cursorPosWhenClicked[1] = y;
-    if (world.isRemovalMode) {
+    if (world.cursorOverBuilding()) {
         world.removeBuilding(world.getCursorGridPos());
     }
     return true;
