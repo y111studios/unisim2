@@ -25,7 +25,7 @@ public class GameScreen implements Screen {
   private InputProcessor uiInputProcessor = new UiInputProcessor(stage);
   private InputProcessor worldInputProcessor = new WorldInputProcessor(world);
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
-  private GameOverMenu gameOverMenu = new GameOverMenu();
+  private GameOverMenu gameOverMenu;
 
   /**
    * Constructor for the GameScreen.
@@ -39,6 +39,8 @@ public class GameScreen implements Screen {
     inputMultiplexer.addProcessor(stage);
     inputMultiplexer.addProcessor(uiInputProcessor);
     inputMultiplexer.addProcessor(worldInputProcessor);
+
+    gameOverMenu = new GameOverMenu(world.scoreTracker);
   }
 
   @Override

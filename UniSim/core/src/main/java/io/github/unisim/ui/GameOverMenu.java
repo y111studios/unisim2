@@ -8,11 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.unisim.GameState;
 import io.github.unisim.leaderboard.Leaderboard;
 import io.github.unisim.leaderboard.LeaderboardEntry;
+import io.github.unisim.scoring.ScoreTracker;
 
 /**
  * Menu that is displayed when the timer has run out. This is where the final score
@@ -27,15 +29,19 @@ public class GameOverMenu {
   private Cell<TextButton> buttonCell;
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
+  private ScoreTracker scoreTracker;
   private Leaderboard leaderboard;
   private ShapeActor leaderboardBackground = new ShapeActor(Color.DARK_GRAY);
   private Table leaderboardTable;
+  private TextField nameField;
+  private TextButton submitButton;
 
   /**
    * Creates a new GameOverMenu and initialises all events and UI elements used in the menu.
    */
-  public GameOverMenu() {
+  public GameOverMenu(ScoreTracker scoreTracker) {
     leaderboard = new Leaderboard();
+    this.scoreTracker = scoreTracker;
 
     stage = new Stage(new ScreenViewport());
     table = new Table();
@@ -60,6 +66,22 @@ public class GameOverMenu {
       leaderboardTable.add(entry.name()).left().padLeft(10);
       leaderboardTable.add(Integer.toString(entry.score())).right().padRight(10);
     }
+    leaderboardTable.row();
+
+    nameField = new TextField("", skin);
+    nameField.setMessageText("Enter your name");
+    leaderboardTable.add(nameField).bottom().padTop(10).padBottom(10);
+
+    submitButton = new TextButton("Submit", skin);
+    submitButton.addListener(new ClickListener() {
+      @Override
+      public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+        leaderboard.addEntry(new LeaderboardEntry(nameField.getText(), scoreTracker.getFinalScore()));
+        leaderboard.save();
+      }
+    });
+    leaderboardTable.add(submitButton).bottom().padTop(10).padBottom(10);
+
     stage.addActor(leaderboardBackground);
     stage.addActor(leaderboardTable);
 

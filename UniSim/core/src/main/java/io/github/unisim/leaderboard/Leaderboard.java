@@ -40,6 +40,20 @@ public class Leaderboard {
         f.writeString(root.toJson(JsonWriter.OutputType.json), false);
     }
 
+    public boolean addEntry(LeaderboardEntry newEntry) {
+        boolean shouldAdd = entries.size() < MAX_ENTRIES;
+        shouldAdd |= entries.stream().anyMatch(e -> e.score() < newEntry.score());
+        if (!shouldAdd) {
+            return false;
+        }
+        if (entries.size() == MAX_ENTRIES) {
+            entries.remove(MAX_ENTRIES - 1);
+        }
+        entries.add(newEntry);
+        sort();
+        return true;
+    }
+
     public void load() {
         entries = new ArrayList<>(MAX_ENTRIES);
         FileHandle f = getFile();
@@ -47,6 +61,10 @@ public class Leaderboard {
         for (JsonValue entry : root) {
             entries.add(new LeaderboardEntry(entry.getString("name"), entry.getInt("score")));
         }
+        sort();
+    }
+
+    private void sort() {
         entries.sort((a, b) -> Integer.compare(b.score(), a.score()));
     }
 
