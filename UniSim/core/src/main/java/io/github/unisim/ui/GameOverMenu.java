@@ -2,6 +2,7 @@ package io.github.unisim.ui;
 
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -10,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.unisim.GameState;
+import io.github.unisim.leaderboard.Leaderboard;
+import io.github.unisim.leaderboard.LeaderboardEntry;
 
 /**
  * Menu that is displayed when the timer has run out. This is where the final score
@@ -23,6 +26,9 @@ public class GameOverMenu {
   private TextButton mainMenuButton;
   private Cell<TextButton> buttonCell;
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
+
+  private ShapeActor leaderboardBackground = new ShapeActor(Color.DARK_GRAY);
+  private Table leaderboardTable;
 
   /**
    * Creates a new GameOverMenu and initialises all events and UI elements used in the menu.
@@ -41,6 +47,18 @@ public class GameOverMenu {
         GameState.currentScreen = GameState.startScreen;
       }
     });
+
+    leaderboardBackground.setBounds(100f, 100f, 300f, 550f);
+    leaderboardTable = new Table(skin);
+    leaderboardTable.setBounds(100f, 100f, 300f, 550f);
+    leaderboardTable.add("Leaderboard").top().padTop(10);
+    for (LeaderboardEntry entry : new Leaderboard().entries()) {
+      leaderboardTable.row();
+      leaderboardTable.add(entry.name()).left().padLeft(10);
+      leaderboardTable.add(Integer.toString(entry.score())).right().padRight(10);
+    }
+    stage.addActor(leaderboardBackground);
+    stage.addActor(leaderboardTable);
 
     // Add UI elements to the stage
     buttonCell = table.add(mainMenuButton).center();

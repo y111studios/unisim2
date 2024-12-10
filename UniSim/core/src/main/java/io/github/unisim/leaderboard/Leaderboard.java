@@ -14,6 +14,10 @@ public class Leaderboard {
 
     private List<LeaderboardEntry> entries;
 
+    public List<LeaderboardEntry> entries() {
+        return entries;
+    }
+
     public Leaderboard() {
         if (fileExists()) {
             load();
