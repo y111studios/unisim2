@@ -60,6 +60,21 @@ public class GameOverMenu {
     leaderboardBackground.setBounds(100f, 100f, 300f, 550f);
     leaderboardTable = new Table(skin);
     leaderboardTable.setBounds(100f, 100f, 300f, 550f);
+    updateLeaderboardTable();
+
+    stage.addActor(leaderboardBackground);
+    stage.addActor(leaderboardTable);
+
+    // Add UI elements to the stage
+    buttonCell = table.add(mainMenuButton).center();
+    stage.addActor(bar);
+    stage.addActor(table);
+
+    inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);
+    inputMultiplexer.addProcessor(stage);
+  }
+
+  private void updateLeaderboardTable() {
     leaderboardTable.add("Leaderboard").top().padTop(10);
     for (LeaderboardEntry entry : leaderboard.entries()) {
       leaderboardTable.row();
@@ -78,22 +93,12 @@ public class GameOverMenu {
       public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
         leaderboard.addEntry(new LeaderboardEntry(nameField.getText(), scoreTracker.getFinalScore()));
         leaderboard.save();
+        leaderboardTable.clear();
+        updateLeaderboardTable();
       }
     });
     leaderboardTable.add(submitButton).bottom().padTop(10).padBottom(10);
-
-    stage.addActor(leaderboardBackground);
-    stage.addActor(leaderboardTable);
-
-    // Add UI elements to the stage
-    buttonCell = table.add(mainMenuButton).center();
-    stage.addActor(bar);
-    stage.addActor(table);
-
-    inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);
-    inputMultiplexer.addProcessor(stage);
   }
-
 
   public void render(float delta) {
     stage.act(delta);
