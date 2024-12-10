@@ -29,6 +29,9 @@ public class MoneyTracker {
     }
 
     public void updateMoney() {
+        if (GameState.gameOver) {
+            return;
+        }
         if (GameState.paused) {
             return;
         }

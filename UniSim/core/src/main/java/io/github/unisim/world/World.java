@@ -439,6 +439,7 @@ public class World {
     initIsometricTransform();
     buildingManager = new BuildingManager(isoTransform);
     selectedBuilding = null;
+    moneyTracker = new MoneyTracker(500);
   }
 
   /**
