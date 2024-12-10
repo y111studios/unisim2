@@ -5,7 +5,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import io.github.unisim.leaderboard.Leaderboard;
 import io.github.unisim.ui.GameScreen;
 import io.github.unisim.ui.SettingsScreen;
 import io.github.unisim.ui.StartMenuScreen;
@@ -33,5 +32,4 @@ public class GameState {
   );
   public static boolean paused = true;
   public static boolean gameOver = false;
-  public static Leaderboard leaderboard = new Leaderboard();
 }
