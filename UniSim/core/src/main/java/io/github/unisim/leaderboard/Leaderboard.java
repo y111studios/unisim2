@@ -47,6 +47,7 @@ public class Leaderboard {
         for (JsonValue entry : root) {
             entries.add(new LeaderboardEntry(entry.getString("name"), entry.getInt("score")));
         }
+        entries.sort((a, b) -> Integer.compare(b.score(), a.score()));
     }
 
     private FileHandle getFile() {
