@@ -27,6 +27,7 @@ public class GameOverMenu {
   private Cell<TextButton> buttonCell;
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
+  private Leaderboard leaderboard;
   private ShapeActor leaderboardBackground = new ShapeActor(Color.DARK_GRAY);
   private Table leaderboardTable;
 
@@ -34,6 +35,8 @@ public class GameOverMenu {
    * Creates a new GameOverMenu and initialises all events and UI elements used in the menu.
    */
   public GameOverMenu() {
+    leaderboard = new Leaderboard();
+
     stage = new Stage(new ScreenViewport());
     table = new Table();
     skin = GameState.defaultSkin;
@@ -52,7 +55,7 @@ public class GameOverMenu {
     leaderboardTable = new Table(skin);
     leaderboardTable.setBounds(100f, 100f, 300f, 550f);
     leaderboardTable.add("Leaderboard").top().padTop(10);
-    for (LeaderboardEntry entry : new Leaderboard().entries()) {
+    for (LeaderboardEntry entry : leaderboard.entries()) {
       leaderboardTable.row();
       leaderboardTable.add(entry.name()).left().padLeft(10);
       leaderboardTable.add(Integer.toString(entry.score())).right().padRight(10);
