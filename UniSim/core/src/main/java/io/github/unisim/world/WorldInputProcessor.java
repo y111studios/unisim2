@@ -42,11 +42,6 @@ public class WorldInputProcessor implements InputProcessor {
           world.selectedBuildingUpdated = true;
         }
         break;
-      case Keys.F:
-        // Toggle deletion mode
-        world.isRemovalMode ^= true;
-        world.selectedBuilding = null;
-        break;
       case Keys.W:
       case Keys.UP:
         moveUp = true;
@@ -122,7 +117,7 @@ public class WorldInputProcessor implements InputProcessor {
     draggedSinceClick = false;
     cursorPos[0] = cursorPosWhenClicked[0] = x;
     cursorPos[1] = cursorPosWhenClicked[1] = y;
-    if (world.isRemovalMode) {
+    if (world.selectedBuilding == null && world.cursorOverBuilding()) {
         world.removeBuilding(world.getCursorGridPos());
     }
     return true;
@@ -135,10 +130,8 @@ public class WorldInputProcessor implements InputProcessor {
   public boolean touchUp(int x, int y, int pointer, int button) {
     clickedOnWorld = false;
     if (!draggedSinceClick && world.selectedBuilding != null) {
-      if (!world.isRemovalMode) {
-        if (world.placeBuilding()) {
-            draggedSinceClick = true;
-        }
+      if (world.placeBuilding()) {
+          draggedSinceClick = true;
       }
     }
     return false;
