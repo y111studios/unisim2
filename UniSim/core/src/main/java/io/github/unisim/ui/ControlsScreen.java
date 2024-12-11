@@ -41,8 +41,9 @@ public class ControlsScreen implements Screen {
         Label panDownLabel = new Label("Pan Down: S / Down Arrow / Mouse", skin);
         Label panLeftLabel = new Label("Pan Left: A / Left Arrow / Mouse", skin);
         Label panRightLabel = new Label("Pan Right: D / Right Arrow / Mouse", skin);
-        Label zoomInLabel = new Label("Zoom In: Z / Mouse Scroll Up", skin);
-        Label zoomOutLabel = new Label("Zoom Out: X / Mouse Scroll Down", skin);
+        Label zoomInLabel = new Label("Zoom In: Z / Mouse Wheel Up", skin);
+        Label zoomOutLabel = new Label("Zoom Out: X / Mouse Wheel Down", skin);
+        Label deselectBuildingLabel = new Label("Deselect Building: F", skin);
         Label placeBuildingLabel = new Label("Place Building: Mouse Left Click", skin);
         Label removeBuildingLabel = new Label("Remove Building: Mouse Left Click", skin);
         Label pauseLabel = new Label("Pause: Space", skin);
@@ -62,6 +63,8 @@ public class ControlsScreen implements Screen {
         table.add(zoomInLabel).padBottom(10);
         table.row();
         table.add(zoomOutLabel).padBottom(10);
+        table.row();
+        table.add(deselectBuildingLabel).padBottom(10);
         table.row();
         table.add(placeBuildingLabel).padBottom(10);
         table.row();
