@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.unisim.ui.GameScreen;
 import io.github.unisim.ui.SettingsScreen;
 import io.github.unisim.ui.StartMenuScreen;
+import io.github.unisim.ui.ControlsScreen;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,6 +25,7 @@ public class GameState {
   public static Screen gameScreen = new GameScreen();
   public static Screen startScreen = new StartMenuScreen();
   public static Screen settingScreen = new SettingsScreen();
+  public static Screen controlsScreen = new ControlsScreen();
   public static Screen currentScreen;
   // Create an unmodifiable set containing the IDs of all buildable tiles
   // we use a set to make searching more efficient
