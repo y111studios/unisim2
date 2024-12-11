@@ -58,7 +58,6 @@ public class World {
   public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
   public MoneyTracker moneyTracker = new MoneyTracker(500);
   public ScoreTracker scoreTracker = new ScoreTracker();
-  public boolean isRemovalMode = false;
   private float minX = 0f; //* Camera bounds for panning and zooming */
   private float maxX = 300f;
   private float minY = -75f;
