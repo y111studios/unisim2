@@ -42,6 +42,13 @@ public class WorldInputProcessor implements InputProcessor {
           world.selectedBuildingUpdated = true;
         }
         break;
+      case Keys.F:
+        // Deselect the building
+        if (world.selectedBuilding != null) {
+          world.selectedBuilding = null;
+          world.selectedBuildingUpdated = true;
+        }
+        break;
       case Keys.W:
       case Keys.UP:
         moveUp = true;

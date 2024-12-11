@@ -22,6 +22,7 @@ public class StartMenuScreen implements Screen {
   private Skin skin;
   private TextButton playButton;
   private TextButton settingsButton;
+  private TextButton controlsButton;
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
   /**
@@ -51,6 +52,16 @@ public class StartMenuScreen implements Screen {
         GameState.currentScreen = GameState.settingScreen;
       }
     });
+    
+    // Controls button
+    controlsButton = new TextButton("Controls", skin);
+    controlsButton.addListener(new ClickListener() {
+      @Override
+      public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+        // Switch to the controls screen
+        GameState.currentScreen = GameState.controlsScreen;
+      }
+    });
 
     // Add UI elements to the stage
     table.setFillParent(true);
@@ -58,7 +69,9 @@ public class StartMenuScreen implements Screen {
     table.pad(100, 100, 100, 100);
     table.add(playButton).center().width(250).height(100).padBottom(10);
     table.row();
-    table.add(settingsButton).center().width(250).height(67);
+    table.add(settingsButton).center().width(250).height(67).padBottom(10);
+    table.row();
+    table.add(controlsButton).center().width(250).height(67).padBottom(10);
     stage.addActor(table);
 
     inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);
