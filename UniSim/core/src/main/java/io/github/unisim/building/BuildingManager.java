@@ -1,16 +1,18 @@
 package io.github.unisim.building;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Manage the buildings placed in the world and methods common to all buildings.
@@ -230,6 +232,7 @@ public class BuildingManager {
     Vector3 btmRightPos = new Vector3(btmLeftPos).add(new Vector3(building.size.x - 1, 0f, 0f));
     btmLeftPos.mul(isoTransform);
     btmRightPos.mul(isoTransform);
+    batch.setColor(1, 1, 1, building == previewBuilding ? 0.5f : 1f); //* Set the preview building to semi-transparent */
     batch.draw(
         building.texture,
         btmLeftPos.x, btmRightPos.y,
