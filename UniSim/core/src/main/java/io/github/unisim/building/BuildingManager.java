@@ -247,6 +247,10 @@ public class BuildingManager {
     return buildings;
   }
 
+  public Building getPreviewBuilding() {
+    return previewBuilding;
+  }
+
   public Building getBuildingAt(Point location) {
     for (Building building : buildings) {
         if (building.location.x > location.x || building.location.x + building.size.x < location.x) {
