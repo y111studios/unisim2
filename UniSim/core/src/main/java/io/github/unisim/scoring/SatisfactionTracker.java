@@ -17,11 +17,14 @@ public class SatisfactionTracker implements ScoringObject {
         return satisfaction;
     }
 
-    public void updateSatisfaction(Iterable<Building> buildings) {
+    public void updateSatisfaction(Iterable<Building> buildings, Building previewBuilding) {
         Map<BuildingType, Float> buildingCounts = new HashMap<>(4);
         long buildingCount = 0;
         long sumStudents = 0;
         for (Building building : buildings) {
+            if (building == previewBuilding) {
+                continue;
+            }
             if (building.type == BuildingType.SLEEPING) {
                 sumStudents += building.capacity;
             }

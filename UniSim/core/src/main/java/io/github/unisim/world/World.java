@@ -84,7 +84,7 @@ public class World {
 
   public void update() {
     moneyTracker.updateMoney();
-    satisfactionTracker.updateSatisfaction(buildingManager.getBuildings());
+    satisfactionTracker.updateSatisfaction(buildingManager.getBuildings(), buildingManager.getPreviewBuilding());
     scoreTracker.update();
     System.out.println("Score: " + scoreTracker.getScore());
   }
