@@ -56,7 +56,6 @@ public class World {
   public boolean selectedBuildingUpdated;
   public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
   public MoneyTracker moneyTracker = new MoneyTracker(500);
-  public boolean isRemovalMode = false;
   private float minX = 0f; //* Camera bounds for panning and zooming */
   private float maxX = 300f;
   private float minY = -75f;
@@ -179,7 +178,7 @@ public class World {
 
   /**
    * Limits the camera position to ensure it stays within the defined minimum and maximum bounds.
-   * 
+   *
    * Adjusts the camera's x and y coordinates so that they do not exceed the specified
    * minimum (minX, minY) and maximum (maxX, maxY) boundaries. If the camera's position is outside
    * these bounds, it will be set to the nearest boundary value.
