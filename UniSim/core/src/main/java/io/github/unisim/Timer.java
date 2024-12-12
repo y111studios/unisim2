@@ -78,4 +78,13 @@ public class Timer {
   public boolean isRunning() {
     return !hasFinished;
   }
+
+  /**
+   * Return the initial time set for the timer.
+
+   * @return - the initial time in milliseconds
+   */
+  public float getInitialTime() {
+    return initialTime;
+  }
 }
