@@ -94,4 +94,32 @@ public class TimerTest {
         assertTrue(timer.isRunning());
     }
 
+    //* Test the  */
+    @org.junit.jupiter.api.Test
+    public void testGetRemainingTime() {
+        timer = new Timer(5000);
+        assertEquals("00:05", timer.getRemainingTime());
+        timer.tick(1000);
+        assertEquals("00:04", timer.getRemainingTime());
+        timer.tick(1000);
+        assertEquals("00:03", timer.getRemainingTime());
+        timer.tick(1000);
+        assertEquals("00:02", timer.getRemainingTime());
+        timer.tick(1000);
+        assertEquals("00:01", timer.getRemainingTime());
+        timer.tick(1000);
+        assertEquals("00:00", timer.getRemainingTime());
+    }
+
+    @org.junit.jupiter.api.Test
+    public void testFormattingSingleDigitTimes() {
+        Timer timer = new Timer(0); // 0 seconds
+        assertEquals("00:00", timer.getRemainingTime());
+        Timer timer2 = new Timer(5000); // 5 seconds
+        assertEquals("00:05", timer2.getRemainingTime());
+        Timer timer3 = new Timer(10000); // 10 seconds
+        assertEquals("00:10", timer3.getRemainingTime());
+        Timer timer4 = new Timer(60000); // 1 mimute
+        assertEquals("01:00", timer4.getRemainingTime());
+    }
 }
