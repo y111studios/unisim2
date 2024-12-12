@@ -7,11 +7,7 @@ import io.github.unisim.Timer;
 public class TimerTest {
 
     private Timer timer;
-    //* @org.junit.jupiter.api.Test
-    // public void shouldAnswerTrue() {
-    //     assertTrue(true);
-    // } */
-
+    
     //* Testing the constructor */
     @org.junit.jupiter.api.Test
     public void testConstructor() {
