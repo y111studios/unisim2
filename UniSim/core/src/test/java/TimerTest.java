@@ -94,6 +94,23 @@ public class TimerTest {
         assertTrue(timer.isRunning());
     }
 
+    @org.junit.jupiter.api.Test
+    public void testTickWithLargeDeltaTime() {
+        Timer timer = new Timer(3000);
+        timer.tick(5000);
+        assertEquals("00:00", timer.getRemainingTime());
+        assertFalse(timer.isRunning());
+    }
+
+    @org.junit.jupiter.api.Test
+    public void testMultipleTicksAfterCompletion() {
+        Timer timer = new Timer(1000);
+        timer.tick(1000);
+        timer.tick(1000);
+        assertEquals("00:00", timer.getRemainingTime());
+        assertFalse(timer.isRunning());
+    }
+
     //* Testing the getting time methods  */
     @org.junit.jupiter.api.Test
     public void testGetRemainingTime() {
