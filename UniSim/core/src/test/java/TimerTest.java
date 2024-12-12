@@ -94,7 +94,7 @@ public class TimerTest {
         assertTrue(timer.isRunning());
     }
 
-    //* Test the  */
+    //* Testing the getting time methods  */
     @org.junit.jupiter.api.Test
     public void testGetRemainingTime() {
         timer = new Timer(5000);
@@ -121,5 +121,28 @@ public class TimerTest {
         assertEquals("00:10", timer3.getRemainingTime());
         Timer timer4 = new Timer(60000); // 1 mimute
         assertEquals("01:00", timer4.getRemainingTime());
+    }
+
+    // Testing the timer runmnig method
+    @org.junit.jupiter.api.Test
+    public void testIsRunningWhileCountingDown() {
+        timer = new Timer(5000);
+        timer.tick(1000);
+        assertTrue(timer.isRunning());
+    }
+
+    @org.junit.jupiter.api.Test
+    public void testIsRunningAfterCompletion() {
+        timer = new Timer(5000);
+        timer.tick(5000);
+        assertFalse(timer.isRunning());
+    }
+
+    @org.junit.jupiter.api.Test
+    public void testIsRunningAfterReset() {
+        Timer timer = new Timer(5000);
+        timer.tick(5000);
+        timer.reset();
+        assertTrue(timer.isRunning());
     }
 }
