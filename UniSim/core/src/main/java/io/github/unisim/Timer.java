@@ -16,7 +16,7 @@ public class Timer {
   public Timer(float initialTime) {
     this.initialTime = initialTime;
     remainingTime = initialTime;
-    hasFinished = false;
+    hasFinished = initialTime <= 0;
   }
 
   /**
