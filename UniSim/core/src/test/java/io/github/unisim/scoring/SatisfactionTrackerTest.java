@@ -26,7 +26,7 @@ public class SatisfactionTrackerTest {
         assertEquals(0, satisfactiontracker.getSatisfaction());
     }
 
-    // Tests for updating satisfaction
+    // Tests for updateSatisfaction
     @Test
     public void testUpdateSatisfactionWithNoBuildings() {
         List<Building> buildings = new ArrayList<>();
@@ -53,6 +53,19 @@ public class SatisfactionTrackerTest {
         buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.EATING, "", 0, 100));
         buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.RECREATION, "", 0, 100));
         satisfactiontracker.updateSatisfaction(buildings, previewBuilding);
+        float expectedSatisfaction = ((1f + 1f + 1f) / 3) / 100;
+        assertEquals(expectedSatisfaction, satisfactiontracker.getSatisfaction());
+    }
+
+    // Tests for getScore
+    @Test
+    public void testGetScore() {
+        List<Building> buildings = new ArrayList<>();
+        buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.SLEEPING, "", 0, 100));
+        buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.LEARNING, "", 0, 50));
+        buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.EATING, "", 0, 50));
+        buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.RECREATION, "", 0, 50));
+        satisfactiontracker.updateSatisfaction(buildings, null);
         float expectedSatisfaction = ((1f + 1f + 1f) / 3) / 100;
         assertEquals(expectedSatisfaction, satisfactiontracker.getSatisfaction());
     }
