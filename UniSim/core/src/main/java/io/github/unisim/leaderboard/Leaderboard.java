@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
 
 public class Leaderboard {
-    private static final String FILE_ADDRESS = "leaderboard.json";
+    static final String FILE_ADDRESS = "leaderboard.json";
     private static final int MAX_ENTRIES = 10;
 
     private List<LeaderboardEntry> entries;
