@@ -96,4 +96,15 @@ public class MoneyTrackerTest {
         assertEquals(100, tracker.getMoney());
     }
 
+    // Test the get money method
+    @org.junit.jupiter.api.Test
+    public void testGetMoney() {
+        // Instantiate with 0
+        tracker = new MoneyTracker(0);
+        assertEquals(0, tracker.getMoney());
+        // Instantiate with 100
+        tracker = new MoneyTracker(100);
+        assertEquals(100,tracker.getMoney());
+    }
+
 }
