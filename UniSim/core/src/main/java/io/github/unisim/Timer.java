@@ -1,5 +1,7 @@
 package io.github.unisim;
 
+import java.time.Duration;
+
 /**
  * A simple timer utility that can be updated on each render call.
  */
@@ -16,7 +18,7 @@ public class Timer {
   public Timer(float initialTime) {
     this.initialTime = initialTime;
     remainingTime = initialTime;
-    hasFinished = false;
+    hasFinished = initialTime <= 0;
   }
 
   /**
@@ -26,7 +28,9 @@ public class Timer {
    * @return - true if the timer is running and the time has been decremented, false otherwise.
    */
   public boolean tick(float deltaTime) {
-    remainingTime -= deltaTime;
+    if (deltaTime > 0) {
+        remainingTime -= deltaTime;
+    }
     if (remainingTime > 0) {
       return true;
     } else {
@@ -50,24 +54,11 @@ public class Timer {
    */
   public String getRemainingTime() {
     // get the number of minutes and seconds from the remaining time in milliseconds.
-    int remainingMinutes = (int) ((remainingTime + 1000) / 60_000);
-    int remainingSeconds = (int) Math.ceil(remainingTime / 1000 - 60 * remainingMinutes);
+    Duration durationRemaining = Duration.ofMillis((long) remainingTime);
+    final long remainingMinutes = Math.max(durationRemaining.toMinutes(), 0);
+    final long remainingSeconds = Math.max(durationRemaining.minusMinutes(remainingMinutes).getSeconds(), 0);
 
-    return formatNum(remainingMinutes) + ":" + formatNum(remainingSeconds);
-  }
-
-  /**
-   * Format a number of minutes or seconds to always have a length of two digits.
-   * This is done by prepending a zero if the number has only one digit.
-
-   * @param num - the number to convert to a formatted string
-   * @return - a formatted string with length at least two.
-   */
-  private String formatNum(int num) {
-    if (num < 10) {
-      return "0" + num;
-    }
-    return String.valueOf(num);
+    return String.format("%02d:%02d", remainingMinutes, remainingSeconds);
   }
 
   /**
