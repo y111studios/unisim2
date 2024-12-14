@@ -1,13 +1,13 @@
+package io.github.unisim;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.github.unisim.Timer;
-
 public class TimerTest {
 
     private Timer timer;
-    
+
     //* Testing the constructor */
     @org.junit.jupiter.api.Test
     public void testConstructor() {

@@ -1,3 +1,5 @@
+package io.github.unisim;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Test {
