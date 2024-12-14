@@ -28,7 +28,9 @@ public class Timer {
    * @return - true if the timer is running and the time has been decremented, false otherwise.
    */
   public boolean tick(float deltaTime) {
-    remainingTime -= deltaTime;
+    if (deltaTime > 0) {
+        remainingTime -= deltaTime;
+    }
     if (remainingTime > 0) {
       return true;
     } else {
