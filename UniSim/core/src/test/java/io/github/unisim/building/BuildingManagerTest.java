@@ -65,4 +65,13 @@ public class BuildingManagerTest {
         boolean removed = buildingManager.removeBuilding(building);
         assertFalse(removed);
     }
+
+    // Testing getBuildingCount
+    @Test
+    public void testGetBuildingCount() {
+        Building building = new Building(null, 0.0f, null, new Point(1,1), new Point(1,1), false, BuildingType.SLEEPING, "", 0, 50);
+        assertEquals(0, buildingManager.getBuildingCount(buildingType));
+        buildingManager.placeBuilding(building);
+        assertEquals(1, buildingManager.getBuildingCount(buildingType));
+    }
 }
