@@ -64,4 +64,12 @@ public class ScoreTrackerTest {
         scoreTracker.update();
         assertEquals(10, scoreTracker.getFinalScore());
     }
+
+    // Tests update
+    @Test
+    public void testUpdate() {
+        scoreTracker.addScoreObject(mockScoringObject);
+        scoreTracker.update();
+        assertEquals(10, scoreTracker.getScore());
+    }
 }
