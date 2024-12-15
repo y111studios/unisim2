@@ -9,11 +9,15 @@ import org.junit.jupiter.api.Test;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Matrix4;
 
+import io.github.unisim.Point;
+
 public class BuildingManagerTest {
 
     private BuildingManager buildingManager;
     private Building previewBuilding;
     private TiledMapTileLayer tileLayer;
+    private Building building;
+    private BuildingType buildingType;
 
     @BeforeEach
     public void setUp() {
@@ -22,6 +26,7 @@ public class BuildingManagerTest {
         tileLayer = new TiledMapTileLayer(10, 10, 32, 32);
     }
 
+    // Testing the constructor
     @Test
     public void testConstructor() {
         assertNotNull(buildingManager);
@@ -29,7 +34,7 @@ public class BuildingManagerTest {
         assertNotNull(buildingManager.getIsoTransform());
     }
 
-    // Tests setPreviewBuilding
+    // Testing setPreviewBuilding
     @Test
     public void testSetPreviewBuilding() {
         buildingManager.setPreviewBuilding(previewBuilding);
@@ -41,5 +46,13 @@ public class BuildingManagerTest {
         buildingManager.setPreviewBuilding(previewBuilding);
         buildingManager.setPreviewBuilding(null);
         assertNull(buildingManager.getPreviewBuilding());
+    }
+
+    // Testing placeBuilding
+    @Test
+    public void testPlaceBuilding() {
+        Building building = new Building(null, 0.0f, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50);
+        buildingManager.placeBuilding(building);
+        assertNotNull(buildingManager.getBuildings());
     }
 }
