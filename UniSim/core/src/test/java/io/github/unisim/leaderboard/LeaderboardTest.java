@@ -1,11 +1,12 @@
 package io.github.unisim.leaderboard;
 
+import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
@@ -73,6 +74,14 @@ public class LeaderboardTest {
         // Create the file manually
         FileHandle file = Gdx.files.local(Leaderboard.FILE_ADDRESS);
         file.writeString("[]", false);
+        leaderboard = new Leaderboard();
+        assertNotNull(leaderboard.entries());
+        assertTrue(file.exists());
+    }
+
+    @Test
+    public void testConstructorWithoutFile() {
+        FileHandle file = Gdx.files.local(Leaderboard.FILE_ADDRESS);
         leaderboard = new Leaderboard();
         assertNotNull(leaderboard.entries());
         assertTrue(file.exists());
