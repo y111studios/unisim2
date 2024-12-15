@@ -1,6 +1,7 @@
 package io.github.unisim.building;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,5 +55,14 @@ public class BuildingManagerTest {
         Building building = new Building(null, 0.0f, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50);
         buildingManager.placeBuilding(building);
         assertNotNull(buildingManager.getBuildings());
+    }
+
+    // Testing removeBuilding
+    @Test
+    public void testRemoveBuilding() {
+        Building building = new Building(null, 0.0f, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50);
+        buildingManager.placeBuilding(building);
+        boolean removed = buildingManager.removeBuilding(building);
+        assertFalse(removed);
     }
 }
