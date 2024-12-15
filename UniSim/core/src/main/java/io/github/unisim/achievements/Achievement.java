@@ -28,6 +28,14 @@ public class Achievement {
         this.hidden = hidden;
     }
 
+    public boolean isUnlocked() {
+        return unlocked;
+    }
+
+    public Function<Integer, Integer> getScoreModifier() {
+        return functionTemplate.getFunction(scoreModifierValue);
+    }
+
     public JsonValue toJsonValue() {
         JsonValue json = new JsonValue(JsonValue.ValueType.object);
         json.addChild("name", new JsonValue(name));

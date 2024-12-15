@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
+import io.github.unisim.achievements.AchievementManager;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingManager;
 import io.github.unisim.building.BuildingType;
@@ -58,6 +59,7 @@ public class World {
   public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
   public MoneyTracker moneyTracker = new MoneyTracker(500);
   public ScoreTracker scoreTracker = new ScoreTracker();
+  public AchievementManager achievementManager = new AchievementManager();
   private float minX = 0f; //* Camera bounds for panning and zooming */
   private float maxX = 300f;
   private float minY = -75f;
@@ -86,7 +88,6 @@ public class World {
     moneyTracker.updateMoney();
     satisfactionTracker.updateSatisfaction(buildingManager.getBuildings(), buildingManager.getPreviewBuilding());
     scoreTracker.update();
-    System.out.println("Score: " + scoreTracker.getScore());
   }
 
   /**

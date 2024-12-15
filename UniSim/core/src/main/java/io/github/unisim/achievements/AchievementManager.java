@@ -25,6 +25,10 @@ public class AchievementManager {
         }
     }
 
+    public List<Achievement> getAchievements() {
+        return achievements;
+    }
+
     public void save() {
         JsonValue root = new JsonValue(JsonValue.ValueType.array);
         achievements.stream().map(Achievement::toJsonValue).forEach(root::addChild);
@@ -46,7 +50,7 @@ public class AchievementManager {
                 json.getBoolean("unlocked"),
                 json.getBoolean("hidden")
             );
-            achievements.add(achievement); 
+            achievements.add(achievement);
         }
     }
 

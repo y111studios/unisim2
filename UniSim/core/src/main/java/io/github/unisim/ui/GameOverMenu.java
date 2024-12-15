@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.unisim.GameState;
+import io.github.unisim.achievements.Achievement;
+import io.github.unisim.achievements.AchievementManager;
 import io.github.unisim.leaderboard.Leaderboard;
 import io.github.unisim.leaderboard.LeaderboardEntry;
 import io.github.unisim.scoring.ScoreTracker;
@@ -30,6 +32,7 @@ public class GameOverMenu {
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
   private ScoreTracker scoreTracker;
+  private AchievementManager achievementManager;
   private Leaderboard leaderboard;
   private ShapeActor leaderboardBackground = new ShapeActor(Color.DARK_GRAY);
   private Table leaderboardTable;
@@ -39,9 +42,10 @@ public class GameOverMenu {
   /**
    * Creates a new GameOverMenu and initialises all events and UI elements used in the menu.
    */
-  public GameOverMenu(ScoreTracker scoreTracker) {
+  public GameOverMenu(ScoreTracker scoreTracker, AchievementManager achievementManager) {
     leaderboard = new Leaderboard();
     this.scoreTracker = scoreTracker;
+    this.achievementManager = achievementManager;
 
     stage = new Stage(new ScreenViewport());
     table = new Table();
@@ -91,7 +95,11 @@ public class GameOverMenu {
     submitButton.addListener(new ClickListener() {
       @Override
       public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-        leaderboard.addEntry(new LeaderboardEntry(nameField.getText(), scoreTracker.getFinalScore()));
+        Integer finalScore = scoreTracker.getFinalScore();
+        for (Achievement achievement : achievementManager.getAchievements().stream().filter(Achievement::isUnlocked).toList()) {
+            finalScore = achievement.getScoreModifier().apply(finalScore);
+        }
+        leaderboard.addEntry(new LeaderboardEntry(nameField.getText(), finalScore));
         leaderboard.save();
         leaderboardTable.clear();
         updateLeaderboardTable();

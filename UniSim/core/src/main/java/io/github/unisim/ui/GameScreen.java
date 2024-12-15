@@ -40,7 +40,7 @@ public class GameScreen implements Screen {
     inputMultiplexer.addProcessor(uiInputProcessor);
     inputMultiplexer.addProcessor(worldInputProcessor);
 
-    gameOverMenu = new GameOverMenu(world.scoreTracker);
+    gameOverMenu = new GameOverMenu(world.scoreTracker, world.achievementManager);
   }
 
   @Override
