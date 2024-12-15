@@ -8,7 +8,7 @@ public class MoneyTrackerTest {
 
     private MoneyTracker tracker;
 
-    // Testing the constructor
+    // Testing constructor
     @org.junit.jupiter.api.Test
     public void testConstructor() {
         tracker = new MoneyTracker(100);
@@ -27,7 +27,7 @@ public class MoneyTrackerTest {
         assertEquals(0, tracker.getMoney());
     }
 
-    // Testing the add money method
+    // Testing addMoney method
     @org.junit.jupiter.api.Test
     public void testaddMoney() {
         // Add 100 to 100, expecting 200
@@ -62,7 +62,7 @@ public class MoneyTrackerTest {
         assertEquals(0,tracker.getMoney());
     }
 
-    // Test the subtract money method
+    // Testing subtractMoney method
     @org.junit.jupiter.api.Test
     public void testSubtractMoney() {
         // Subracting 100 from 100, expecting 0
@@ -97,7 +97,7 @@ public class MoneyTrackerTest {
         assertEquals(100, tracker.getMoney());
     }
 
-    // Test the get money method
+    // Testing getMoney method
     @org.junit.jupiter.api.Test
     public void testGetMoney() {
         // Instantiate with 0

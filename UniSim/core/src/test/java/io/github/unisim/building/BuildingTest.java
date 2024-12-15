@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 
 public class BuildingTest {
 
-    private Building building;
-
     // Testing constructor
     @Test
     public void testConstructor() {

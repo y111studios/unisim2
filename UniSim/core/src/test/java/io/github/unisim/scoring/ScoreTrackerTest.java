@@ -2,7 +2,6 @@ package io.github.unisim.scoring;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,8 +10,6 @@ import org.junit.jupiter.api.Test;
 public class ScoreTrackerTest {
 
     private ScoreTracker scoreTracker;
-    private float score;
-    private Map<ScoringObject, Instant> lastUpdateTimes;
     private ScoringObject mockScoringObject;
 
     @BeforeEach
@@ -42,14 +39,14 @@ public class ScoreTrackerTest {
 
     }
 
-    // Tests initial score
+    // Testing initial score/constructor
     @Test
     public void testInitialScore() {
         assertEquals(0, scoreTracker.getScore());
     }
 
 
-    // Tests AddSocreObject
+    // Testing AddSocreObject
     @Test
     public void testAddScoreObject() {
         scoreTracker.addScoreObject(mockScoringObject);
@@ -57,7 +54,7 @@ public class ScoreTrackerTest {
         assertEquals(Instant.MIN, scoreTracker.getLastUpdateTimes().get(mockScoringObject));
     }
 
-    // Tests getFinalScore
+    // Testing getFinalScore
     @Test
     public void testGetFinalScore() {
         scoreTracker.addScoreObject(mockScoringObject);
@@ -65,7 +62,7 @@ public class ScoreTrackerTest {
         assertEquals(10, scoreTracker.getFinalScore());
     }
 
-    // Tests update
+    // Testing update
     @Test
     public void testUpdate() {
         scoreTracker.addScoreObject(mockScoringObject);

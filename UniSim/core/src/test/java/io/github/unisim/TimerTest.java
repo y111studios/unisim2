@@ -8,7 +8,7 @@ public class TimerTest {
 
     private Timer timer;
 
-    //* Testing the constructor */
+    // Testing constructor
     @org.junit.jupiter.api.Test
     public void testConstructor() {
         timer = new Timer(5000);
@@ -33,7 +33,7 @@ public class TimerTest {
         assertFalse(timer.isRunning());
     }
 
-    //*Testing the timer tick method */
+    // Testing tick method
     @org.junit.jupiter.api.Test
     public void testTick() {
         timer = new Timer(5000);
@@ -92,7 +92,7 @@ public class TimerTest {
 
     @org.junit.jupiter.api.Test
     public void testTickWithLargeDeltaTime() {
-        Timer timer = new Timer(3000);
+        timer = new Timer(3000);
         timer.tick(5000);
         assertEquals("00:00", timer.getRemainingTime());
         assertFalse(timer.isRunning());
@@ -100,14 +100,14 @@ public class TimerTest {
 
     @org.junit.jupiter.api.Test
     public void testMultipleTicksAfterCompletion() {
-        Timer timer = new Timer(1000);
+        timer = new Timer(1000);
         timer.tick(1000);
         timer.tick(1000);
         assertEquals("00:00", timer.getRemainingTime());
         assertFalse(timer.isRunning());
     }
 
-    //* Testing the getting time methods  */
+    // Testing getRemainingTime methods
     @org.junit.jupiter.api.Test
     public void testGetRemainingTime() {
         timer = new Timer(5000);
@@ -126,7 +126,7 @@ public class TimerTest {
 
     @org.junit.jupiter.api.Test
     public void testFormattingSingleDigitTimes() {
-        Timer timer = new Timer(0); // 0 seconds
+        timer = new Timer(0); // 0 seconds
         assertEquals("00:00", timer.getRemainingTime());
         Timer timer2 = new Timer(5000); // 5 seconds
         assertEquals("00:05", timer2.getRemainingTime());
@@ -136,7 +136,7 @@ public class TimerTest {
         assertEquals("01:00", timer4.getRemainingTime());
     }
 
-    // Testing the timer runmnig method
+    // Testing isRunmnig method
     @org.junit.jupiter.api.Test
     public void testIsRunningWhileCountingDown() {
         timer = new Timer(5000);
@@ -153,7 +153,7 @@ public class TimerTest {
 
     @org.junit.jupiter.api.Test
     public void testIsRunningAfterReset() {
-        Timer timer = new Timer(5000);
+        timer = new Timer(5000);
         timer.tick(5000);
         timer.reset();
         assertTrue(timer.isRunning());

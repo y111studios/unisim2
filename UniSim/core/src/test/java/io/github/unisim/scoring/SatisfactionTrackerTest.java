@@ -21,18 +21,18 @@ public class SatisfactionTrackerTest {
         satisfactiontracker = new SatisfactionTracker();
     }
 
-    // Tests for initial satisfaction
+    // Testing initial satisfaction/constructor
     @Test
     public void testInitialSatisfaction() {
         assertEquals(0, satisfactiontracker.getSatisfaction());
     }
 
-    // Tests for updateSatisfaction
+    // Testing updateSatisfaction
     @Test
     public void testUpdateSatisfactionWithNoBuildings() {
-        List<Building> buildings = new ArrayList<>();
         assertEquals(0, satisfactiontracker.getSatisfaction());
     }
+    
     @Test
     public void testUpdateSatisfactionWithBuildings() {
         List<Building> buildings = new ArrayList<>();
@@ -58,7 +58,7 @@ public class SatisfactionTrackerTest {
         assertEquals(expectedSatisfaction, satisfactiontracker.getSatisfaction());
     }
 
-    // Tests for getScore
+    // Testing getScore
     @Test
     public void testGetScore() {
         List<Building> buildings = new ArrayList<>();
@@ -71,7 +71,7 @@ public class SatisfactionTrackerTest {
         assertEquals(expectedSatisfaction, satisfactiontracker.getSatisfaction());
     }
 
-    // Tests for getUpdateInterval
+    // Testing getUpdateInterval
     @Test
     public void testGetUpdateInterval() {
         assertEquals(Duration.ofSeconds(1), satisfactiontracker.getUpdateInterval());

@@ -7,6 +7,7 @@ public class LeaderboardEntryTest {
 
     private LeaderboardEntry entry;
 
+    // Testing constructor
     @Test
     public void testConstructorWithNoName() {
         assertThrows(IllegalArgumentException.class, () -> new LeaderboardEntry("", 100));
