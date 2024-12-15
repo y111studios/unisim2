@@ -39,4 +39,8 @@ public class ScoreTracker {
         }
     }
 
+    public Map<ScoringObject, Instant> getLastUpdateTimes() {
+        return lastUpdateTimes;
+    }
+
 }

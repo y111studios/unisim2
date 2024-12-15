@@ -13,10 +13,12 @@ public class ScoreTrackerTest {
     private ScoreTracker scoreTracker;
     private float score;
     private Map<ScoringObject, Instant> lastUpdateTimes;
+    private ScoringObject mockScoringObject;
 
     @BeforeEach
     public void setUp() {
         scoreTracker = new ScoreTracker();
+        mockScoringObject = new MockScoringObject(10.0f, Duration.ofSeconds(0));
     }
 
     public class MockScoringObject implements ScoringObject {
@@ -44,5 +46,14 @@ public class ScoreTrackerTest {
     @Test
     public void testInitialScore() {
         assertEquals(0, scoreTracker.getScore());
+    }
+
+
+    // Tests AddSocreObject
+    @Test
+    public void testAddScoreObject() {
+        scoreTracker.addScoreObject(mockScoringObject);
+        assertEquals(1, scoreTracker.getLastUpdateTimes().size());
+        assertEquals(Instant.MIN, scoreTracker.getLastUpdateTimes().get(mockScoringObject));
     }
 }
