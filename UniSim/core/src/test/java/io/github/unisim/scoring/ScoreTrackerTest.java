@@ -1,5 +1,6 @@
 package io.github.unisim.scoring;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
 
@@ -18,10 +19,30 @@ public class ScoreTrackerTest {
         scoreTracker = new ScoreTracker();
     }
 
+    public class MockScoringObject implements ScoringObject {
+        private final float score;
+        private final Duration updateInterval;
+
+        public MockScoringObject(float score, Duration updateInterval) {
+            this.score = score;
+            this.updateInterval = updateInterval;
+        }
+
+        @Override
+        public float getScore() {
+            return score;
+        }
+
+        @Override
+        public Duration getUpdateInterval() {
+            return updateInterval;
+        }
+
+    }
+
     // Tests initial score
     @Test
     public void testInitialScore() {
-        scoreTracker = new ScoreTracker();
         assertEquals(0, scoreTracker.getScore());
     }
 }
