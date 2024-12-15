@@ -56,4 +56,12 @@ public class ScoreTrackerTest {
         assertEquals(1, scoreTracker.getLastUpdateTimes().size());
         assertEquals(Instant.MIN, scoreTracker.getLastUpdateTimes().get(mockScoringObject));
     }
+
+    // Tests getFinalScore
+    @Test
+    public void testGetFinalScore() {
+        scoreTracker.addScoreObject(mockScoringObject);
+        scoreTracker.update();
+        assertEquals(10, scoreTracker.getFinalScore());
+    }
 }
