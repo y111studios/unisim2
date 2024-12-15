@@ -19,6 +19,7 @@ import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingType;
 import io.github.unisim.world.World;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Menu used to place buildings in the world by clicking and dragging them
@@ -28,13 +29,15 @@ import java.util.ArrayList;
 public class BuildingMenu {
   private World world;
   private ShapeActor bar = new ShapeActor(GameState.UISecondaryColour);
-  private Table table;
   private ArrayList<Building> buildings = new ArrayList<>();
   private ArrayList<Image> buildingImages = new ArrayList<>();
+  private HashMap<BuildingType, Table> navBar = new HashMap<>();
+  private Table currNavTable;
   private Label buildingInfoLabel = new Label(
       "", new Skin(Gdx.files.internal("ui/uiskin.json"))
   );
   private Table buildingInfoTable = new Table();
+  private Stage stage;
 
   /**
    * Create a Building Menu and attach its actors and components to the provided stage.
@@ -44,6 +47,7 @@ public class BuildingMenu {
    */
   public BuildingMenu(Stage stage, World world) {
     this.world = world;
+    this.stage = stage;
     // Set building images and sizes
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/restaurant.png")),
@@ -106,7 +110,10 @@ public class BuildingMenu {
         1000
     ));
 
-    table = new Table();
+    for (BuildingType type : BuildingType.values()) {
+      navBar.put(type, new Table());
+    }
+
     // Add buldings to the table
     for (int i = 0; i < buildings.size(); i++) {
       buildingImages.add(new Image(buildings.get(i).texture));
@@ -129,14 +136,17 @@ public class BuildingMenu {
           }
         }
       });
-      table.add(buildingImages.get(i));
+      navBar.get(buildings.get(i).type).add(buildingImages.get(i));
     }
 
     buildingInfoTable.add(buildingInfoLabel).expandX().align(Align.center);
 
     stage.addActor(bar);
-    stage.addActor(table);
+    currNavTable = navBar.get(BuildingType.EATING);
+    stage.addActor(currNavTable);
     stage.addActor(buildingInfoTable);
+    currNavTable = navBar.get(BuildingType.LEARNING);
+    changeNavType(BuildingType.LEARNING);//test
   }
 
   /**
@@ -147,20 +157,21 @@ public class BuildingMenu {
    */
   @SuppressWarnings("unchecked")
   public void resize(int width, int height) {
-    table.setBounds(0, 0, width, height * 0.1f);
     bar.setBounds(0, 0, width, height * 0.1f);
     buildingInfoTable.setBounds(0, height * 0.1f, width, height * 0.025f);
-
-    // we must perform an unchecked type conversion here
-    // this is acceptable as we know our table only contains instances of Actors
-    for (Cell<Actor> cell : table.getCells()) {
-      Image buildingImage = (Image) (cell.getActor());
-      Vector2 textureSize = new Vector2(buildingImage.getWidth(), buildingImage.getHeight());
-      cell.width(
-          height * 0.1f * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1)
-      ).height(
-          height * 0.1f * (textureSize.y < textureSize.x ? textureSize.y / textureSize.x : 1)
-      );
+    for (Table table : navBar.values()) {
+      table.setBounds(0, 0, width, height * 0.1f);
+      // we must perform an unchecked type conversion here
+      // this is acceptable as we know our table only contains instances of Actors
+      for (Cell<Actor> cell : table.getCells()) {
+        Image buildingImage = (Image) (cell.getActor());
+        Vector2 textureSize = new Vector2(buildingImage.getWidth(), buildingImage.getHeight());
+        cell.width(
+            height * 0.1f * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1)
+        ).height(
+            height * 0.1f * (textureSize.y < textureSize.x ? textureSize.y / textureSize.x : 1)
+        );
+      }
     }
 
     buildingInfoLabel.setFontScale(height * 0.0015f);
@@ -175,6 +186,11 @@ public class BuildingMenu {
     } else if (world.selectedBuilding == null) {
       buildingInfoLabel.setText("");
     }
+  }
+
+  public void changeNavType(BuildingType type) {
+    currNavTable.remove();
+    stage.addActor(navBar.get(type));
   }
 
   public void reset() {

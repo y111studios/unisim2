@@ -70,7 +70,7 @@ public class WorldInputProcessor implements InputProcessor {
         break;
       case Keys.X:
         zoomOut = true;
-        break;        
+        break;
       default:
         break;
     }
