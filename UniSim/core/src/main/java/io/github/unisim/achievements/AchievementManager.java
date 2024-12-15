@@ -2,7 +2,9 @@ package io.github.unisim.achievements;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.JsonReader;
@@ -27,6 +29,14 @@ public class AchievementManager {
 
     public List<Achievement> getAchievements() {
         return achievements;
+    }
+
+    public Iterator<Function<Integer, Integer>> getUnlockedScoreModifiers() {
+        return achievements.stream()
+            .filter(Achievement::isUnlocked)
+            .sorted((a, b) -> (a.functionTemplate.compareTo(b.functionTemplate)))
+            .map(Achievement::getScoreModifier)
+            .iterator();
     }
 
     public void save() {

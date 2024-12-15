@@ -1,5 +1,6 @@
 package io.github.unisim.ui;
 
+import java.util.function.Function;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
@@ -12,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.unisim.GameState;
-import io.github.unisim.achievements.Achievement;
 import io.github.unisim.achievements.AchievementManager;
 import io.github.unisim.leaderboard.Leaderboard;
 import io.github.unisim.leaderboard.LeaderboardEntry;
@@ -96,8 +96,9 @@ public class GameOverMenu {
       @Override
       public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
         Integer finalScore = scoreTracker.getFinalScore();
-        for (Achievement achievement : achievementManager.getAchievements().stream().filter(Achievement::isUnlocked).toList()) {
-            finalScore = achievement.getScoreModifier().apply(finalScore);
+        final Iterable<Function<Integer, Integer>> unlockedScoreModifiers = () -> achievementManager.getUnlockedScoreModifiers();
+        for (Function<Integer, Integer> modifierFunction : unlockedScoreModifiers) {
+            finalScore = modifierFunction.apply(finalScore);
         }
         leaderboard.addEntry(new LeaderboardEntry(nameField.getText(), finalScore));
         leaderboard.save();
