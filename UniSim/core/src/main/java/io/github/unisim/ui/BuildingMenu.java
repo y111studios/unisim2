@@ -82,6 +82,18 @@ public class BuildingMenu {
         500
     ));
     buildings.add(new Building(
+        new Texture(Gdx.files.internal("buildings/tennisCourt.png")),
+        0.0025f,
+        new Vector2(1f, -2.4f),
+        new Point(),
+        new Point(6, 9),
+        false,
+        BuildingType.RECREATION,
+        "Tennis Court",
+        10,
+        500
+    ));
+    buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/studentHousing.png")),
         0.108f,
         new Vector2(1.4f, -2.8f),
@@ -157,7 +169,7 @@ public class BuildingMenu {
   /**
    * Called when the building menu needs to be redrawn with new values in the labels.
    */
-  public void update() {
+  public void update(Stage stage) {
     if (GameState.gameOver) {
       buildingInfoLabel.setText("Game Over!");
     } else if (world.selectedBuilding == null) {
