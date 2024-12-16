@@ -25,16 +25,18 @@ public class InfoBar {
   private Table buildingCountersTable = new Table();
   private Label[] buildingCounterLabels = new Label[4];
   private Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-  private Label scoreLabel = new Label("86%", skin);
+  private Label satisfactionLabel = new Label("", skin);
   private Label titleLabel = new Label("UniSim", skin);
   private Label moneyLabel;
   private Label timerLabel;
+  private Label scoreLabel;
   private Texture pauseTexture = new Texture("ui/pause.png");
   private Texture playTexture = new Texture("ui/play.png");
   private Image pauseImage = new Image(pauseTexture);
   private Image playImage = new Image(playTexture);
   private Timer timer;
   private Cell<Label> timerLabelCell;
+  private Cell<Label> satisfacationLabelCell;
   private Cell<Label> scoreLabelCell;
   private Cell<Image> pauseButtonCell;
   private Cell<Label> moneyLabelCell;
@@ -61,16 +63,18 @@ public class InfoBar {
     buildingCounterCells[2] = buildingCountersTable.add(buildingCounterLabels[2]);
     buildingCounterCells[3] = buildingCountersTable.add(buildingCounterLabels[3]);
 
-    scoreLabel = new Label(world.satisfactionTracker.getSatisfaction() + "%", skin);
+    satisfactionLabel = new Label(world.satisfactionTracker.getSatisfaction() + "%", skin);
     moneyLabel = new Label("Money: $" + world.moneyTracker.getMoney(), skin);
+    scoreLabel = new Label("Score: " + world.scoreTracker.getFinalScore(), skin);
 
     // Info Table
     timerLabel = new Label(timer.getRemainingTime(), skin);
     infoTable.center().center();
     pauseButtonCell = infoTable.add(playImage).align(Align.center);
     timerLabelCell = infoTable.add(timerLabel).align(Align.center);
-    scoreLabelCell = infoTable.add(scoreLabel).align(Align.center);
+    satisfacationLabelCell = infoTable.add(satisfactionLabel).align(Align.center);
     moneyLabelCell = infoTable.add(moneyLabel).align(Align.center);
+    scoreLabelCell = infoTable.add(scoreLabel).align(Align.center);
     buildingCountersTableCell = infoTable.add(buildingCountersTable).expandX().align(Align.right);
 
     // Pause button
@@ -103,7 +107,8 @@ public class InfoBar {
    * Called when the UI needs to be updated, usually on every frame.
    */
   public void update() {
-    scoreLabel.setText(world.satisfactionTracker.getSatisfaction() + "%");
+    satisfactionLabel.setText(world.satisfactionTracker.getSatisfaction() + "%");
+    scoreLabel.setText("Score: " + world.scoreTracker.getFinalScore());
     moneyLabel.setText("Money: $" + world.moneyTracker.getMoney());
     timerLabel.setText(timer.getRemainingTime());
     buildingCounterLabels[0].setText("Recreation: "
@@ -138,12 +143,16 @@ public class InfoBar {
     timerLabel.setFontScale(height * 0.002f);
     timerLabelCell.width(height * 0.08f).height(height * 0.05f);
     timerLabelCell.padLeft(height * 0.005f);
+    satisfactionLabel.setFontScale(height * 0.002f);
+    satisfacationLabelCell.width(height * 0.04f).height(height * 0.05f);
+    satisfacationLabelCell.padLeft(Math.min(width, height * 2) * 0.10f);
     scoreLabel.setFontScale(height * 0.002f);
     scoreLabelCell.width(height * 0.04f).height(height * 0.05f);
-    scoreLabelCell.padLeft(Math.min(width, height * 2) * 0.10f);
+    scoreLabelCell.padLeft(Math.min(width, height * 2) * 0.08f);
     moneyLabel.setFontScale(height * 0.002f);
     moneyLabelCell.width(height * 0.04f).height(height * 0.05f);
     moneyLabelCell.padLeft(Math.min(width, height * 2) * 0.08f);
+    moneyLabelCell.padRight(Math.min(width, height * 2) * 0.2f);
     pauseButtonCell.width(height * 0.03f).height(height * 0.03f)
     .padLeft(height * 0.01f).padRight(height * 0.01f);
 
