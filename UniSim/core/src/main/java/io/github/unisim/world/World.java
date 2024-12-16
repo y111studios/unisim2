@@ -24,6 +24,7 @@ import io.github.unisim.building.BuildingType;
 import io.github.unisim.finance.MoneyTracker;
 import io.github.unisim.scoring.SatisfactionTracker;
 import io.github.unisim.scoring.ScoreTracker;
+import io.github.unisim.ui.AchievementBar;
 
 /**
  * A class that holds all the gameplay elements of the game UniSim.
@@ -60,6 +61,7 @@ public class World {
   public MoneyTracker moneyTracker = new MoneyTracker(500);
   public ScoreTracker scoreTracker = new ScoreTracker();
   public AchievementManager achievementManager = new AchievementManager();
+  public AchievementBar achievementBar;
   private float minX = 0f; //* Camera bounds for panning and zooming */
   private float maxX = 300f;
   private float minY = -75f;
@@ -68,12 +70,13 @@ public class World {
   /**
    * Create a new World.
    */
-  public World() {
+  public World(AchievementBar achievementBar) {
     camera.zoom = 0.05f;
     initIsometricTransform();
     buildingManager = new BuildingManager(isoTransform);
     selectedBuilding = null;
     scoreTracker.addScoreObject(satisfactionTracker);
+    this.achievementBar = achievementBar;
   }
 
   /**
@@ -93,8 +96,10 @@ public class World {
 
     if (moneyTracker.getMoney() == 0) {
         achievementManager.unlockAchievement("Bankruptcy");
+        achievementBar.setAchievement(achievementManager.getAchievement("Bankruptcy"));
     } else if (moneyTracker.getMoney() >= 100_000) {
         achievementManager.unlockAchievement("Capitalist");
+        achievementBar.setAchievement(achievementManager.getAchievement("Capitalist"));
     }
   }
 

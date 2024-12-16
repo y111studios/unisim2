@@ -17,14 +17,14 @@ import io.github.unisim.world.WorldInputProcessor;
  * Supports pausing the game with a pause menu.
  */
 public class GameScreen implements Screen {
-  private World world = new World();
+  private World world;
   private Stage stage = new Stage(new ScreenViewport());
   private AchievementBar achievementBar;
   private InfoBar infoBar;
   private BuildingMenu buildingMenu;
   private Timer timer;
   private InputProcessor uiInputProcessor = new UiInputProcessor(stage);
-  private InputProcessor worldInputProcessor = new WorldInputProcessor(world);
+  private InputProcessor worldInputProcessor;
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
   private GameOverMenu gameOverMenu;
 
@@ -32,9 +32,11 @@ public class GameScreen implements Screen {
    * Constructor for the GameScreen.
    */
   public GameScreen() {
+    achievementBar = new AchievementBar(stage);
+    world = new World(achievementBar);
+    worldInputProcessor = new WorldInputProcessor(world);
     timer = new Timer(300_000);
     infoBar = new InfoBar(stage, timer, world);
-    achievementBar = new AchievementBar(stage);
     buildingMenu = new BuildingMenu(stage, world);
 
     inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);

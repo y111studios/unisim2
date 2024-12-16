@@ -39,6 +39,14 @@ public class Achievement {
         this.hidden = hidden;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     public Image getIcon() {
         final String path = String.format("achievements/%s.png", name);
         FileHandle imageFile = Gdx.files.internal(path);

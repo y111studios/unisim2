@@ -106,4 +106,8 @@ public class AchievementManager {
         }
     }
 
+    public Achievement getAchievement(String string) {
+        return achievements.stream().filter((a) -> a.name.equals(string)).findFirst().get();
+    }
+
 }
