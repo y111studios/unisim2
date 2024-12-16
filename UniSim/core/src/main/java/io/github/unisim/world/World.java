@@ -95,11 +95,13 @@ public class World {
     // Check achievement conditions
 
     if (moneyTracker.getMoney() == 0) {
-        achievementManager.unlockAchievement("Bankruptcy");
-        achievementBar.setAchievement(achievementManager.getAchievement("Bankruptcy"));
+        if (achievementManager.unlockAchievement("Bankruptcy")) {
+            achievementBar.setAchievement(achievementManager.getAchievement("Bankruptcy"));
+        }
     } else if (moneyTracker.getMoney() >= 100_000) {
-        achievementManager.unlockAchievement("Capitalist");
-        achievementBar.setAchievement(achievementManager.getAchievement("Capitalist"));
+        if (achievementManager.unlockAchievement("Capitalist")) {
+            achievementBar.setAchievement(achievementManager.getAchievement("Capitalist"));
+        }
     }
   }
 
@@ -458,6 +460,7 @@ public class World {
     buildingManager = new BuildingManager(isoTransform);
     selectedBuilding = null;
     moneyTracker = new MoneyTracker(500);
+    achievementManager.clearSessionAchievements();
   }
 
   /**

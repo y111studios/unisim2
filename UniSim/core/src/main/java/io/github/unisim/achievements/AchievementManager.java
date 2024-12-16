@@ -2,9 +2,11 @@ package io.github.unisim.achievements;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -17,8 +19,10 @@ public class AchievementManager {
     final static String FILE_PATH = "achievements.json";
 
     List<Achievement> achievements;
+    Set<Achievement> sessionAchievements;
 
     public AchievementManager() {
+        sessionAchievements = new HashSet<>();
         if (!fileExists()) {
             createFile();
             achievements = new ArrayList<>();
@@ -27,13 +31,16 @@ public class AchievementManager {
         load();
     }
 
+    public void clearSessionAchievements() {
+        sessionAchievements.clear();
+    }
+
     public List<Achievement> getAchievements() {
         return achievements;
     }
 
     public Iterator<Function<Integer, Integer>> getUnlockedScoreModifiers() {
-        return achievements.stream()
-            .filter(Achievement::isUnlocked)
+        return sessionAchievements.stream()
             .sorted((a, b) -> (a.functionTemplate.compareTo(b.functionTemplate)))
             .map(Achievement::getScoreModifier)
             .iterator();
@@ -48,8 +55,8 @@ public class AchievementManager {
                 achievement.get().unlocked = true;
                 achievement.get().unlockTime = Instant.now();
                 save();
-                return true;
             }
+            return sessionAchievements.add(achievement.get());
         }
 
         return false;

@@ -56,6 +56,8 @@ public class Achievement {
         } else {
             texture = new Texture(Gdx.files.internal(MISSING_ICON_PATH));
         }
+        Gdx.app.log("Texture Info", "Width: " + texture.getWidth() + ", Height: " + texture.getHeight());
+        Gdx.app.log("Texture Info", "Format: " + texture.getTextureData().getFormat());
         return new Image(texture);
     }
 
