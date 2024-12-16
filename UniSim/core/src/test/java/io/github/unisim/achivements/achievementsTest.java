@@ -43,4 +43,14 @@ public class achievementsTest {
         Achievement achievement = new Achievement("Test", description, Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, false, false);
         assertEquals(description, achievement.getDescription());
     }
+    
+    // Testing isUnlcoked
+    @Test
+    public void testIsUnlocked() {
+        Achievement achievement = new Achievement("Test", "Test description", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, false, false);
+        assertEquals(false, achievement.isUnlocked());
+
+        achievement = new Achievement("Test", "Test description", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, true, false);
+        assertEquals(true, achievement.isUnlocked());
+    }
 }
