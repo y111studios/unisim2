@@ -1,7 +1,9 @@
 package io.github.unisim.world;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+
 import io.github.unisim.GameState;
 
 /**
@@ -124,7 +126,7 @@ public class WorldInputProcessor implements InputProcessor {
     draggedSinceClick = false;
     cursorPos[0] = cursorPosWhenClicked[0] = x;
     cursorPos[1] = cursorPosWhenClicked[1] = y;
-    if (world.selectedBuilding == null && world.cursorOverBuilding()) {
+    if (world.selectedBuilding == null && world.cursorOverBuilding() && button == Input.Buttons.RIGHT) {
         world.removeBuilding(world.getCursorGridPos());
     }
     return true;
@@ -136,7 +138,7 @@ public class WorldInputProcessor implements InputProcessor {
   @Override
   public boolean touchUp(int x, int y, int pointer, int button) {
     clickedOnWorld = false;
-    if (!draggedSinceClick && world.selectedBuilding != null) {
+    if (!draggedSinceClick && world.selectedBuilding != null && button == Input.Buttons.LEFT) {
       if (world.placeBuilding()) {
           draggedSinceClick = true;
       }
