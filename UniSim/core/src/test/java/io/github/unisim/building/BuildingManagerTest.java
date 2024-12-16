@@ -1,9 +1,9 @@
 package io.github.unisim.building;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -63,7 +63,7 @@ public class BuildingManagerTest {
         Building building = new Building(null, 0.0f, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50);
         buildingManager.placeBuilding(building);
         boolean removed = buildingManager.removeBuilding(building);
-        assertFalse(removed);
+        assertTrue(removed);
     }
 
     // Testing getBuildingCount
