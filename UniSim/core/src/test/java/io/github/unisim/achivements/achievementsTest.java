@@ -28,11 +28,19 @@ public class achievementsTest {
         assertEquals(unlocked, achievement.isUnlocked());
     }
 
-    // Testing getname
+    // Testing getName
     @Test
     public void testGetName() {
         String name = "Test Achievement";
         Achievement achievement = new Achievement(name, "Test description", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, false, false);
         assertEquals(name, achievement.getName());
+    }
+
+    // Testing getDescription
+    @Test
+    public void testGetDescription() {
+        String description = "Test description";
+        Achievement achievement = new Achievement("Test", description, Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, false, false);
+        assertEquals(description, achievement.getDescription());
     }
 }
