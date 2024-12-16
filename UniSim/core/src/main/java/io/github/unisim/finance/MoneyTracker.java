@@ -12,7 +12,7 @@ public class MoneyTracker {
     private Instant lastUpdateTime;
 
     public MoneyTracker(int initialMoney) {
-        money = initialMoney;
+        money = Math.max(initialMoney, 0);
         lastUpdateTime = Instant.now();
     }
 
@@ -21,6 +21,9 @@ public class MoneyTracker {
     }
 
     public boolean subtractMoney(int amount) {
+        if (amount < 0) {
+            return false;
+        }
         if (money < amount) {
             return false;
         }
@@ -44,6 +47,9 @@ public class MoneyTracker {
     }
 
     public void addMoney(int amount) {
+        if (amount < 0) {
+            return;
+        }
         money += amount;
     }
 }

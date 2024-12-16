@@ -263,4 +263,8 @@ public class BuildingManager {
     }
     return null;
   }
+
+  public Matrix4 getIsoTransform() {
+    return this.isoTransform;
+  }
 }
