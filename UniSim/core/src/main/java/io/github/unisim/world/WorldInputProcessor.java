@@ -126,7 +126,7 @@ public class WorldInputProcessor implements InputProcessor {
     draggedSinceClick = false;
     cursorPos[0] = cursorPosWhenClicked[0] = x;
     cursorPos[1] = cursorPosWhenClicked[1] = y;
-    if (world.selectedBuilding == null && world.cursorOverBuilding()) {
+    if (world.selectedBuilding == null && world.cursorOverBuilding() && button == Input.Buttons.RIGHT) {
         world.removeBuilding(world.getCursorGridPos());
     }
     return true;
