@@ -17,12 +17,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
+import io.github.unisim.achievements.AchievementManager;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingManager;
 import io.github.unisim.building.BuildingType;
 import io.github.unisim.finance.MoneyTracker;
 import io.github.unisim.scoring.SatisfactionTracker;
 import io.github.unisim.scoring.ScoreTracker;
+import io.github.unisim.ui.AchievementBar;
 
 /**
  * A class that holds all the gameplay elements of the game UniSim.
@@ -58,6 +60,8 @@ public class World {
   public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
   public MoneyTracker moneyTracker = new MoneyTracker(500);
   public ScoreTracker scoreTracker = new ScoreTracker();
+  public AchievementManager achievementManager = new AchievementManager();
+  public AchievementBar achievementBar;
   private float minX = 0f; //* Camera bounds for panning and zooming */
   private float maxX = 300f;
   private float minY = -75f;
@@ -66,12 +70,13 @@ public class World {
   /**
    * Create a new World.
    */
-  public World() {
+  public World(AchievementBar achievementBar) {
     camera.zoom = 0.05f;
     initIsometricTransform();
     buildingManager = new BuildingManager(isoTransform);
     selectedBuilding = null;
     scoreTracker.addScoreObject(satisfactionTracker);
+    this.achievementBar = achievementBar;
   }
 
   /**
@@ -86,7 +91,18 @@ public class World {
     moneyTracker.updateMoney();
     satisfactionTracker.updateSatisfaction(buildingManager.getBuildings(), buildingManager.getPreviewBuilding());
     scoreTracker.update();
-    System.out.println("Score: " + scoreTracker.getScore());
+
+    // Check achievement conditions
+
+    if (moneyTracker.getMoney() == 0) {
+        if (achievementManager.unlockAchievement("Bankruptcy")) {
+            achievementBar.setAchievement(achievementManager.getAchievement("Bankruptcy"));
+        }
+    } else if (moneyTracker.getMoney() >= 100_000) {
+        if (achievementManager.unlockAchievement("Capitalist")) {
+            achievementBar.setAchievement(achievementManager.getAchievement("Capitalist"));
+        }
+    }
   }
 
   /**
@@ -444,6 +460,7 @@ public class World {
     buildingManager = new BuildingManager(isoTransform);
     selectedBuilding = null;
     moneyTracker = new MoneyTracker(500);
+    achievementManager.clearSessionAchievements();
   }
 
   /**
