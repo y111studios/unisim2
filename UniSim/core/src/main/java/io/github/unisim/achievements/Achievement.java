@@ -15,6 +15,11 @@ public class Achievement {
     boolean unlocked;
     boolean hidden;
 
+    public Achievement(DefinedAchievements definition) {
+        this(definition.name, definition.description, Instant.EPOCH, definition.functionTemplate,
+                definition.scoreModifierValue, 0, false, definition.hidden);
+    }
+
     public Achievement(String name, String description, Instant unlockTime,
             ScoreModifierTemplate functionTemplate, float scoreModifierValue, float progress,
             boolean unlocked, boolean hidden) {
@@ -47,21 +52,6 @@ public class Achievement {
         json.addChild("unlocked", new JsonValue(unlocked));
         json.addChild("hidden", new JsonValue(hidden));
         return json;
-    }
-
-    enum ScoreModifierTemplate {
-        ADD, MUL;
-
-        public Function<Integer, Integer> getFunction(float value) {
-            switch (this) {
-                case ADD:
-                    return x -> x + (int) value;
-                case MUL:
-                    return x -> (int) (x * value);
-                default:
-                    throw new IllegalArgumentException("Invalid score modifier");
-            }
-        }
     }
 
 }

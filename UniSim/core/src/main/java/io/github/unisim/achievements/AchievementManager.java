@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -18,13 +19,12 @@ public class AchievementManager {
     List<Achievement> achievements;
 
     public AchievementManager() {
-        if (fileExists()) {
-            load();
-        } else {
+        if (!fileExists()) {
             createFile();
             achievements = new ArrayList<>();
             save();
         }
+        load();
     }
 
     public List<Achievement> getAchievements() {
@@ -39,6 +39,21 @@ public class AchievementManager {
             .iterator();
     }
 
+    public boolean unlockAchievement(String name) {
+        Optional<Achievement> achievement =
+                achievements.stream().filter((a) -> a.name.equals(name)).findFirst();
+
+        if (achievement.isPresent()) {
+            if (!achievement.get().isUnlocked()) {
+                achievement.get().unlocked = true;
+                achievement.get().unlockTime = Instant.now();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void save() {
         JsonValue root = new JsonValue(JsonValue.ValueType.array);
         achievements.stream().map(Achievement::toJsonValue).forEach(root::addChild);
@@ -50,17 +65,24 @@ public class AchievementManager {
         FileHandle f = getFile();
         JsonValue root = new JsonReader().parse(f);
         for (JsonValue json : root) {
-            Achievement achievement = new Achievement(
-                json.getString("name"),
-                json.getString("description"),
-                Instant.ofEpochMilli(json.getLong("unlockTime")),
-                Achievement.ScoreModifierTemplate.valueOf(json.getString("functionTemplate")),
-                json.getFloat("scoreModifierValue"),
-                json.getFloat("progress"),
-                json.getBoolean("unlocked"),
-                json.getBoolean("hidden")
-            );
+            String name = json.getString("name");
+            String description = json.getString("description");
+            Instant unlockTime = Instant.ofEpochMilli(json.getLong("unlockTime"));
+            ScoreModifierTemplate functionTemplate =
+                    ScoreModifierTemplate.valueOf(json.getString("functionTemplate"));
+            float scoreModifierValue = json.getFloat("scoreModifierValue");
+            float progress = json.getFloat("progress");
+            boolean unlocked = json.getBoolean("unlocked");
+            boolean hidden = json.getBoolean("hidden");
+            Achievement achievement = new Achievement(name, description, unlockTime, functionTemplate,
+                    scoreModifierValue, progress, unlocked, hidden);
             achievements.add(achievement);
+        }
+        Optional<List<DefinedAchievements>> undefinedAchievements =
+                DefinedAchievements.getMissingAchievements(achievements);
+        if (undefinedAchievements.isPresent()) {
+            undefinedAchievements.get().forEach(a -> achievements.add(new Achievement(a)));
+            save();
         }
     }
 
