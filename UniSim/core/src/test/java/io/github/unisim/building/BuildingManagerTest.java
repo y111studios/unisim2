@@ -69,6 +69,7 @@ public class BuildingManagerTest {
     // Testing getBuildingCount
     @Test
     public void testGetBuildingCount() {
+        buildingType = BuildingType.SLEEPING;
         Building building = new Building(null, 0.0f, null, new Point(1,1), new Point(1,1), false, BuildingType.SLEEPING, "", 0, 50);
         assertEquals(0, buildingManager.getBuildingCount(buildingType));
         buildingManager.placeBuilding(building);
