@@ -19,6 +19,7 @@ import io.github.unisim.world.WorldInputProcessor;
 public class GameScreen implements Screen {
   private World world = new World();
   private Stage stage = new Stage(new ScreenViewport());
+  private AchievementBar achievementBar;
   private InfoBar infoBar;
   private BuildingMenu buildingMenu;
   private Timer timer;
@@ -33,6 +34,7 @@ public class GameScreen implements Screen {
   public GameScreen() {
     timer = new Timer(300_000);
     infoBar = new InfoBar(stage, timer, world);
+    achievementBar = new AchievementBar(stage);
     buildingMenu = new BuildingMenu(stage, world);
 
     inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);

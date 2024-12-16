@@ -5,6 +5,7 @@ import java.util.function.Function;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.JsonValue;
 
 public class Achievement {
@@ -38,14 +39,16 @@ public class Achievement {
         this.hidden = hidden;
     }
 
-    public Texture getIcon() {
+    public Image getIcon() {
         final String path = String.format("achievements/%s.png", name);
         FileHandle imageFile = Gdx.files.internal(path);
+        Texture texture;
         if (imageFile.exists()) {
-            return new Texture(imageFile);
+            texture = new Texture(imageFile);
         } else {
-            return new Texture(Gdx.files.internal(MISSING_ICON_PATH));
+            texture = new Texture(Gdx.files.internal(MISSING_ICON_PATH));
         }
+        return new Image(texture);
     }
 
     public boolean isUnlocked() {
