@@ -2,6 +2,9 @@ package io.github.unisim.achievements;
 
 import java.time.Instant;
 import java.util.function.Function;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.JsonValue;
 
 public class Achievement {
@@ -14,6 +17,8 @@ public class Achievement {
     float progress;
     boolean unlocked;
     boolean hidden;
+
+    private static String MISSING_ICON_PATH = "achievements/missing_icon.png";
 
     public Achievement(DefinedAchievements definition) {
         this(definition.name, definition.description, Instant.EPOCH, definition.functionTemplate,
@@ -31,6 +36,16 @@ public class Achievement {
         this.progress = progress;
         this.unlocked = unlocked;
         this.hidden = hidden;
+    }
+
+    public Texture getIcon() {
+        final String path = String.format("achievements/%s.png", name);
+        FileHandle imageFile = Gdx.files.internal(path);
+        if (imageFile.exists()) {
+            return new Texture(imageFile);
+        } else {
+            return new Texture(Gdx.files.internal(MISSING_ICON_PATH));
+        }
     }
 
     public boolean isUnlocked() {
