@@ -86,7 +86,6 @@ public class World {
     moneyTracker.updateMoney();
     satisfactionTracker.updateSatisfaction(buildingManager.getBuildings(), buildingManager.getPreviewBuilding());
     scoreTracker.update();
-    System.out.println("Score: " + scoreTracker.getScore());
   }
 
   /**
