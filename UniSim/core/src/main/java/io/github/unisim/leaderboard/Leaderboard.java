@@ -68,15 +68,15 @@ public class Leaderboard {
         entries.sort((a, b) -> Integer.compare(b.score(), a.score()));
     }
 
-    private FileHandle getFile() {
+    private static FileHandle getFile() {
         return Gdx.files.local(FILE_ADDRESS);
     }
 
-    private boolean fileExists() {
+    static boolean fileExists() {
         return getFile().exists();
     }
 
-    private void createFile() {
+    private static void createFile() {
         try {
             getFile().file().createNewFile();
         } catch (Exception e) {
