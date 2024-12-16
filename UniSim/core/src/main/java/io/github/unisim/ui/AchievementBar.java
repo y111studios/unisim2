@@ -1,10 +1,9 @@
 package io.github.unisim.ui;
 
+import java.time.Duration;
+import java.time.Instant;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -19,6 +18,10 @@ public class AchievementBar {
     private Image iconImage;
     private Label titleLabel;
     private Label descriptionLabel;
+
+    private Instant displayEndTime;
+
+    private static final Duration DISPLAY_TIME = Duration.ofSeconds(8);
 
     final static float normalisedWidth = 0.4f;
     final static float normalisedHeight = 0.1f;
@@ -47,6 +50,8 @@ public class AchievementBar {
 
         stage.addActor(bar);
         stage.addActor(table);
+
+        hide();
     }
 
     public void setAchievement(Achievement achievement) {
@@ -59,6 +64,29 @@ public class AchievementBar {
 
         table.invalidate();
         table.layout();
+
+        showFor(DISPLAY_TIME);
+    }
+
+    private void hide() {
+        displayEndTime = null;
+        this.bar.setVisible(false);
+        this.table.setVisible(false);
+    }
+
+    private void showFor(Duration duration) {
+        this.bar.setVisible(true);
+        this.table.setVisible(true);
+        displayEndTime = Instant.now().plus(duration);
+    }
+
+    public void update() {
+        if (displayEndTime == null) {
+            return;
+        }
+        if (Instant.now().isAfter(displayEndTime)) {
+            hide();
+        }
     }
 
 }

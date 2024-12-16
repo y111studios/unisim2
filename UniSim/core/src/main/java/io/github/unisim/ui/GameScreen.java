@@ -65,6 +65,7 @@ public class GameScreen implements Screen {
     stage.act(dt);
     infoBar.update();
     buildingMenu.update();
+    achievementBar.update();
     stage.draw();
     if (GameState.gameOver) {
       world.zoom((world.getMaxZoom() - world.getZoom()) * 2f);
