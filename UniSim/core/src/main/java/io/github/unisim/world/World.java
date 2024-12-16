@@ -88,6 +88,14 @@ public class World {
     moneyTracker.updateMoney();
     satisfactionTracker.updateSatisfaction(buildingManager.getBuildings(), buildingManager.getPreviewBuilding());
     scoreTracker.update();
+
+    // Check achievement conditions
+
+    if (moneyTracker.getMoney() == 0) {
+        achievementManager.unlockAchievement("Bankruptcy");
+    } else if (moneyTracker.getMoney() >= 100_000) {
+        achievementManager.unlockAchievement("Capitalist");
+    }
   }
 
   /**

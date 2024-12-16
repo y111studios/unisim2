@@ -47,6 +47,7 @@ public class AchievementManager {
             if (!achievement.get().isUnlocked()) {
                 achievement.get().unlocked = true;
                 achievement.get().unlockTime = Instant.now();
+                save();
                 return true;
             }
         }
