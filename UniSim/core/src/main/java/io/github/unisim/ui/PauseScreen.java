@@ -22,7 +22,7 @@ import io.github.unisim.GameState;
 
 
 public class PauseScreen implements Screen {
-	
+
 	  private Stage stage;
 	  private Table table;
 	  private Skin skin = GameState.defaultSkin;
@@ -31,26 +31,27 @@ public class PauseScreen implements Screen {
 	  private TextButton mainMenuButton;
 	  private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 	  private TextButton resumeButton;
-	  
+
 	  public PauseScreen() {
 		  stage = new Stage();
 		  table = new Table();
-		  
-		  
-		  
-		  
-		 
+
+
+
+
+
 		  resumeButton = new TextButton("Resume", skin);
 		  resumeButton.setPosition(150, 150);
 		  resumeButton.setSize(200, 60);
 		  resumeButton.addListener(new ClickListener() {
 			  @Override
 			  public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-			  GameState.currentScreen = GameState.gameScreen;  
-			  }  
+                GameState.paused = false;
+			  GameState.currentScreen = GameState.gameScreen;
+			  }
 		  });
-		  
-		  
+
+
 		  mainMenuButton = new TextButton("Exit to Main Menu", skin);
 		  mainMenuButton.setPosition(150, 80);
 		  mainMenuButton.setSize(200, 60);
@@ -71,7 +72,7 @@ public class PauseScreen implements Screen {
 		          confirmDialog.show(stage);
 		      }
 		  });
-		  
+
 		  table.setFillParent(true);
 		  table.center().center();
 		  table.pad(100, 100, 100, 100);
@@ -84,42 +85,42 @@ public class PauseScreen implements Screen {
 		  inputMultiplexer.addProcessor(stage);
 
 
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-		  
-	  }
-	  
-	  
-	  
-	
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+	  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -137,26 +138,26 @@ public class PauseScreen implements Screen {
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
 		stage.getViewport().update(width, height, true);
-		
+
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
 		Gdx.input.setInputProcessor(inputMultiplexer);
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -164,27 +165,27 @@ public class PauseScreen implements Screen {
 		// TODO Auto-generated method stub
 		stage.dispose();
 	    skin.dispose();
-		
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
