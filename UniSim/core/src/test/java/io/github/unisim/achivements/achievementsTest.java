@@ -10,8 +10,8 @@ import com.badlogic.gdx.utils.JsonValue;
 import io.github.unisim.achievements.Achievement;
 import io.github.unisim.achievements.ScoreModifierTemplate;
 
-public class achievementsTest {
-    
+public class AchievementsTest {
+
     // Testing constructor
     @Test
     public void testConstructor() {
@@ -46,7 +46,7 @@ public class achievementsTest {
         Achievement achievement = new Achievement("Test", description, Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, false, false);
         assertEquals(description, achievement.getDescription());
     }
-    
+
     // Testing isUnlcoked
     @Test
     public void testIsUnlocked() {
@@ -97,7 +97,7 @@ public class achievementsTest {
         assertNotNull(jsonValue);
         assertEquals(name, jsonValue.getString("name"));
         assertEquals(description, jsonValue.getString("description"));
-        assertEquals(unlockTime, jsonValue.getString("unlockTime"));
+        assertEquals(unlockTime.toEpochMilli(), jsonValue.getLong("unlockTime"));
         assertEquals(functionTemplate.toString(), jsonValue.getString("functionTemplate"));
         assertEquals(scoreModifierValue, jsonValue.getFloat("scoreModifierValue"));
         assertEquals(progress, jsonValue.getFloat("progress"));

@@ -14,7 +14,7 @@ import io.github.unisim.achievements.AchievementManager;
 import io.github.unisim.achievements.DefinedAchievements;
 import io.github.unisim.achievements.ScoreModifierTemplate;
 
-public class definedAchievementsTest {
+public class DefinedAchievementsTest {
 
     private AchievementManager achievementManager;
 

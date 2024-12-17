@@ -12,7 +12,7 @@ import io.github.unisim.achievements.Achievement;
 import io.github.unisim.achievements.AchievementManager;
 import io.github.unisim.achievements.ScoreModifierTemplate;
 
-public class achievementManagerTest {
+public class AchievementManagerTest {
 
     AchievementManager achievementManager;
     Achievement achievementUnlocked;
@@ -25,7 +25,7 @@ public class achievementManagerTest {
         achievementLocked = new Achievement("Test2", "Description", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, true, false);
 
     }
-    
+
     // Testing constructor
     @Test
     public void testAchievementManager() {
