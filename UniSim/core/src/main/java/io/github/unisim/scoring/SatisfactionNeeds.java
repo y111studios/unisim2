@@ -3,19 +3,17 @@ package io.github.unisim.scoring;
 import java.util.HashMap;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingType;
-import io.github.unisim.world.World;
 
 public class SatisfactionNeeds {
 
-    public float getSatisfaction(World world) {
+    public float getSatisfaction(Iterable<Building> buildings, int totalStudents) {
         HashMap<BuildingType, Integer> capacityByType = new HashMap<>(3);
-        for (Building building : world.getBuildings()) {
+        for (Building building : buildings) {
             BuildingType type = building.type;
             int capacity = building.capacity;
             capacityByType.put(type, capacityByType.getOrDefault(type, 0) + capacity);
         }
 
-        int totalStudents = world.numberOfStudents;
         float housingCapacity = capacityByType.getOrDefault(BuildingType.SLEEPING, 0);
         float cateringCapacity = capacityByType.getOrDefault(BuildingType.EATING, 0);
         float teachingCapacity = capacityByType.getOrDefault(BuildingType.LEARNING, 0);
