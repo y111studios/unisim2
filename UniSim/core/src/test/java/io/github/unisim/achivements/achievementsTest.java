@@ -2,7 +2,10 @@ package io.github.unisim.achivements;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
+
+import com.badlogic.gdx.utils.JsonValue;
 
 import io.github.unisim.achievements.Achievement;
 import io.github.unisim.achievements.ScoreModifierTemplate;
@@ -76,4 +79,29 @@ public class achievementsTest {
         assertEquals(scoreModifierValue, achievement.getScoreModifier());
     }
 
+    // Testing toJsonValue
+    @Test
+    public void testToJsonValue() {
+        String name = "Test";
+        String description = "Test description";
+        Instant unlockTime = Instant.now();
+        ScoreModifierTemplate functionTemplate = ScoreModifierTemplate.ADD;
+        float scoreModifierValue = 0;
+        float progress = 0;
+        boolean unlocked = false;
+        boolean hidden = false;
+
+        Achievement achievement = new Achievement(name, description, unlockTime, functionTemplate, scoreModifierValue, progress, unlocked, hidden);
+        JsonValue jsonValue = achievement.toJsonValue();
+
+        assertNotNull(jsonValue);
+        assertEquals(name, jsonValue.getString("name"));
+        assertEquals(description, jsonValue.getString("description"));
+        assertEquals(unlockTime, jsonValue.getString("unlockTime"));
+        assertEquals(functionTemplate.toString(), jsonValue.getString("functionTemplate"));
+        assertEquals(scoreModifierValue, jsonValue.getFloat("scoreModifierValue"));
+        assertEquals(progress, jsonValue.getFloat("progress"));
+        assertEquals(unlocked, jsonValue.getBoolean("unlocked"));
+        assertEquals(hidden, jsonValue.getBoolean("hidden"));
+    }
 }
