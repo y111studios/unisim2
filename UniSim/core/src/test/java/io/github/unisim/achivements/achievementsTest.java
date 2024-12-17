@@ -53,4 +53,27 @@ public class achievementsTest {
         achievement = new Achievement("Test", "Test description", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, true, false);
         assertEquals(true, achievement.isUnlocked());
     }
+
+    // Testing getScoreModifier
+    @Test
+    public void testGetScoreModifier() {
+        float scoreModifierValue = 10;
+        Achievement achievement = new Achievement("Test", "Desciption", Instant.EPOCH, ScoreModifierTemplate.ADD, scoreModifierValue, 0, false, false);
+        assertEquals(scoreModifierValue, achievement.getScoreModifier());
+    }
+
+    @Test
+    public void testGetScoreModifierZero() {
+        float scoreModifierValue = 0;
+        Achievement achievement = new Achievement("Test", "Desciption", Instant.EPOCH, ScoreModifierTemplate.ADD, scoreModifierValue, 0, false, false);
+        assertEquals(scoreModifierValue, achievement.getScoreModifier());
+    }
+
+    @Test
+    public void testGetScoreModifierNegative() {
+        float scoreModifierValue = -10;
+        Achievement achievement = new Achievement("Test", "Desciption", Instant.EPOCH, ScoreModifierTemplate.ADD, scoreModifierValue, 0, false, false);
+        assertEquals(scoreModifierValue, achievement.getScoreModifier());
+    }
+
 }
