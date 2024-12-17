@@ -27,6 +27,7 @@ public class GameScreen implements Screen {
   private InputProcessor worldInputProcessor;
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
   private GameOverMenu gameOverMenu;
+  private ManagementMenu managementMenu;
 
   /**
    * Constructor for the GameScreen.
@@ -34,7 +35,8 @@ public class GameScreen implements Screen {
   public GameScreen() {
     achievementBar = new AchievementBar(stage);
     world = new World(achievementBar);
-    worldInputProcessor = new WorldInputProcessor(world);
+    managementMenu = new ManagementMenu(stage, world);
+    worldInputProcessor = new WorldInputProcessor(world, managementMenu);
     timer = new Timer(300_000);
     infoBar = new InfoBar(stage, timer, world);
     buildingMenu = new BuildingMenu(stage, world);
