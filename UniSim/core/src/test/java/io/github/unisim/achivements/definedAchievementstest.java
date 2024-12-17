@@ -1,18 +1,14 @@
 package io.github.unisim.achivements;
 
+import java.util.HashSet;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.time.Instant;
-import java.util.HashSet;
-
 import org.junit.jupiter.api.Test;
 
-import io.github.unisim.achievements.Achievement;
-import io.github.unisim.achievements.DefinedAchievements;
-import io.github.unisim.achievements.ScoreModifierTemplate;
 import io.github.unisim.achievements.AchievementManager;
+import io.github.unisim.achievements.DefinedAchievements;
 
 public class definedAchievementsTest {
 
@@ -30,7 +26,10 @@ public class definedAchievementsTest {
 
     @Test
     public void testGetNames() {
-        HashSet<String> names = DefinedAchievements.getNames();
+        HashSet<String> names = new HashSet<>();
+        for (DefinedAchievements achievement : DefinedAchievements.values()) {
+            names.add(achievement.name());
+        }
         assertNotNull(names);
         assertTrue(names.contains("Bankruptcy"));
         assertTrue(names.contains("Capitalist"));
