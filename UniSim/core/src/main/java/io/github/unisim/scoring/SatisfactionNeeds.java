@@ -18,14 +18,14 @@ public class SatisfactionNeeds {
         float cateringCapacity = capacityByType.getOrDefault(BuildingType.EATING, 0);
         float teachingCapacity = capacityByType.getOrDefault(BuildingType.LEARNING, 0);
 
-        if (housingCapacity == 0 || cateringCapacity == 0 || teachingCapacity == 0) {
+        if (housingCapacity == 0 || cateringCapacity == 0 || teachingCapacity == 0 || totalStudents == 0) {
             // Special case where no student can be satisfied
             return 0;
         }
 
-        float housingSatisfaction = Math.min(1, totalStudents / housingCapacity);
-        float cateringSatisfaction = Math.min(1, totalStudents / cateringCapacity);
-        float teachingSatisfaction = Math.min(1, totalStudents / teachingCapacity);
+        float housingSatisfaction = Math.min(1, housingCapacity / totalStudents);
+        float cateringSatisfaction = Math.min(1, cateringCapacity / totalStudents);
+        float teachingSatisfaction = Math.min(1, teachingCapacity / totalStudents);
 
         return Math.min(housingSatisfaction, Math.min(cateringSatisfaction, teachingSatisfaction));
     }
