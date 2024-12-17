@@ -1,4 +1,4 @@
-package io.github.unisim.achivements;
+package io.github.unisim.achievements;
 
 import java.time.Instant;
 
@@ -7,10 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import io.github.unisim.achievements.Achievement;
-import io.github.unisim.achievements.AchievementManager;
-import io.github.unisim.achievements.ScoreModifierTemplate;
 
 public class AchievementManagerTest {
 
