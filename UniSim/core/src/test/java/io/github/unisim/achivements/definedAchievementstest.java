@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import io.github.unisim.achievements.DefinedAchievements;
 
-public class definedAchievementstest {
+public class definedAchievementsTest {
 
     // Testing constructor
     @Test
