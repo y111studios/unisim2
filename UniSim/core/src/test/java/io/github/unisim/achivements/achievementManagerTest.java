@@ -2,6 +2,7 @@ package io.github.unisim.achivements;
 
 import java.time.Instant;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,5 +50,12 @@ public class achievementManagerTest {
     @Test
     public void testGetUnlockedachievements() {
         assertNotNull(achievementManager.getUnlockedScoreModifiers());
+    }
+
+    // Testing unlockAchievement
+    @Test
+    public void testUnlockedAchievements() {
+        achievementManager.unlockAchievement("Test2");
+        assertFalse(achievementManager.getAchievements().contains(achievementLocked));
     }
 }
