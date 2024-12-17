@@ -12,6 +12,10 @@ public class BuildingMenuEntry {
   private Table navTable;
   private Table buildingTable;
 
+  /**
+   * creates a new holder for the images and navigation
+   * pannel for a building type
+   */
   public BuildingMenuEntry() {
     navTable = new Table();
     buildingTable = new Table();
@@ -43,6 +47,12 @@ public class BuildingMenuEntry {
     return buildingTable;
   }
 
+  /**
+   * Called when the window is resized, scales the building menu images with the window size.
+
+   * @param width - The new width of the window in pixels
+   * @param height - The new height of the window in pixels
+   */
   @SuppressWarnings("unchecked")
   public void resize(int width, int height) {
     buildingTable.setBounds(0, 0, width, height * 0.1f);

@@ -106,16 +106,18 @@ public class BuildingMenu {
         1000
     ));
 
+    //add arrows and label for each building type
     BuildingType temp = null;
     for (BuildingType type : BuildingType.values()) {
       navTableMap.put(type, new BuildingMenuEntry());
       final BuildingType prev = temp;
+      final BuildingType curr = type;
       if (temp != null) {
         Image leftArrow = new Image(new Texture(Gdx.files.internal("ui/leftarrow.png")));
         leftArrow.addListener(new ClickListener() {
           @Override
           public void clicked(InputEvent e, float x, float y) {
-            currMenuEntry.removeFromStage();
+            navTableMap.get(curr).removeFromStage();
             navTableMap.get(prev).addToStage(stage);
           }
         });
@@ -127,8 +129,8 @@ public class BuildingMenu {
         rightArrow.addListener(new ClickListener() {
           @Override
           public void clicked(InputEvent e, float x, float y) {
-            currMenuEntry.removeFromStage();
-            navTableMap.get(type).addToStage(stage);
+            navTableMap.get(prev).removeFromStage();
+            navTableMap.get(curr).addToStage(stage);
           }
         });
         navTableMap.get(prev).addToNavTable(rightArrow);
