@@ -3,10 +3,8 @@ package io.github.unisim.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -19,6 +17,7 @@ import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingType;
 import io.github.unisim.world.World;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Menu used to place buildings in the world by clicking and dragging them
@@ -28,9 +27,10 @@ import java.util.ArrayList;
 public class BuildingMenu {
   private World world;
   private ShapeActor bar = new ShapeActor(GameState.UISecondaryColour);
-  private Table table;
   private ArrayList<Building> buildings = new ArrayList<>();
   private ArrayList<Image> buildingImages = new ArrayList<>();
+  private HashMap<BuildingType, BuildingMenuEntry> navTableMap = new HashMap<>();
+  private BuildingMenuEntry currMenuEntry;
   private Label buildingInfoLabel = new Label(
       "", new Skin(Gdx.files.internal("ui/uiskin.json"))
   );
@@ -82,6 +82,18 @@ public class BuildingMenu {
         500
     ));
     buildings.add(new Building(
+        new Texture(Gdx.files.internal("buildings/tennisCourt.png")),
+        0.0025f,
+        new Vector2(1f, -2.4f),
+        new Point(),
+        new Point(6, 9),
+        false,
+        BuildingType.RECREATION,
+        "Tennis Court",
+        10,
+        500
+    ));
+    buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/studentHousing.png")),
         0.108f,
         new Vector2(1.4f, -2.8f),
@@ -94,8 +106,39 @@ public class BuildingMenu {
         1000
     ));
 
-    table = new Table();
-    // Add buldings to the table
+    //add arrows and label for each building type
+    BuildingType temp = null;
+    for (BuildingType type : BuildingType.values()) {
+      navTableMap.put(type, new BuildingMenuEntry());
+      final BuildingType prev = temp;
+      final BuildingType curr = type;
+      if (temp != null) {
+        Image leftArrow = new Image(new Texture(Gdx.files.internal("ui/leftarrow.png")));
+        leftArrow.addListener(new ClickListener() {
+          @Override
+          public void clicked(InputEvent e, float x, float y) {
+            navTableMap.get(curr).removeFromStage();
+            navTableMap.get(prev).addToStage(stage);
+          }
+        });
+        navTableMap.get(type).addToNavTable(leftArrow);
+      }
+      navTableMap.get(type).addToNavTable(new Label(type.toString(), new Skin(Gdx.files.internal("ui/uiskin.json"))));
+      if (temp != null) {
+        Image rightArrow = new Image(new Texture(Gdx.files.internal("ui/rightarrow.png")));
+        rightArrow.addListener(new ClickListener() {
+          @Override
+          public void clicked(InputEvent e, float x, float y) {
+            navTableMap.get(prev).removeFromStage();
+            navTableMap.get(curr).addToStage(stage);
+          }
+        });
+        navTableMap.get(prev).addToNavTable(rightArrow);
+      }
+      temp = type;
+    }
+
+    // Add buildings to the table
     for (int i = 0; i < buildings.size(); i++) {
       buildingImages.add(new Image(buildings.get(i).texture));
       final int buildingIndex = i;
@@ -117,13 +160,14 @@ public class BuildingMenu {
           }
         }
       });
-      table.add(buildingImages.get(i));
+      navTableMap.get(buildings.get(i).type).addToBuildingTable(buildingImages.get(i));
     }
 
     buildingInfoTable.add(buildingInfoLabel).expandX().align(Align.center);
 
     stage.addActor(bar);
-    stage.addActor(table);
+    currMenuEntry = navTableMap.get(BuildingType.RECREATION);
+    currMenuEntry.addToStage(stage);
     stage.addActor(buildingInfoTable);
   }
 
@@ -133,24 +177,12 @@ public class BuildingMenu {
    * @param width - The new width of the window in pixels
    * @param height - The new height of the window in pixels
    */
-  @SuppressWarnings("unchecked")
   public void resize(int width, int height) {
-    table.setBounds(0, 0, width, height * 0.1f);
-    bar.setBounds(0, 0, width, height * 0.1f);
-    buildingInfoTable.setBounds(0, height * 0.1f, width, height * 0.025f);
-
-    // we must perform an unchecked type conversion here
-    // this is acceptable as we know our table only contains instances of Actors
-    for (Cell<Actor> cell : table.getCells()) {
-      Image buildingImage = (Image) (cell.getActor());
-      Vector2 textureSize = new Vector2(buildingImage.getWidth(), buildingImage.getHeight());
-      cell.width(
-          height * 0.1f * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1)
-      ).height(
-          height * 0.1f * (textureSize.y < textureSize.x ? textureSize.y / textureSize.x : 1)
-      );
+    bar.setBounds(0, 0, width, height * 0.125f);
+    buildingInfoTable.setBounds(0, height * 0.125f, width, height * 0.025f);
+    for (BuildingMenuEntry menuEntry : navTableMap.values()) {
+      menuEntry.resize(width, height);
     }
-
     buildingInfoLabel.setFontScale(height * 0.0015f);
   }
 
