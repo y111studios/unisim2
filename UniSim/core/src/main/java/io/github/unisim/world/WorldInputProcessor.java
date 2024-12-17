@@ -5,12 +5,14 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
 import io.github.unisim.GameState;
+import io.github.unisim.ui.ManagementMenu;
 
 /**
  * Handles input events related to the world, after they have passed through the UiInputProcessor.
  */
 public class WorldInputProcessor implements InputProcessor {
   private World world;
+  private ManagementMenu managementMenu;
   private int[] cursorPos = new int[2];
   private int[] cursorPosWhenClicked = new int[2];
   private boolean clickedOnWorld = false;
@@ -21,10 +23,11 @@ public class WorldInputProcessor implements InputProcessor {
   private boolean moveRight = false;
   private boolean zoomIn = false;
   private boolean zoomOut = false;
-  
 
-  public WorldInputProcessor(World world) {
+
+  public WorldInputProcessor(World world, ManagementMenu managementMenu) {
     this.world = world;
+    this.managementMenu = managementMenu;
   }
 
 
@@ -33,6 +36,9 @@ public class WorldInputProcessor implements InputProcessor {
     switch (keycode) {
       case Keys.SPACE:
         GameState.paused = !GameState.paused;
+        break;
+    case Keys.TAB:
+        managementMenu.toggleVisibility();
         break;
       case Keys.R:
         // Flip the selected building
@@ -72,7 +78,7 @@ public class WorldInputProcessor implements InputProcessor {
         break;
       case Keys.X:
         zoomOut = true;
-        break;        
+        break;
       default:
         break;
     }
