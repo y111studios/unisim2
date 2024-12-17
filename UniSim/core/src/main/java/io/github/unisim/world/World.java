@@ -473,7 +473,11 @@ public class World {
     return buildingManager.getBuildingAt(getCursorGridPos()) != null;
   }
 
-    public void setStudentEnrollment(int studentCount) {
-        numberOfStudents = studentCount;
-    }
+  public void setStudentEnrollment(int studentCount) {
+      numberOfStudents = studentCount;
+  }
+
+  public Iterable<Building> getBuildings() {
+    return buildingManager.getBuildings();
+  }
 }
