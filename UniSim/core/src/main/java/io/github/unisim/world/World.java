@@ -62,6 +62,7 @@ public class World {
   public ScoreTracker scoreTracker = new ScoreTracker();
   public AchievementManager achievementManager = new AchievementManager();
   public AchievementBar achievementBar;
+  public int numberOfStudents;
   private float minX = 0f; //* Camera bounds for panning and zooming */
   private float maxX = 300f;
   private float minY = -75f;
@@ -77,6 +78,7 @@ public class World {
     selectedBuilding = null;
     scoreTracker.addScoreObject(satisfactionTracker);
     this.achievementBar = achievementBar;
+    numberOfStudents = 0;
   }
 
   /**
@@ -89,7 +91,7 @@ public class World {
 
   public void update() {
     moneyTracker.updateMoney();
-    satisfactionTracker.updateSatisfaction(buildingManager.getBuildings(), buildingManager.getPreviewBuilding());
+    satisfactionTracker.updateSatisfaction(buildingManager.getBuildings(), buildingManager.getPreviewBuilding(), numberOfStudents);
     scoreTracker.update();
 
     // Check achievement conditions
@@ -469,5 +471,13 @@ public class World {
    */
   public boolean cursorOverBuilding() {
     return buildingManager.getBuildingAt(getCursorGridPos()) != null;
+  }
+
+  public void setStudentEnrollment(int studentCount) {
+      numberOfStudents = studentCount;
+  }
+
+  public Iterable<Building> getBuildings() {
+    return buildingManager.getBuildings();
   }
 }

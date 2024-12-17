@@ -1,15 +1,16 @@
 package io.github.unisim.scoring;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Iterator;
+import java.util.stream.StreamSupport;
 import io.github.unisim.building.Building;
-import io.github.unisim.building.BuildingType;
 
 public class SatisfactionTracker implements ScoringObject {
     private float satisfaction;
+    private SatisfactionNeeds satisfactionNeeds;
 
     public SatisfactionTracker() {
+        satisfactionNeeds = new SatisfactionNeeds();
         satisfaction = 0;
     }
 
@@ -17,34 +18,16 @@ public class SatisfactionTracker implements ScoringObject {
         return satisfaction;
     }
 
-    public void updateSatisfaction(Iterable<Building> buildings, Building previewBuilding) {
-        Map<BuildingType, Float> buildingCounts = new HashMap<>(4);
-        long buildingCount = 0;
-        long sumStudents = 0;
-        for (Building building : buildings) {
-            if (building == previewBuilding) {
-                continue;
-            }
-            if (building.type == BuildingType.SLEEPING) {
-                sumStudents += building.capacity;
-            }
-            buildingCounts.put(building.type, buildingCounts.getOrDefault(building.type, 0f) + 1);
-            buildingCount += 1;
+    public void updateSatisfaction(Iterable<Building> buildings, Building previewBuilding, int totalStudents) {
+        final Iterator<Building> filteredBuildings;
+        if (previewBuilding == null) {
+            filteredBuildings = buildings.iterator();
+        } else {
+            filteredBuildings = StreamSupport.stream(buildings.spliterator(), false)
+                .filter(b -> b != previewBuilding)
+                .iterator();
         }
-        for (Map.Entry<BuildingType, Float> entry : buildingCounts.entrySet()) {
-            if (entry.getKey() == BuildingType.SLEEPING) {
-                continue;
-            }
-            entry.setValue(entry.getValue() / buildingCount);
-        }
-        float teachFactor = buildingCounts.getOrDefault(BuildingType.LEARNING, 0f)
-                / buildingCounts.getOrDefault(BuildingType.SLEEPING, 1.0f);
-        float eatingFactor = buildingCounts.getOrDefault(BuildingType.EATING, 0f)
-                / buildingCounts.getOrDefault(BuildingType.SLEEPING, 1.0f);
-        float funFactor = buildingCounts.getOrDefault(BuildingType.RECREATION, 0f)
-                / buildingCounts.getOrDefault(BuildingType.SLEEPING, 1.0f);
-        float intermediateSatisfaction = (teachFactor + eatingFactor + funFactor) / 3;
-        satisfaction = 10000f * intermediateSatisfaction / sumStudents;
+        satisfaction = 100 * satisfactionNeeds.getSatisfaction(() -> filteredBuildings, totalStudents);
     }
 
     public void changeSatisfaction(float change) {
