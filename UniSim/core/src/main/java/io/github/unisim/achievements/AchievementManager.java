@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.JsonReader;
@@ -117,4 +118,7 @@ public class AchievementManager {
         return achievements.stream().filter((a) -> a.name.equals(string)).findFirst().get();
     }
 
+    public Set<Achievement> getSessionAchievements() {
+        return sessionAchievements;
+    }
 }
