@@ -83,7 +83,6 @@ public class InfoBar {
       public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
         GameState.paused = true;
         GameState.currentScreen = GameState.pauseScreen;
-        // pauseButtonCell.setActor(playImage);
       }
     });
 
