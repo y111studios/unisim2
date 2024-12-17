@@ -68,11 +68,13 @@ public class ManagementMenu {
     }
 
     void submitToWorld() {
-        if (studentEnrollmentField.getText().isEmpty()) {
-            // If field is empty default back to the previous value
+        try {
+            world.setStudentEnrollment(Integer.parseInt(studentEnrollmentField.getText()));
+        } catch (NumberFormatException e) {
+            // If the input is not a number default back to the previous value
             studentEnrollmentField.setText(Integer.toString(world.numberOfStudents));
+            return;
         }
-        world.setStudentEnrollment(Integer.parseInt(studentEnrollmentField.getText()));
     }
 
     public void hide() {
