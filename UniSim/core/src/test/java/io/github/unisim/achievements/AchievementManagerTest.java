@@ -2,13 +2,14 @@ package io.github.unisim.achievements;
 
 import java.time.Instant;
 
+import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
@@ -100,5 +101,19 @@ public class AchievementManagerTest {
     public void testUnlockedAchievements() {
         achievementManager.unlockAchievement("Test2");
         assertFalse(achievementManager.getAchievements().contains(achievementLocked));
+    }
+
+    // Testing
+    @Test
+    public void testUnlockNonExistentAchievement() {
+        boolean result = achievementManager.unlockAchievement("Non-existent");
+        assertFalse(result);
+    }
+
+    @Test
+    public void testUnlockAlreadyUnlockedAchievement() {
+        achievementManager.unlockAchievement("Test1");
+        boolean result = achievementManager.unlockAchievement("Test1");
+        assertFalse(result);
     }
 }

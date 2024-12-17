@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
-public class DefinedAchievementsTest {
+public class DefinedAchievementstest {
 
     private AchievementManager achievementManager;
 
