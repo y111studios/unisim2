@@ -35,7 +35,14 @@ public class WorldInputProcessor implements InputProcessor {
   public boolean keyDown(int keycode) {
     switch (keycode) {
       case Keys.SPACE:
-        GameState.paused = !GameState.paused;
+    	 if (GameState.paused) {
+    		 GameState.paused = !GameState.paused;
+    	 }
+    	 else {
+    		 GameState.currentScreen = GameState.pauseScreen;
+    	 }
+        
+        
         break;
     case Keys.TAB:
         managementMenu.toggleVisibility();

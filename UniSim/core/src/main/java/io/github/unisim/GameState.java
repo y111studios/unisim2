@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.unisim.ui.GameScreen;
+import io.github.unisim.ui.PauseScreen;
 import io.github.unisim.ui.SettingsScreen;
 import io.github.unisim.ui.StartMenuScreen;
 import io.github.unisim.ui.ControlsScreen;
@@ -26,6 +27,7 @@ public class GameState {
   public static Screen startScreen = new StartMenuScreen();
   public static Screen settingScreen = new SettingsScreen();
   public static Screen controlsScreen = new ControlsScreen();
+  public static Screen pauseScreen = new PauseScreen();
   public static Screen currentScreen;
   // Create an unmodifiable set containing the IDs of all buildable tiles
   // we use a set to make searching more efficient
