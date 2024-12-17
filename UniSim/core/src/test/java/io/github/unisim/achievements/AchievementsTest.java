@@ -59,21 +59,21 @@ public class AchievementsTest {
     public void testGetScoreModifier() {
         float scoreModifierValue = 10;
         Achievement achievement = new Achievement("Test", "Desciption", Instant.EPOCH, ScoreModifierTemplate.ADD, scoreModifierValue, 0, false, false);
-        assertEquals(scoreModifierValue, achievement.getScoreModifier());
+        assertEquals(scoreModifierValue, achievement.scoreModifierValue);
     }
 
     @Test
     public void testGetScoreModifierZero() {
         float scoreModifierValue = 0;
         Achievement achievement = new Achievement("Test", "Desciption", Instant.EPOCH, ScoreModifierTemplate.ADD, scoreModifierValue, 0, false, false);
-        assertEquals(scoreModifierValue, achievement.getScoreModifier());
+        assertEquals(scoreModifierValue, achievement.scoreModifierValue);
     }
 
     @Test
     public void testGetScoreModifierNegative() {
         float scoreModifierValue = -10;
         Achievement achievement = new Achievement("Test", "Desciption", Instant.EPOCH, ScoreModifierTemplate.ADD, scoreModifierValue, 0, false, false);
-        assertEquals(scoreModifierValue, achievement.getScoreModifier());
+        assertEquals(scoreModifierValue, achievement.scoreModifierValue);
     }
 
     // Testing toJsonValue
