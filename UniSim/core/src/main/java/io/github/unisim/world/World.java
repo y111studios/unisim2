@@ -91,7 +91,7 @@ public class World {
 
   public void update() {
     moneyTracker.updateMoney();
-    satisfactionTracker.updateSatisfaction(buildingManager.getBuildings(), buildingManager.getPreviewBuilding());
+    satisfactionTracker.updateSatisfaction(buildingManager.getBuildings(), buildingManager.getPreviewBuilding(), numberOfStudents);
     scoreTracker.update();
 
     // Check achievement conditions
