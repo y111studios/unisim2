@@ -21,8 +21,8 @@ public class SatisfactionTrackerTest {
         satisfactiontracker = new SatisfactionTracker();
         buildings = new ArrayList<>();
         buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.SLEEPING, "", 0, 100));
-        buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.LEARNING, "", 0, 50));
-        buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.EATING, "", 0, 75));
+        buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.LEARNING, "", 0, 100));
+        buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.EATING, "", 0, 100));
     }
 
     // Testing initial satisfaction/constructor
@@ -35,7 +35,7 @@ public class SatisfactionTrackerTest {
     @Test
     public void testUpdateSatisfactionWithBuildings() {
         satisfactiontracker.updateSatisfaction(buildings, null, 50);
-        assertEquals(50, satisfactiontracker.getSatisfaction());
+        assertEquals(100, satisfactiontracker.getSatisfaction());
     }
 
     @Test
@@ -50,6 +50,13 @@ public class SatisfactionTrackerTest {
         Building previewBuilding = new Building(null, 0.0f, null, null, null, false, BuildingType.SLEEPING, "", 0, 100);
         buildings.add(previewBuilding);
         satisfactiontracker.updateSatisfaction(buildings, previewBuilding, 100);
-        assertEquals(50, satisfactiontracker.getSatisfaction());
+        assertEquals(100, satisfactiontracker.getSatisfaction());
+    }
+
+    // Testing getScore
+    @Test
+    public void testGetScore() {
+        satisfactiontracker.updateSatisfaction(buildings, null, 100);
+        assertEquals(100, satisfactiontracker.getScore());
     }
 }
