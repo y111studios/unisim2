@@ -30,7 +30,7 @@ public class achievementManagerTest {
     public void testAchievementManager() {
         assertNotNull(achievementManager);
     }
-    
+
     // Testing clearSessionAchievements
     @Test
     public void testClearSessionAchievements() {
@@ -45,4 +45,9 @@ public class achievementManagerTest {
         System.out.println(achievementManager.getAchievements());
     }
 
+    // Testing getUnlockedScoreModifiers
+    @Test
+    public void testGetUnlockedachievements() {
+        assertNotNull(achievementManager.getUnlockedScoreModifiers());
+    }
 }
