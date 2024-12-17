@@ -39,7 +39,7 @@ public class ManagementMenu {
 
         studentEnrollmentLabel = new Label("Student Enrollment", skin);
         table.add(studentEnrollmentLabel).left();
-        studentEnrollmentField = new TextField("", skin);
+        studentEnrollmentField = new TextField(Integer.toString(world.numberOfStudents), skin);
         studentEnrollmentField.setMessageText("Student Number");
         studentEnrollmentField.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
         studentEnrollmentField.addListener(new InputListener() {
@@ -68,6 +68,10 @@ public class ManagementMenu {
     }
 
     void submitToWorld() {
+        if (studentEnrollmentField.getText().isEmpty()) {
+            // If field is empty default back to the previous value
+            studentEnrollmentField.setText(Integer.toString(world.numberOfStudents));
+        }
         world.setStudentEnrollment(Integer.parseInt(studentEnrollmentField.getText()));
     }
 
