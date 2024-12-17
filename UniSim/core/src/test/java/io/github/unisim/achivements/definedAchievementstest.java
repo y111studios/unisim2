@@ -1,14 +1,18 @@
 package io.github.unisim.achivements;
 
+import java.time.Instant;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
+import io.github.unisim.achievements.Achievement;
 import io.github.unisim.achievements.AchievementManager;
 import io.github.unisim.achievements.DefinedAchievements;
+import io.github.unisim.achievements.ScoreModifierTemplate;
 
 public class definedAchievementsTest {
 
@@ -34,4 +38,21 @@ public class definedAchievementsTest {
         assertTrue(names.contains("Bankruptcy"));
         assertTrue(names.contains("Capitalist"));
     }
+
+    // Testing getMissingAchievements
+    @Test
+    public void testGetMissingAchievements() {
+        Achievement achievement1 = new Achievement("Test1", "Desc1", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, false, false);
+        Achievement achievement2 = new Achievement("Test2", "Desc2", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, false, false);
+
+        Iterable <Achievement> achievements = List.of(achievement1, achievement2);
+        achievementManager = new AchievementManager();
+
+        List<DefinedAchievements> missingAchievements = DefinedAchievements.getMissingAchievements(achievements).get();
+        assertEquals(2, missingAchievements.size());
+        System.out.println("Missing achievements: " + missingAchievements);
+        assertTrue(missingAchievements.contains(DefinedAchievements.Bankruptcy));
+        assertTrue(missingAchievements.contains(DefinedAchievements.Capitalist));
+    }
+
 }
