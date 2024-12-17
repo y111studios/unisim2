@@ -53,6 +53,18 @@ public class SatisfactionTrackerTest {
         assertEquals(100, satisfactiontracker.getSatisfaction());
     }
 
+    @Test
+    public void testUpdateSatisfactionWithNullBuildings() {
+        satisfactiontracker.updateSatisfaction(null, null, 50);
+        assertEquals(0, satisfactiontracker.getSatisfaction());
+    }
+
+    @Test
+    public void testUpdateSatisfactionWithNoStudents() {
+        satisfactiontracker.updateSatisfaction(buildings,null ,0);
+        assertEquals(0, satisfactiontracker.getSatisfaction());
+    }
+
     // Testing getScore
     @Test
     public void testGetScore() {
