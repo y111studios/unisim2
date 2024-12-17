@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -20,6 +21,7 @@ public class EventDisplay {
 
     private Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
     private ShapeActor dialog;
+    private ShapeActor timerBar;
     private Table table;
 
     private EventBucket eventBucket = new EventBucket();
@@ -31,7 +33,7 @@ public class EventDisplay {
     private TextButton choice3;
 
     private Instant displayEndTime;
-    private static final Duration DISPLAY_TIME = Duration.ofSeconds(10);
+    private static final Duration DISPLAY_TIME = Duration.ofSeconds(8);
 
     final static float normalisedWidth = 0.4f;
     final static float normalisedHeight = 0.4f;
@@ -65,7 +67,12 @@ public class EventDisplay {
         table.row();
         table.add(choice3).padBottom(5);
 
+        timerBar = new ShapeActor(Color.GREEN);
+        timerBar.setPosition(dialog.getX(), dialog.getY() + dialog.getHeight());
+        timerBar.setSize(dialog.getWidth(), 8f);
+
         stage.addActor(dialog);
+        stage.addActor(timerBar);
         stage.addActor(table);
 
         hide();
@@ -74,10 +81,11 @@ public class EventDisplay {
     private void hide() {
         displayEndTime = null;
         this.dialog.setVisible(false);
+        this.timerBar.setVisible(false);
         this.table.setVisible(false);
     }
 
-    public void setEvent() {
+    private void setEvent() {
         eventCard = eventBucket.getRandomEvent();
 
         eventTitleLabel.setText(eventCard.getTitle());
@@ -114,6 +122,7 @@ public class EventDisplay {
     public void show() {
         setEvent();
         this.dialog.setVisible(true);
+        this.timerBar.setVisible(true);
         this.table.setVisible(true);
         displayEndTime = Instant.now().plus(DISPLAY_TIME);
     }
@@ -124,6 +133,10 @@ public class EventDisplay {
         }
         if (Instant.now().isAfter(displayEndTime)) {
             hide();
+        } else {
+            long remainingTime = Duration.between(Instant.now(), displayEndTime).toMillis();
+            float width = (remainingTime / (float) DISPLAY_TIME.toMillis()) * dialog.getWidth();
+            timerBar.setSize(width, 8f);
         }
     }
 
