@@ -95,8 +95,8 @@ public class AchievementManager {
         }
     }
 
-    private FileHandle getFile() {
-        return new FileHandle(FILE_PATH);
+    final static FileHandle getFile() {
+        return Gdx.files.local(FILE_PATH);
     }
 
     private boolean fileExists() {

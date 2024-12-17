@@ -5,14 +5,24 @@ import java.time.Instant;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import com.badlogic.gdx.files.FileHandle;
 
 public class AchievementManagerTest {
 
     AchievementManager achievementManager;
     Achievement achievementUnlocked;
     Achievement achievementLocked;
+
+    @AfterAll
+    void removeFile() {
+        FileHandle file = AchievementManager.getFile();
+        if (file.exists()) {
+            file.delete();
+        }
+    }
 
     @BeforeEach
     public void setUp() {
