@@ -24,11 +24,15 @@ public class ManagementMenu {
     private static final float normalisedLeftPadding = (0.975f - normalisedWidth);
     private static final float normalisedTopPadding = (1 - normalisedHeight) / 2;
 
+    private float stageWidth;
+
     private Label studentEnrollmentLabel;
     private TextField studentEnrollmentField;
 
     public ManagementMenu(Stage stage, World world) {
         this.world = world;
+
+        stageWidth = stage.getWidth();
 
         background = new ShapeActor(GameState.UIPrimaryColour);
         background.setSize(normalisedWidth * stage.getWidth(), normalisedHeight * stage.getHeight());
@@ -78,11 +82,17 @@ public class ManagementMenu {
     }
 
     public void hide() {
+        background.moveBy(stageWidth, 0);
+        table.moveBy(stageWidth, 0);
+
         background.setVisible(false);
         table.setVisible(false);
     }
 
     public void show() {
+        background.moveBy(-stageWidth, 0);
+        table.moveBy(-stageWidth, 0);
+
         background.setVisible(true);
         table.setVisible(true);
     }
