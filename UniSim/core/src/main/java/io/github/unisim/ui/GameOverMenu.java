@@ -39,10 +39,13 @@ public class GameOverMenu {
   private TextField nameField;
   private TextButton submitButton;
 
+  private boolean addedToLeaderboard;
+
   /**
    * Creates a new GameOverMenu and initialises all events and UI elements used in the menu.
    */
   public GameOverMenu(ScoreTracker scoreTracker, AchievementManager achievementManager) {
+    addedToLeaderboard = false;
     leaderboard = new Leaderboard();
     this.scoreTracker = scoreTracker;
     this.achievementManager = achievementManager;
@@ -95,12 +98,23 @@ public class GameOverMenu {
     submitButton.addListener(new ClickListener() {
       @Override
       public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+        if (addedToLeaderboard) {
+            return;
+        }
         Integer finalScore = scoreTracker.getFinalScore();
         final Iterable<Function<Integer, Integer>> unlockedScoreModifiers = () -> achievementManager.getUnlockedScoreModifiers();
         for (Function<Integer, Integer> modifierFunction : unlockedScoreModifiers) {
             finalScore = modifierFunction.apply(finalScore);
         }
-        leaderboard.addEntry(new LeaderboardEntry(nameField.getText(), finalScore));
+        LeaderboardEntry newEntry;
+        try {
+            newEntry = new LeaderboardEntry(nameField.getText(), finalScore);
+        } catch (IllegalArgumentException e) {
+            nameField.setColor(Color.RED);
+            return;
+        }
+        addedToLeaderboard = true;
+        leaderboard.addEntry(newEntry);
         leaderboard.save();
         leaderboardTable.clear();
         updateLeaderboardTable();
