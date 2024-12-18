@@ -67,6 +67,7 @@ public class AchievementManager {
         return sessionAchievements.add(a);
     }
 
+    @Deprecated
     public boolean unlockAchievement(String name) {
         Optional<Achievement> achievement =
                 achievements.stream().filter((a) -> a.name.equals(name)).findFirst();
@@ -127,6 +128,7 @@ public class AchievementManager {
         return getAchievement(achievement.name).get();
     }
 
+    @Deprecated
     public Optional<Achievement> getAchievement(String string) {
         return achievements.stream().filter((a) -> a.name.equals(string)).findFirst();
     }
