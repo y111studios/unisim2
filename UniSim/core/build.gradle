@@ -1,6 +1,10 @@
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 eclipse.project.name = appName + '-core'
 
+jacoco {
+  toolVersion = "0.8.12"
+}
+
 dependencies {
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
   testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
@@ -12,10 +16,14 @@ dependencies {
 }
 
 test {
-    // Enable debugging for tests
-    if (project.hasProperty('debug') && project.debug == 'true') {
-        jvmArgs += ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005"]
-    }
+  useJUnitPlatform()
+  jacoco {
+    destinationFile = layout.buildDirectory.file("jacoco/jacocoTest.exec").get().asFile
+  }
+  // Enable debugging for tests
+  if (project.hasProperty('debug') && project.debug == 'true') {
+      jvmArgs += ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005"]
+  }
 }
 
 testing {
@@ -41,5 +49,12 @@ testing {
         }
       }
     }
+  }
+}
+
+jacocoTestReport {
+  dependsOn(test)
+  reports {
+    html.required = true
   }
 }
