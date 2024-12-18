@@ -28,6 +28,7 @@ allprojects {
 
 configure(subprojects) {
   apply plugin: 'java-library'
+  apply plugin: 'jacoco'
 
   java {
     sourceCompatibility = JavaVersion.VERSION_17

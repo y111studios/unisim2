@@ -23,8 +23,8 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
-      - name: Test with Gradle Wrapper
-        run: cd UniSim && ./gradlew test
+      - name: Test and Generate Coverage Report
+        run: cd UniSim && ./gradlew test jacocoTestReport
 
       - name: Archive Test Report
         if: always()
@@ -32,4 +32,12 @@ jobs:
         with:
           name: test-reports
           path: UniSim/core/build/reports/tests/test
+          retention-days: 14
+
+      - name: Archive Test Coverage Report
+        if: success()
+        uses: actions/upload-artifact@v4.4.3
+        with:
+          name: test-coverage-report
+          path: UniSim/core/build/reports/jacoco/test/html
           retention-days: 14
