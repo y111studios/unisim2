@@ -1,5 +1,7 @@
 package io.github.unisim.ui;
 
+import java.util.ArrayList;
+import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -41,7 +43,7 @@ public class InfoBar {
   private Cell<Image> pauseButtonCell;
   private Cell<Label> moneyLabelCell;
   private Cell<Table> buildingCountersTableCell;
-  private Cell[] buildingCounterCells;
+  private List<Cell<Label>> buildingCounterCells;
   private World world;
   /**
    * Create a new infoBar and draws its' components onto the provided stage.
@@ -51,17 +53,17 @@ public class InfoBar {
   public InfoBar(Stage stage, Timer timer, World world) {
     this.timer = timer;
     this.world = world;
-    buildingCounterCells = new Cell[4];
+    buildingCounterCells = new ArrayList<Cell<Label>>(4);
 
     // Building counter table
     for (int i = 0; i < 4; i++) {
       buildingCounterLabels[i] = new Label("", skin);
     }
-    buildingCounterCells[0] = buildingCountersTable.add(buildingCounterLabels[0]);
-    buildingCounterCells[1] = buildingCountersTable.add(buildingCounterLabels[1]);
+    buildingCounterCells.add(buildingCountersTable.add(buildingCounterLabels[0]));
+    buildingCounterCells.add(buildingCountersTable.add(buildingCounterLabels[1]));
     buildingCountersTable.row();
-    buildingCounterCells[2] = buildingCountersTable.add(buildingCounterLabels[2]);
-    buildingCounterCells[3] = buildingCountersTable.add(buildingCounterLabels[3]);
+    buildingCounterCells.add(buildingCountersTable.add(buildingCounterLabels[2]));
+    buildingCounterCells.add(buildingCountersTable.add(buildingCounterLabels[3]));
 
     satisfactionLabel = new Label(world.satisfactionTracker.getSatisfaction() + "%", skin);
     moneyLabel = new Label("Money: $" + world.moneyTracker.getMoney(), skin);
@@ -137,7 +139,7 @@ public class InfoBar {
     buildingCountersTableCell.width(counterTableWidth).height(height * 0.05f);
     for (int i = 0; i < 4; i++) {
       buildingCounterLabels[i].setFontScale(height * 0.0015f);
-      buildingCounterCells[i].width(counterTableWidth * 0.5f).height(height * 0.025f);
+      buildingCounterCells.get(i).width(counterTableWidth * 0.5f).height(height * 0.025f);
     }
 
     timerLabel.setFontScale(height * 0.002f);
