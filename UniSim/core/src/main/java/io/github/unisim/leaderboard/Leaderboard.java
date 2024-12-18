@@ -27,7 +27,7 @@ public class Leaderboard {
         }
     }
 
-    public void save() {
+    public final void save() {
         FileHandle f = getFile();
         JsonValue root = new JsonValue(JsonValue.ValueType.array);
         for (LeaderboardEntry entry : entries) {
