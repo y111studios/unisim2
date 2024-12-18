@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Matrix4;
 
 import io.github.unisim.Point;
@@ -15,15 +14,12 @@ import io.github.unisim.Point;
 public class BuildingManagerTest {
 
     private BuildingManager buildingManager;
-    private TiledMapTileLayer tileLayer;
-    private Building building;
     private BuildingType buildingType;
 
     @BeforeEach
     public void setUp() {
         Matrix4 isoTransform = new Matrix4();
         buildingManager = new BuildingManager(isoTransform);
-        tileLayer = new TiledMapTileLayer(10, 10, 32, 32);
     }
 
     // Testing the constructor
