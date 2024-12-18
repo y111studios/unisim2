@@ -10,23 +10,23 @@ import com.badlogic.gdx.utils.JsonValue;
 
 public class Achievement {
 
-    String name;
-    String description;
+    final String name;
+    final String description;
     Instant unlockTime;
-    ScoreModifierTemplate functionTemplate;
-    float scoreModifierValue;
+    final ScoreModifierTemplate functionTemplate;
+    final float scoreModifierValue;
     float progress;
     boolean unlocked;
-    boolean hidden;
+    final boolean hidden;
 
     private static String MISSING_ICON_PATH = "achievements/missing_icon.png";
 
-    public Achievement(DefinedAchievements definition) {
+    Achievement(DefinedAchievements definition) {
         this(definition.name, definition.description, Instant.EPOCH, definition.functionTemplate,
                 definition.scoreModifierValue, 0, false, definition.hidden);
     }
 
-    public Achievement(String name, String description, Instant unlockTime,
+    Achievement(String name, String description, Instant unlockTime,
             ScoreModifierTemplate functionTemplate, float scoreModifierValue, float progress,
             boolean unlocked, boolean hidden) {
         this.name = name;
@@ -57,6 +57,15 @@ public class Achievement {
             texture = new Texture(Gdx.files.internal(MISSING_ICON_PATH));
         }
         return new Image(texture);
+    }
+
+    boolean unlock() {
+        if (isUnlocked()) {
+            return false;
+        }
+        unlocked = true;
+        unlockTime = Instant.now();
+        return true;
     }
 
     public boolean isUnlocked() {

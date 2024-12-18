@@ -59,20 +59,12 @@ public class AchievementManager {
             .iterator();
     }
 
-    public boolean unlockAchievement(String name) {
-        Optional<Achievement> achievement =
-                achievements.stream().filter((a) -> a.name.equals(name)).findFirst();
-
-        if (achievement.isPresent()) {
-            if (!achievement.get().isUnlocked()) {
-                achievement.get().unlocked = true;
-                achievement.get().unlockTime = Instant.now();
-                save();
-            }
-            return sessionAchievements.add(achievement.get());
+    public boolean unlockAchievement(DefinedAchievements achievement) {
+        Achievement a = getAchievement(achievement);
+        if (a.unlock()) {
+            save();
         }
-
-        return false;
+        return sessionAchievements.add(a);
     }
 
     public final void save() {
@@ -115,8 +107,12 @@ public class AchievementManager {
         return true;
     }
 
-    public Achievement getAchievement(String string) {
-        return achievements.stream().filter((a) -> a.name.equals(string)).findFirst().get();
+    public Achievement getAchievement(DefinedAchievements achievement) {
+        return getAchievement(achievement.name).get();
+    }
+
+    private Optional<Achievement> getAchievement(String string) {
+        return achievements.stream().filter((a) -> a.name.equals(string)).findFirst();
     }
 
     public Set<Achievement> getSessionAchievements() {
