@@ -67,23 +67,6 @@ public class AchievementManager {
         return sessionAchievements.add(a);
     }
 
-    @Deprecated
-    public boolean unlockAchievement(String name) {
-        Optional<Achievement> achievement =
-                achievements.stream().filter((a) -> a.name.equals(name)).findFirst();
-
-        if (achievement.isPresent()) {
-            if (!achievement.get().isUnlocked()) {
-                achievement.get().unlocked = true;
-                achievement.get().unlockTime = Instant.now();
-                save();
-            }
-            return sessionAchievements.add(achievement.get());
-        }
-
-        return false;
-    }
-
     public final void save() {
         JsonValue root = new JsonValue(JsonValue.ValueType.array);
         achievements.stream().map(Achievement::toJsonValue).forEach(root::addChild);
