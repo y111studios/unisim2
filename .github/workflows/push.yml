@@ -26,15 +26,16 @@ jobs:
       - name: Build with Gradle Wrapper
         run: cd UniSim && ./gradlew build
 
-      - name: Generate Test Coverage Report
-        if: success()
-        run: cd UniSim && ./gradlew jacocoTestReport
-
       - name: Upload JAR
+        if: success()
         uses: actions/upload-artifact@v4.4.3
         with:
           name: unisim.jar
           path: UniSim/lwjgl3/build/libs/UniSim-1.0.0.jar
+
+      - name: Generate Test Coverage Report
+        if: success()
+        run: cd UniSim && ./gradlew jacocoTestReport
 
       - name: Archive Test Report
         if: always()
