@@ -1,5 +1,7 @@
 package io.github.unisim;
 
+import java.util.Objects;
+
 /**
  * Represents a point in 2D space with integer co-ordinates (x, y).
  */
@@ -29,6 +31,11 @@ public class Point {
     }
     Point point = (Point) other;
     return this.x == point.x && this.y == point.y;
+  }
+
+  @Override
+  public int hashCode() {
+      return Objects.hash(x, y);
   }
 
   @Override
