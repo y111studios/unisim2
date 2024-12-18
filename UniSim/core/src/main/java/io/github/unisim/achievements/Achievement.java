@@ -10,14 +10,14 @@ import com.badlogic.gdx.utils.JsonValue;
 
 public class Achievement {
 
-    String name;
-    String description;
+    final String name;
+    final String description;
     Instant unlockTime;
-    ScoreModifierTemplate functionTemplate;
-    float scoreModifierValue;
+    final ScoreModifierTemplate functionTemplate;
+    final float scoreModifierValue;
     float progress;
     boolean unlocked;
-    boolean hidden;
+    final boolean hidden;
 
     private static String MISSING_ICON_PATH = "achievements/missing_icon.png";
 
