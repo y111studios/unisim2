@@ -2,9 +2,13 @@ package io.github.unisim.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -25,6 +29,7 @@ public class ManagementMenu {
     private static final float normalisedTopPadding = (1 - normalisedHeight) / 2;
 
     private float stageWidth;
+    private float stageHeight;
 
     private Label studentEnrollmentLabel;
     private TextField studentEnrollmentField;
@@ -33,13 +38,14 @@ public class ManagementMenu {
         this.world = world;
 
         stageWidth = stage.getWidth();
+        stageHeight = stage.getHeight();
 
         background = new ShapeActor(GameState.UIPrimaryColour);
         background.setSize(normalisedWidth * stage.getWidth(), normalisedHeight * stage.getHeight());
-        background.setPosition(normalisedLeftPadding * stage.getWidth(), normalisedTopPadding * stage.getHeight());
+        background.setPosition(stageWidth, normalisedTopPadding * stageHeight);
         table = new Table();
         table.setSize(normalisedWidth * stage.getWidth(), normalisedHeight * stage.getHeight());
-        table.setPosition(normalisedLeftPadding * stage.getWidth(), normalisedTopPadding * stage.getHeight());
+        table.setPosition(stageWidth, normalisedTopPadding * stageHeight);
 
         studentEnrollmentLabel = new Label("Student Enrollment", skin);
         table.add(studentEnrollmentLabel).left();
@@ -82,26 +88,20 @@ public class ManagementMenu {
     }
 
     public void hide() {
-        background.moveBy(stageWidth, 0);
-        table.moveBy(stageWidth, 0);
-
-        background.setVisible(false);
-        table.setVisible(false);
+        background.addAction(Actions.moveTo(stageWidth, normalisedTopPadding * stageHeight, 0.33f, Interpolation.slowFast));
+        table.addAction(Actions.moveTo(stageWidth, normalisedTopPadding * stageHeight, 0.33f, Interpolation.slowFast));
     }
 
     public void show() {
-        background.moveBy(-stageWidth, 0);
-        table.moveBy(-stageWidth, 0);
-
-        background.setVisible(true);
-        table.setVisible(true);
+        background.addAction(Actions.moveTo(normalisedLeftPadding * stageWidth, normalisedTopPadding * stageHeight, 0.33f, Interpolation.fastSlow));
+        table.addAction(Actions.moveTo(normalisedLeftPadding * stageWidth, normalisedTopPadding * stageHeight, 0.33f, Interpolation.fastSlow));
     }
 
     public void toggleVisibility() {
-        if (background.isVisible()) {
-            hide();
-        } else {
+        if (background.getX() == stageWidth) {
             show();
+        } else {
+            hide();
         }
     }
 }
