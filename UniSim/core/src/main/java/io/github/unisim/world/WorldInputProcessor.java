@@ -41,8 +41,8 @@ public class WorldInputProcessor implements InputProcessor {
     	 else {
     		 GameState.currentScreen = GameState.pauseScreen;
     	 }
-        
-        
+
+
         break;
     case Keys.TAB:
         managementMenu.toggleVisibility();
@@ -117,6 +117,7 @@ public class WorldInputProcessor implements InputProcessor {
         break;
       case Keys.X:
         zoomOut = false;
+        break;
       default:
         break;
     }
