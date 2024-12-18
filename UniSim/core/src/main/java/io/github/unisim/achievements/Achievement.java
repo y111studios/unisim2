@@ -21,12 +21,12 @@ public class Achievement {
 
     private static String MISSING_ICON_PATH = "achievements/missing_icon.png";
 
-    public Achievement(DefinedAchievements definition) {
+    Achievement(DefinedAchievements definition) {
         this(definition.name, definition.description, Instant.EPOCH, definition.functionTemplate,
                 definition.scoreModifierValue, 0, false, definition.hidden);
     }
 
-    public Achievement(String name, String description, Instant unlockTime,
+    Achievement(String name, String description, Instant unlockTime,
             ScoreModifierTemplate functionTemplate, float scoreModifierValue, float progress,
             boolean unlocked, boolean hidden) {
         this.name = name;
