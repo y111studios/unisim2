@@ -56,6 +56,7 @@ public class PauseScreen implements Screen {
                     @Override
                     protected void result(Object object) {
                         if ((Boolean) object) {
+                            GameState.gameOver = true;
                             GameState.currentScreen = GameState.startScreen;
                         }
                     }
