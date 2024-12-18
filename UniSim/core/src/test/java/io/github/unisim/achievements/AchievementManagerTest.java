@@ -21,11 +21,12 @@ public class AchievementManagerTest {
     Achievement achievementUnlocked;
     Achievement achievementLocked;
 
+    private static FileHandle testFileHandle;
+
     @AfterAll
     static void removeFile() {
-        FileHandle file = AchievementManager.getFile();
-        if (file.exists()) {
-            file.delete();
+        if (testFileHandle.exists()) {
+            testFileHandle.delete();
         }
     }
 
@@ -35,39 +36,29 @@ public class AchievementManagerTest {
         if (Gdx.app == null) {
             Gdx.app = new HeadlessApplication(new ApplicationListener() {
                 @Override
-                public void create() {
-                    throw new UnsupportedOperationException("Unimplemented method 'create'");
-                }
+                public void create() {}
                 @Override
-                public void resize(int width, int height) {
-                    throw new UnsupportedOperationException("Unimplemented method 'resize'");
-                }
+                public void resize(int width, int height) {}
                 @Override
-                public void render() {
-                    throw new UnsupportedOperationException("Unimplemented method 'render'");
-                }
+                public void render() {}
                 @Override
-                public void pause() {
-                    throw new UnsupportedOperationException("Unimplemented method 'pause'");
-                }
+                public void pause() {}
                 @Override
-                public void resume() {
-                    throw new UnsupportedOperationException("Unimplemented method 'resume'");
-                }
+                public void resume() {}
                 @Override
-                public void dispose() {
-                    throw new UnsupportedOperationException("Unimplemented method 'dispose'");
-                }
+                public void dispose() {}
             });
         }
+
+        final String path = String.format("%s-%s", AchievementManagerTest.class.getSimpleName(), AchievementManager.DEFAULT_FILE_PATH);
+        testFileHandle = Gdx.files.local(path);
     }
 
     @BeforeEach
     public void setUp() {
-        achievementManager = new AchievementManager();
+        achievementManager = new AchievementManager(testFileHandle);
         achievementUnlocked = new Achievement("Test1", "Description", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, false, false);
         achievementLocked = new Achievement("Test2", "Description", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, true, false);
-
     }
 
     // Testing constructor
