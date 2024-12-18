@@ -3,7 +3,9 @@ package io.github.unisim.ui;
 import java.time.Duration;
 import java.time.Instant;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -29,12 +31,13 @@ public class AchievementBar {
     final static float normalisedTopPadding = 1 - 0.1f - normalisedHeight;
 
     private float stageHeight;
+    private float stageWidth;
 
     public AchievementBar(Stage stage) {
-        float stageWidth = stage.getWidth();
+        stageWidth = stage.getWidth();
         stageHeight = stage.getHeight();
         this.bar = new ShapeActor(GameState.UIPrimaryColour);
-        this.bar.setPosition(normalisedLeftPadding * stageWidth, normalisedTopPadding * stageHeight);
+        this.bar.setPosition(normalisedLeftPadding * stageWidth, (1 + normalisedHeight) * stageHeight);
         this.bar.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
         this.table = new Table();
         this.iconImage = new Image();
@@ -52,8 +55,6 @@ public class AchievementBar {
 
         stage.addActor(bar);
         stage.addActor(table);
-
-        hide();
     }
 
     public void setAchievement(Achievement achievement) {
@@ -72,20 +73,16 @@ public class AchievementBar {
 
     private void hide() {
         displayEndTime = null;
-        this.bar.setVisible(false);
-        this.table.setVisible(false);
 
-        this.bar.moveBy(0, stageHeight);
-        this.table.moveBy(0, stageHeight);
+        bar.addAction(Actions.moveTo(normalisedLeftPadding * stageWidth, (1 + normalisedHeight) * stageHeight, 0.25f, Interpolation.slowFast));
+        table.addAction(Actions.moveTo(normalisedLeftPadding * stageWidth, (1 + normalisedHeight) * stageHeight, 0.25f, Interpolation.slowFast));
     }
 
     private void showFor(Duration duration) {
-        this.bar.setVisible(true);
-        this.table.setVisible(true);
         displayEndTime = Instant.now().plus(duration);
 
-        this.bar.moveBy(0, -stageHeight);
-        this.table.moveBy(0, -stageHeight);
+        bar.addAction(Actions.moveTo(normalisedLeftPadding * stageWidth, normalisedTopPadding * stageHeight, 0.25f, Interpolation.fastSlow));
+        table.addAction(Actions.moveTo(normalisedLeftPadding * stageWidth, normalisedTopPadding * stageHeight, 0.25f, Interpolation.fastSlow));
     }
 
     public void update() {
