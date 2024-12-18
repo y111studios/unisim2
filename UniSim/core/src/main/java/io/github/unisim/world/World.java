@@ -150,7 +150,7 @@ public class World {
       topRight = new Point(btmLeft.x + buildingSize.x - 1, btmLeft.y + buildingSize.y - 1);
       canBuild = buildingManager.isBuildable(btmLeft, topRight, getMapTiles());
       if (selectedBuilding != null) {
-        canBuild &= moneyTracker.getMoney() >= selectedBuilding.cost;
+        canBuild = canBuild && moneyTracker.getMoney() >= selectedBuilding.cost;
         selectedBuilding.location = btmLeft;
       }
       buildingManager.setPreviewBuilding(selectedBuilding);
