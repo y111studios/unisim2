@@ -15,7 +15,6 @@ import io.github.unisim.Point;
 public class BuildingManagerTest {
 
     private BuildingManager buildingManager;
-    private Building previewBuilding;
     private TiledMapTileLayer tileLayer;
     private Building building;
     private BuildingType buildingType;
@@ -38,13 +37,14 @@ public class BuildingManagerTest {
     // Testing setPreviewBuilding
     @Test
     public void testSetPreviewBuilding() {
+        Building previewBuilding = new Building(null, 0.0f, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50);
         buildingManager.setPreviewBuilding(previewBuilding);
+        assertNotNull(buildingManager.getPreviewBuilding());
         assertEquals(previewBuilding, buildingManager.getPreviewBuilding());
     }
 
     @Test
     public void testSetPreviewBuildingToNull() {
-        buildingManager.setPreviewBuilding(previewBuilding);
         buildingManager.setPreviewBuilding(null);
         assertNull(buildingManager.getPreviewBuilding());
     }
