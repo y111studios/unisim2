@@ -57,8 +57,8 @@ public class World {
   private Point topRight;
   public Building selectedBuilding;
   public boolean selectedBuildingUpdated;
-  public static SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
-  public static MoneyTracker moneyTracker = new MoneyTracker(500);
+  public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
+  public MoneyTracker moneyTracker = new MoneyTracker(500);
   public ScoreTracker scoreTracker = new ScoreTracker();
   public AchievementManager achievementManager = new AchievementManager();
   public AchievementBar achievementBar;

@@ -12,8 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import io.github.unisim.world.World;
 import io.github.unisim.events.EventCard;
+import io.github.unisim.finance.MoneyTracker;
+import io.github.unisim.scoring.SatisfactionTracker;
 import io.github.unisim.GameState;
 import io.github.unisim.events.EventBucket;
 
@@ -23,6 +24,9 @@ public class EventDisplay {
     private ShapeActor dialog;
     private ShapeActor timerBar;
     private Table table;
+
+    private MoneyTracker moneyTracker;
+    private SatisfactionTracker satisfactionTracker;
 
     private EventBucket eventBucket = new EventBucket();
     private EventCard eventCard;
@@ -38,11 +42,14 @@ public class EventDisplay {
     final static float normalisedWidth = 0.4f;
     final static float normalisedHeight = 0.4f;
 
-    public EventDisplay(Stage stage) {
+    public EventDisplay(Stage stage, MoneyTracker moneyTracker, SatisfactionTracker satisfactionTracker) {
+
+        this.moneyTracker = moneyTracker;
+        this.satisfactionTracker = satisfactionTracker;
 
         float stageWidth = stage.getWidth();
         float stageHeight = stage.getHeight();
-        
+
         this.dialog = new ShapeActor(GameState.UISecondaryColour);
         this.dialog.setPosition(stageWidth / 2, stageHeight / 2);
         this.dialog.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
@@ -54,7 +61,7 @@ public class EventDisplay {
         eventTitleLabel = new Label("",skin);
         eventDescriptionLabel = new Label("",skin);
         choice1 = new TextButton("", skin);
-        choice2 = new TextButton("", skin);        
+        choice2 = new TextButton("", skin);
         choice3 = new TextButton("", skin);
 
         table.add(eventTitleLabel).padBottom(10);
@@ -95,7 +102,7 @@ public class EventDisplay {
         choice1.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                eventCard.getChoices().get(0).applyEffects(World.moneyTracker, World.satisfactionTracker);
+                eventCard.getChoices().get(0).applyEffects(moneyTracker, satisfactionTracker);
                 hide();
             }
         });
@@ -104,7 +111,7 @@ public class EventDisplay {
         choice2.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                eventCard.getChoices().get(1).applyEffects(World.moneyTracker, World.satisfactionTracker);
+                eventCard.getChoices().get(1).applyEffects(moneyTracker, satisfactionTracker);
                 hide();
             }
         });
@@ -113,7 +120,7 @@ public class EventDisplay {
         choice3.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                eventCard.getChoices().get(2).applyEffects(World.moneyTracker, World.satisfactionTracker);
+                eventCard.getChoices().get(2).applyEffects(moneyTracker, satisfactionTracker);
                 hide();
             }
         });

@@ -43,7 +43,7 @@ public class GameScreen implements Screen {
     timer = new Timer(300_000);
     infoBar = new InfoBar(stage, timer, world);
     buildingMenu = new BuildingMenu(stage, world);
-    eventDisplay = new EventDisplay(stage);
+    eventDisplay = new EventDisplay(stage, world.moneyTracker, world.satisfactionTracker);
     eventTimer = 0;
 
     inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);
@@ -62,7 +62,7 @@ public class GameScreen implements Screen {
   public void render(float delta) {
     world.render();
     float dt = Gdx.graphics.getDeltaTime();
-    
+
     if (!GameState.paused && !GameState.gameOver) {
       if (!timer.tick(dt * 1000)) {
         GameState.gameOver = true;
@@ -77,7 +77,7 @@ public class GameScreen implements Screen {
         }
       }
     }
-  
+
     eventDisplay.update();
     ((WorldInputProcessor) worldInputProcessor).update(dt);
     stage.act(dt);
@@ -85,7 +85,7 @@ public class GameScreen implements Screen {
     buildingMenu.update();
     achievementBar.update();
     stage.draw();
-    
+
     if (GameState.gameOver) {
       world.zoom((world.getMaxZoom() - world.getZoom()) * 2f);
       world.pan((150 - world.getCameraPos().x) / 10, -world.getCameraPos().y / 10);
@@ -130,5 +130,5 @@ public class GameScreen implements Screen {
     world.dispose();
     stage.dispose();
   }
-  
+
 }
