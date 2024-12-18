@@ -26,6 +26,10 @@ jobs:
       - name: Build with Gradle Wrapper
         run: cd UniSim && ./gradlew build
 
+      - name: Generate Test Coverage Report
+        if: success()
+        run: cd UniSim && ./gradlew jacocoTestReport
+
       - name: Upload JAR
         uses: actions/upload-artifact@v4.4.3
         with:
@@ -38,4 +42,12 @@ jobs:
         with:
           name: test-reports
           path: UniSim/core/build/reports/tests/test
+          retention-days: 14
+
+      - name: Archive Test Coverage Report
+        if: success()
+        uses: actions/upload-artifact@v4.4.3
+        with:
+          name: test-coverage-report
+          path: UniSim/core/build/reports/jacoco/test/html
           retention-days: 14
