@@ -11,6 +11,13 @@ dependencies {
   }
 }
 
+test {
+    // Enable debugging for tests
+    if (project.hasProperty('debug') && project.debug == 'true') {
+        jvmArgs += ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005"]
+    }
+}
+
 testing {
   suites {
     test {
@@ -26,6 +33,10 @@ testing {
         all {
           testTask.configure {
             shouldRunAfter(test)
+            useJUnitJupiter()
+            if (project.hasProperty('debug') && project.debug == 'true') {
+              jvmArgs += ["-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005"]
+            }
           }
         }
       }
