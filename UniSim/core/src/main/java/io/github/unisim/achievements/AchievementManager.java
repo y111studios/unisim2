@@ -17,12 +17,25 @@ import com.badlogic.gdx.utils.JsonWriter;
 
 public class AchievementManager {
 
-    final static String FILE_PATH = "achievements.json";
+    final static String DEFAULT_FILE_PATH = "achievements.json";
+    private FileHandle fileHandle;
 
     List<Achievement> achievements;
     Set<Achievement> sessionAchievements;
 
     public AchievementManager() {
+        this(Gdx.files.local(DEFAULT_FILE_PATH));
+    }
+
+    /**
+     * Constructor for testing purposes
+     *
+     * This constructor allows for definition of a test file to be used for testing
+     *
+     * @param fileHandle The file handle to be used for testing
+     */
+    AchievementManager(FileHandle fileHandle) {
+        this.fileHandle = fileHandle;
         sessionAchievements = new HashSet<>();
         if (!fileExists()) {
             createFile();
@@ -66,13 +79,12 @@ public class AchievementManager {
     public void save() {
         JsonValue root = new JsonValue(JsonValue.ValueType.array);
         achievements.stream().map(Achievement::toJsonValue).forEach(root::addChild);
-        getFile().writeString(root.toJson(JsonWriter.OutputType.json), false);
+        fileHandle.writeString(root.toJson(JsonWriter.OutputType.json), false);
     }
 
     public void load() {
         achievements = new ArrayList<>();
-        FileHandle f = getFile();
-        JsonValue root = new JsonReader().parse(f);
+        JsonValue root = new JsonReader().parse(fileHandle);
         for (JsonValue json : root) {
             String name = json.getString("name");
             String description = json.getString("description");
@@ -95,17 +107,13 @@ public class AchievementManager {
         }
     }
 
-    final static FileHandle getFile() {
-        return Gdx.files.local(FILE_PATH);
-    }
-
     private boolean fileExists() {
-        return getFile().exists();
+        return fileHandle.exists();
     }
 
     private void createFile() {
         try {
-            getFile().file().createNewFile();
+            fileHandle.file().createNewFile();
         } catch (Exception e) {
             // Log the error
             Gdx.app.error("Leaderboard file creation", "Failed to create leaderboard file", e);
