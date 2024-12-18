@@ -149,7 +149,8 @@ public class BuildingMenu {
             world.selectedBuilding = null;
           } else {
             world.selectedBuilding = buildings.get(buildingIndex);
-            buildingInfoLabel.setText(world.selectedBuilding.name + " - Press 'R' to rotate");
+            buildingInfoLabel.setAlignment(Align.center);
+            buildingInfoLabel.setText(world.selectedBuilding.name + " - Press 'R' to rotate\nPress 'F' to deselect");
             if (world.selectedBuilding.flipped) {
               world.selectedBuilding.flipped = false;
               int temp = world.selectedBuilding.size.x;
@@ -163,7 +164,7 @@ public class BuildingMenu {
       navTableMap.get(buildings.get(i).type).addToBuildingTable(buildingImages.get(i));
     }
 
-    buildingInfoTable.add(buildingInfoLabel).expandX().align(Align.center);
+    buildingInfoTable.add(buildingInfoLabel).expandX().align(Align.center).padBottom(25);
 
     stage.addActor(bar);
     currMenuEntry = navTableMap.get(BuildingType.RECREATION);
