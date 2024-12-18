@@ -1,7 +1,5 @@
 package io.github.unisim.achievements;
 
-import java.time.Instant;
-
 import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -20,8 +18,6 @@ import com.badlogic.gdx.files.FileHandle;
 public class AchievementManagerTest {
 
     AchievementManager achievementManager;
-    Achievement achievementUnlocked;
-    Achievement achievementLocked;
 
     private static FileHandle testFileHandle;
 
@@ -59,8 +55,6 @@ public class AchievementManagerTest {
     @BeforeEach
     public void setUp() {
         achievementManager = new AchievementManager(testFileHandle);
-        achievementUnlocked = new Achievement("Test1", "Description", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, false, false);
-        achievementLocked = new Achievement("Test2", "Description", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, true, false);
     }
 
     @ParameterizedTest
@@ -79,12 +73,6 @@ public class AchievementManagerTest {
         assertDoesNotThrow(() -> achievementManager.getAchievement(definedAchievement));
     }
 
-    // Testing constructor
-    @Test
-    public void testAchievementManager() {
-        assertNotNull(achievementManager);
-    }
-
     // Testing clearSessionAchievements
     @Test
     public void testClearSessionAchievements() {
@@ -96,7 +84,6 @@ public class AchievementManagerTest {
     @Test
     public void testGetAchievements() {
         assertNotNull(achievementManager.getAchievements());
-        System.out.println(achievementManager.getAchievements());
     }
 
     // Testing getUnlockedScoreModifiers
@@ -105,24 +92,27 @@ public class AchievementManagerTest {
         assertNotNull(achievementManager.getUnlockedScoreModifiers());
     }
 
+    @Test
+    void testGetDefinedAchivement() {
+        DefinedAchievements definedAchievement = DefinedAchievements.values()[0];
+        Achievement fetchedAchievement = achievementManager.getAchievement(definedAchievement);
+        assertNotNull(fetchedAchievement);
+        assertTrue(fetchedAchievement.name.equals(definedAchievement.name));
+    }
+
     // Testing unlockAchievement
     @Test
     public void testUnlockedAchievements() {
-        achievementManager.unlockAchievement("Test2");
-        assertFalse(achievementManager.getAchievements().contains(achievementLocked));
-    }
-
-    // Testing
-    @Test
-    public void testUnlockNonExistentAchievement() {
-        boolean result = achievementManager.unlockAchievement("Non-existent");
-        assertFalse(result);
+        DefinedAchievements toUnlock = DefinedAchievements.values()[0];
+        assertTrue(achievementManager.unlockAchievement(toUnlock));
+        assertTrue(achievementManager.sessionAchievements.contains(achievementManager.getAchievement(toUnlock)));
     }
 
     @Test
     public void testUnlockAlreadyUnlockedAchievement() {
-        achievementManager.unlockAchievement("Test1");
-        boolean result = achievementManager.unlockAchievement("Test1");
+        DefinedAchievements toUnlock = DefinedAchievements.values()[0];
+        assertTrue(achievementManager.unlockAchievement(toUnlock));
+        boolean result = achievementManager.unlockAchievement(toUnlock);
         assertFalse(result);
     }
 }
