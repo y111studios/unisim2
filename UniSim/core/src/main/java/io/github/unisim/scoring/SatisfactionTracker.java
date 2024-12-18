@@ -19,6 +19,11 @@ public class SatisfactionTracker implements ScoringObject {
     }
 
     public void updateSatisfaction(Iterable<Building> buildings, Building previewBuilding, int totalStudents) {
+        if (buildings == null) {
+            // Special case where there are no buildings
+            satisfaction = 0;
+            return;
+        }
         final Iterator<Building> filteredBuildings;
         if (previewBuilding == null) {
             filteredBuildings = buildings.iterator();
