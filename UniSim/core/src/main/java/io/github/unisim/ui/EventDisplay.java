@@ -42,10 +42,14 @@ public class EventDisplay {
     final static float normalisedWidth = 0.4f;
     final static float normalisedHeight = 0.4f;
 
+    private float stageWidth;
+
     public EventDisplay(Stage stage, MoneyTracker moneyTracker, SatisfactionTracker satisfactionTracker) {
 
         this.moneyTracker = moneyTracker;
         this.satisfactionTracker = satisfactionTracker;
+
+        this.stageWidth = stage.getWidth();
 
         float stageWidth = stage.getWidth();
         float stageHeight = stage.getHeight();
@@ -90,6 +94,10 @@ public class EventDisplay {
         this.dialog.setVisible(false);
         this.timerBar.setVisible(false);
         this.table.setVisible(false);
+
+        this.dialog.moveBy(stageWidth, 0);
+        this.timerBar.moveBy(stageWidth, 0);
+        this.table.moveBy(stageWidth, 0);
     }
 
     private void setEvent() {
@@ -132,6 +140,10 @@ public class EventDisplay {
         this.timerBar.setVisible(true);
         this.table.setVisible(true);
         displayEndTime = Instant.now().plus(DISPLAY_TIME);
+
+        this.dialog.moveBy(-stageWidth, 0);
+        this.timerBar.moveBy(-stageWidth, 0);
+        this.table.moveBy(-stageWidth, 0);
     }
 
     public void update() {

@@ -28,9 +28,11 @@ public class AchievementBar {
     final static float normalisedLeftPadding = (1 - normalisedWidth) / 2;
     final static float normalisedTopPadding = 1 - 0.1f - normalisedHeight;
 
+    private float stageHeight;
+
     public AchievementBar(Stage stage) {
         float stageWidth = stage.getWidth();
-        float stageHeight = stage.getHeight();
+        stageHeight = stage.getHeight();
         this.bar = new ShapeActor(GameState.UIPrimaryColour);
         this.bar.setPosition(normalisedLeftPadding * stageWidth, normalisedTopPadding * stageHeight);
         this.bar.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
@@ -72,12 +74,18 @@ public class AchievementBar {
         displayEndTime = null;
         this.bar.setVisible(false);
         this.table.setVisible(false);
+
+        this.bar.moveBy(0, stageHeight);
+        this.table.moveBy(0, stageHeight);
     }
 
     private void showFor(Duration duration) {
         this.bar.setVisible(true);
         this.table.setVisible(true);
         displayEndTime = Instant.now().plus(duration);
+
+        this.bar.moveBy(0, -stageHeight);
+        this.table.moveBy(0, -stageHeight);
     }
 
     public void update() {
