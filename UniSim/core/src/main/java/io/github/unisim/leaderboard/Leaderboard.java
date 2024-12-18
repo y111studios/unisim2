@@ -19,12 +19,11 @@ public class Leaderboard {
     }
 
     public Leaderboard() {
-        if (fileExists()) {
-            load();
-        } else {
-            createFile();
+        if (createFile()) {
             entries = new ArrayList<>(MAX_ENTRIES);
             save();
+        } else {
+            load();
         }
     }
 
@@ -76,14 +75,15 @@ public class Leaderboard {
         return getFile().exists();
     }
 
-    private static void createFile() {
+    private static boolean createFile() {
         try {
-            getFile().file().createNewFile();
+            return getFile().file().createNewFile();
         } catch (Exception e) {
             // Log the error
             Gdx.app.error("Leaderboard file creation", "Failed to create leaderboard file", e);
             // Exit the program as the file is required
             System.exit(1);
         }
+        throw new IllegalStateException("This should be unreachable as the method should log and exit");
     }
 }
