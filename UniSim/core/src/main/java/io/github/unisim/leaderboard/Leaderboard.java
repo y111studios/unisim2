@@ -79,11 +79,8 @@ public class Leaderboard {
         try {
             return getFile().file().createNewFile();
         } catch (Exception e) {
-            // Log the error
             Gdx.app.error("Leaderboard file creation", "Failed to create leaderboard file", e);
-            // Exit the program as the file is required
-            System.exit(1);
         }
-        throw new IllegalStateException("This should be unreachable as the method should log and exit");
+        return true;
     }
 }
