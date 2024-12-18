@@ -59,6 +59,14 @@ public class AchievementManager {
             .iterator();
     }
 
+    public boolean unlockAchievement(DefinedAchievements achievement) {
+        Achievement a = getAchievement(achievement);
+        if (a.unlock()) {
+            save();
+        }
+        return sessionAchievements.add(a);
+    }
+
     public boolean unlockAchievement(String name) {
         Optional<Achievement> achievement =
                 achievements.stream().filter((a) -> a.name.equals(name)).findFirst();
@@ -115,8 +123,12 @@ public class AchievementManager {
         return true;
     }
 
-    public Achievement getAchievement(String string) {
-        return achievements.stream().filter((a) -> a.name.equals(string)).findFirst().get();
+    public Achievement getAchievement(DefinedAchievements achievement) {
+        return getAchievement(achievement.name).get();
+    }
+
+    public Optional<Achievement> getAchievement(String string) {
+        return achievements.stream().filter((a) -> a.name.equals(string)).findFirst();
     }
 
     public Set<Achievement> getSessionAchievements() {

@@ -59,6 +59,15 @@ public class Achievement {
         return new Image(texture);
     }
 
+    boolean unlock() {
+        if (isUnlocked()) {
+            return false;
+        }
+        unlocked = true;
+        unlockTime = Instant.now();
+        return true;
+    }
+
     public boolean isUnlocked() {
         return unlocked;
     }
