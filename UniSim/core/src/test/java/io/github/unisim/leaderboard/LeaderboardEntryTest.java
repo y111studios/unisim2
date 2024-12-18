@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test;
 
 public class LeaderboardEntryTest {
 
-    private LeaderboardEntry entry;
-
     // Testing constructor
     @Test
     public void testConstructorWithNoName() {

@@ -4,18 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingType;
 
 public class SatisfactionNeedsTest {
-
-    @BeforeEach
-    public void setUp() {
-        SatisfactionNeeds satisfactionNeeds = new SatisfactionNeeds();
-    }
 
     @Test
     public void testGetSatisfactionWithNoBuildings() {
@@ -54,7 +48,7 @@ public class SatisfactionNeedsTest {
         assertEquals(0, satisfaction);
     }
 
-    @Test 
+    @Test
     public void testGetSatisfactionWithMixedCapcities() {
         List<Building> buildings = new ArrayList<>();
         buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.SLEEPING, "", 100, 0));

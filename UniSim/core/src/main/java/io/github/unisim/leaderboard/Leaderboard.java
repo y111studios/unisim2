@@ -19,16 +19,15 @@ public class Leaderboard {
     }
 
     public Leaderboard() {
-        if (fileExists()) {
-            load();
-        } else {
-            createFile();
+        if (createFile()) {
             entries = new ArrayList<>(MAX_ENTRIES);
             save();
+        } else {
+            load();
         }
     }
 
-    public void save() {
+    public final void save() {
         FileHandle f = getFile();
         JsonValue root = new JsonValue(JsonValue.ValueType.array);
         for (LeaderboardEntry entry : entries) {
@@ -54,7 +53,7 @@ public class Leaderboard {
         return true;
     }
 
-    public void load() {
+    public final void load() {
         entries = new ArrayList<>(MAX_ENTRIES);
         FileHandle f = getFile();
         JsonValue root = new JsonReader().parse(f);
@@ -64,7 +63,7 @@ public class Leaderboard {
         sort();
     }
 
-    private void sort() {
+    private final void sort() {
         entries.sort((a, b) -> Integer.compare(b.score(), a.score()));
     }
 
@@ -76,14 +75,12 @@ public class Leaderboard {
         return getFile().exists();
     }
 
-    private static void createFile() {
+    private static boolean createFile() {
         try {
-            getFile().file().createNewFile();
+            return getFile().file().createNewFile();
         } catch (Exception e) {
-            // Log the error
             Gdx.app.error("Leaderboard file creation", "Failed to create leaderboard file", e);
-            // Exit the program as the file is required
-            System.exit(1);
         }
+        return true;
     }
 }

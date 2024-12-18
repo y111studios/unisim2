@@ -71,8 +71,6 @@ public class ManagementMenu {
 
         stage.addActor(background);
         stage.addActor(table);
-
-        hide();
     }
 
     void submitToWorld() {
