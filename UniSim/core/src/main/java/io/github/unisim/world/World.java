@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
 import io.github.unisim.achievements.AchievementManager;
+import io.github.unisim.achievements.DefinedAchievements;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingManager;
 import io.github.unisim.building.BuildingType;
@@ -97,12 +98,12 @@ public class World {
     // Check achievement conditions
 
     if (moneyTracker.getMoney() == 0) {
-        if (achievementManager.unlockAchievement("Bankruptcy")) {
-            achievementBar.setAchievement(achievementManager.getAchievement("Bankruptcy"));
+        if (achievementManager.unlockAchievement(DefinedAchievements.Bankruptcy)) {
+            achievementBar.setAchievement(achievementManager.getAchievement(DefinedAchievements.Bankruptcy));
         }
     } else if (moneyTracker.getMoney() >= 100_000) {
-        if (achievementManager.unlockAchievement("Capitalist")) {
-            achievementBar.setAchievement(achievementManager.getAchievement("Capitalist"));
+        if (achievementManager.unlockAchievement(DefinedAchievements.Capitalist)) {
+            achievementBar.setAchievement(achievementManager.getAchievement(DefinedAchievements.Capitalist));
         }
     }
   }
