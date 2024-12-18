@@ -4,9 +4,7 @@ package io.github.unisim;
  * Represents a point in 2D space with integer co-ordinates (x, y).
  */
 public class Point {
-  @SuppressWarnings("memberName")
   public int x;
-  @SuppressWarnings("memberName")
   public int y;
 
   /**
