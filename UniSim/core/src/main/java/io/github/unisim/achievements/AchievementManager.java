@@ -37,8 +37,7 @@ public class AchievementManager {
     AchievementManager(FileHandle fileHandle) {
         this.fileHandle = fileHandle;
         sessionAchievements = new HashSet<>();
-        if (!fileExists()) {
-            createFile();
+        if (createFile()) {
             achievements = new ArrayList<>();
             save();
         }
@@ -107,19 +106,16 @@ public class AchievementManager {
         }
     }
 
-    private boolean fileExists() {
-        return fileHandle.exists();
-    }
-
-    private void createFile() {
+    private boolean createFile() {
         try {
-            fileHandle.file().createNewFile();
+            return fileHandle.file().createNewFile();
         } catch (Exception e) {
             // Log the error
             Gdx.app.error("Leaderboard file creation", "Failed to create leaderboard file", e);
             // Exit the program as the file is required
             System.exit(1);
         }
+        throw new IllegalStateException("This should be unreachable as the method should log and exit");
     }
 
     public Achievement getAchievement(String string) {
