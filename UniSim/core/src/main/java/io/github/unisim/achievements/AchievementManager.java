@@ -111,8 +111,7 @@ public class AchievementManager {
         return getAchievement(achievement.name).get();
     }
 
-    @Deprecated
-    public Optional<Achievement> getAchievement(String string) {
+    private Optional<Achievement> getAchievement(String string) {
         return achievements.stream().filter((a) -> a.name.equals(string)).findFirst();
     }
 
