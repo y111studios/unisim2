@@ -75,13 +75,13 @@ public class AchievementManager {
         return false;
     }
 
-    public void save() {
+    public final void save() {
         JsonValue root = new JsonValue(JsonValue.ValueType.array);
         achievements.stream().map(Achievement::toJsonValue).forEach(root::addChild);
         fileHandle.writeString(root.toJson(JsonWriter.OutputType.json), false);
     }
 
-    public void load() {
+    public final void load() {
         achievements = new ArrayList<>();
         JsonValue root = new JsonReader().parse(fileHandle);
         for (JsonValue json : root) {

@@ -53,7 +53,7 @@ public class Leaderboard {
         return true;
     }
 
-    public void load() {
+    public final void load() {
         entries = new ArrayList<>(MAX_ENTRIES);
         FileHandle f = getFile();
         JsonValue root = new JsonReader().parse(f);
@@ -63,7 +63,7 @@ public class Leaderboard {
         sort();
     }
 
-    private void sort() {
+    private final void sort() {
         entries.sort((a, b) -> Integer.compare(b.score(), a.score()));
     }
 

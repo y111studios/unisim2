@@ -81,7 +81,7 @@ public class ManagementMenu {
         }
     }
 
-    public void hide() {
+    public final void hide() {
         background.moveBy(stageWidth, 0);
         table.moveBy(stageWidth, 0);
 
