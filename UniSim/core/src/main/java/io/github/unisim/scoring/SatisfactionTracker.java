@@ -35,6 +35,10 @@ public class SatisfactionTracker implements ScoringObject {
         satisfaction = 100 * satisfactionNeeds.getSatisfaction(() -> filteredBuildings, totalStudents);
     }
 
+    public void changeSatisfaction(float change) {
+        satisfaction += change;
+    }
+
     @Override
     public float getScore() {
         if (Float.isFinite(satisfaction)) {
