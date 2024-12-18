@@ -29,7 +29,7 @@ public class GameScreen implements Screen {
   private GameOverMenu gameOverMenu;
   private EventDisplay eventDisplay;
   private float eventTimer;
-  private final float EVENT_INTERVAL = 45f;
+  private final static float EVENT_INTERVAL = 45f;
   private ManagementMenu managementMenu;
 
   /**

@@ -221,12 +221,8 @@ public class BuildingManager {
    */
   public void drawBuilding(Building building, SpriteBatch batch) {
     Vector3 btmLeftPos = new Vector3(
-        (float) building.location.x + (
-          building.flipped ? building.textureOffset.x : building.textureOffset.x
-        ),
-        (float) building.location.y + (
-          building.flipped ? building.textureOffset.y : building.textureOffset.y
-        ),
+        (float) building.location.x + building.textureOffset.x,
+        (float) building.location.y + building.textureOffset.y,
         0f
     );
     Vector3 btmRightPos = new Vector3(btmLeftPos).add(new Vector3(building.size.x - 1, 0f, 0f));

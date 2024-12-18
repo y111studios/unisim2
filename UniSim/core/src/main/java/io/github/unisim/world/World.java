@@ -39,7 +39,7 @@ public class World {
   private Vector2 camPosition = new Vector2(150f, 0f);
   private Vector2 panVelocity = new Vector2(0f, 0f);
   private float zoomVelocity = 0f;
-  private final float timeStepSize = 0.001f;
+  private final static float timeStepSize = 0.001f;
   private float panDt = 0f;
   private float zoomDt = 0f;
   private float minZoom;
@@ -150,7 +150,7 @@ public class World {
       topRight = new Point(btmLeft.x + buildingSize.x - 1, btmLeft.y + buildingSize.y - 1);
       canBuild = buildingManager.isBuildable(btmLeft, topRight, getMapTiles());
       if (selectedBuilding != null) {
-        canBuild &= moneyTracker.getMoney() >= selectedBuilding.cost;
+        canBuild = canBuild && moneyTracker.getMoney() >= selectedBuilding.cost;
         selectedBuilding.location = btmLeft;
       }
       buildingManager.setPreviewBuilding(selectedBuilding);

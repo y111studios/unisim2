@@ -7,49 +7,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.headless.HeadlessApplication;
-import com.badlogic.gdx.files.FileHandle;
 
 public class DefinedAchievementsTest {
-
-    private AchievementManager achievementManager;
-    private static FileHandle testFileHandle;
-
-    @AfterAll
-    static void removeFile() {
-        if (testFileHandle.exists()) {
-            testFileHandle.delete();
-        }
-    }
-
-    @BeforeAll
-    static void initialiseHeadlessApp() {
-        // Initialise a new headless application
-        if (Gdx.app == null) {
-            Gdx.app = new HeadlessApplication(new ApplicationListener() {
-                @Override
-                public void create() {}
-                @Override
-                public void resize(int width, int height) {}
-                @Override
-                public void render() {}
-                @Override
-                public void pause() {}
-                @Override
-                public void resume() {}
-                @Override
-                public void dispose() {}
-            });
-        }
-
-        final String path = String.format("%s-%s", DefinedAchievementsTest.class.getSimpleName(), AchievementManager.DEFAULT_FILE_PATH);
-        testFileHandle = Gdx.files.local(path);
-    }
 
     // Testing constructor
     @Test
@@ -79,7 +39,6 @@ public class DefinedAchievementsTest {
         Achievement achievement2 = new Achievement("Test2", "Desc2", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, false, false);
 
         Iterable <Achievement> achievements = List.of(achievement1, achievement2);
-        achievementManager = new AchievementManager(testFileHandle);
 
         List<DefinedAchievements> missingAchievements = DefinedAchievements.getMissingAchievements(achievements).get();
         assertEquals(2, missingAchievements.size());

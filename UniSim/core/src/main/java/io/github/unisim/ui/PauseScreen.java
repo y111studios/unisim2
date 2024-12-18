@@ -5,9 +5,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -23,8 +21,6 @@ public class PauseScreen implements Screen {
     private Stage stage;
     private Table table;
     private Skin skin = GameState.defaultSkin;
-    private Slider volumeSlider;
-    private Label volumeLabel;
     private TextButton mainMenuButton;
     private InputMultiplexer inputMultiplexer = new InputMultiplexer();
     private TextButton resumeButton;
