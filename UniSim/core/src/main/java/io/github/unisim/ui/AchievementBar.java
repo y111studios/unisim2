@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -20,6 +21,7 @@ public class AchievementBar {
     private Image iconImage;
     private Label titleLabel;
     private Label descriptionLabel;
+    private Cell<Image> iconCell;
 
     private Instant displayEndTime;
 
@@ -36,25 +38,58 @@ public class AchievementBar {
     public AchievementBar(Stage stage) {
         stageWidth = stage.getWidth();
         stageHeight = stage.getHeight();
-        this.bar = new ShapeActor(GameState.UIPrimaryColour);
-        this.bar.setPosition(normalisedLeftPadding * stageWidth, (1 + normalisedHeight) * stageHeight);
-        this.bar.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
-        this.table = new Table();
-        this.iconImage = new Image();
-        table.add(iconImage).size(0.95f * bar.getHeight()).center().padLeft(0.025f * bar.getHeight());
+        bar = new ShapeActor(GameState.UIPrimaryColour);
+
+        table = new Table();
+        iconImage = new Image();
+        iconCell = table.add(iconImage).center();
 
         Table rightColumn = new Table();
-        this.titleLabel = new Label("", skin);
-        rightColumn.add(this.titleLabel).center().row();
-        this.descriptionLabel = new Label("", skin);
-        rightColumn.add(this.descriptionLabel).center();
+        titleLabel = new Label("", skin);
+        rightColumn.add(titleLabel).center().row();
+        descriptionLabel = new Label("", skin);
+        rightColumn.add(descriptionLabel).center();
 
         table.add(rightColumn).expand().fill();
-        this.table.setPosition(bar.getX(), bar.getY());
-        this.table.setSize(bar.getWidth(), bar.getHeight());
+
+        resize((int) stage.getWidth(), (int) stage.getHeight());
 
         stage.addActor(bar);
         stage.addActor(table);
+    }
+
+    public void resize(int width, int height) {
+        stageWidth = width;
+        stageHeight = height;
+        positionElements();
+    }
+
+    void positionElements() {
+        final float yPos = isHidden() ? getHiddenY() : getShownY();
+
+        bar.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
+        bar.setPosition(getX(), yPos);
+
+        table.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
+        table.setPosition(getX(), yPos);
+
+        iconCell.size(0.95f * bar.getHeight()).padLeft(0.025f * bar.getHeight());
+    }
+
+    float getX() {
+        return normalisedLeftPadding * stageWidth;
+    }
+
+    float getShownY() {
+        return normalisedTopPadding * stageHeight;
+    }
+
+    float getHiddenY() {
+        return (1 + normalisedHeight) * stageHeight;
+    }
+
+    boolean isHidden() {
+        return displayEndTime == null;
     }
 
     public void setAchievement(Achievement achievement) {
@@ -74,19 +109,19 @@ public class AchievementBar {
     private void hide() {
         displayEndTime = null;
 
-        bar.addAction(Actions.moveTo(normalisedLeftPadding * stageWidth, (1 + normalisedHeight) * stageHeight, 0.25f, Interpolation.slowFast));
-        table.addAction(Actions.moveTo(normalisedLeftPadding * stageWidth, (1 + normalisedHeight) * stageHeight, 0.25f, Interpolation.slowFast));
+        bar.addAction(Actions.moveTo(getX(), getHiddenY(), 0.25f, Interpolation.slowFast));
+        table.addAction(Actions.moveTo(getX(), getHiddenY(), 0.25f, Interpolation.slowFast));
     }
 
     private void showFor(Duration duration) {
         displayEndTime = Instant.now().plus(duration);
 
-        bar.addAction(Actions.moveTo(normalisedLeftPadding * stageWidth, normalisedTopPadding * stageHeight, 0.25f, Interpolation.fastSlow));
-        table.addAction(Actions.moveTo(normalisedLeftPadding * stageWidth, normalisedTopPadding * stageHeight, 0.25f, Interpolation.fastSlow));
+        bar.addAction(Actions.moveTo(getX(), getShownY(), 0.25f, Interpolation.fastSlow));
+        table.addAction(Actions.moveTo(getX(), getShownY(), 0.25f, Interpolation.fastSlow));
     }
 
     public void update() {
-        if (displayEndTime == null) {
+        if (isHidden()) {
             return;
         }
         if (Instant.now().isAfter(displayEndTime)) {

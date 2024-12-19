@@ -102,6 +102,7 @@ public class GameScreen implements Screen {
     buildingMenu.resize(width, height);
     gameOverMenu.resize(width, height);
     managementMenu.resize(width, height);
+    achievementBar.resize(width, height);
   }
 
   @Override
