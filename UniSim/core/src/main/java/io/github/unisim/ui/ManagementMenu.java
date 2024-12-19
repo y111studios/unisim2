@@ -28,6 +28,7 @@ public class ManagementMenu {
 
     private float stageWidth;
     private float stageHeight;
+    private boolean visible;
 
     private Label studentEnrollmentLabel;
     private TextField studentEnrollmentField;
@@ -35,15 +36,8 @@ public class ManagementMenu {
     public ManagementMenu(Stage stage, World world) {
         this.world = world;
 
-        stageWidth = stage.getWidth();
-        stageHeight = stage.getHeight();
-
         background = new ShapeActor(GameState.UIPrimaryColour);
-        background.setSize(normalisedWidth * stage.getWidth(), normalisedHeight * stage.getHeight());
-        background.setPosition(stageWidth, normalisedTopPadding * stageHeight);
         table = new Table();
-        table.setSize(normalisedWidth * stage.getWidth(), normalisedHeight * stage.getHeight());
-        table.setPosition(stageWidth, normalisedTopPadding * stageHeight);
 
         studentEnrollmentLabel = new Label("Student Enrollment", skin);
         table.add(studentEnrollmentLabel).left();
@@ -69,6 +63,9 @@ public class ManagementMenu {
         });
         table.add(studentEnrollmentField).padLeft(25);
 
+        visible = false;
+        resize((int) stage.getWidth(), (int) stage.getHeight());
+
         stage.addActor(background);
         stage.addActor(table);
     }
@@ -83,21 +80,51 @@ public class ManagementMenu {
         }
     }
 
+    public void resize(int width, int height) {
+        stageWidth = width;
+        stageHeight = height;
+        positionElements();
+    }
+
+    void positionElements() {
+        final float xPos = visible ? getShownX() : getHiddenX();
+
+        background.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
+        background.setPosition(xPos, getY());
+
+        table.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
+        table.setPosition(xPos, getY());
+    }
+
+    float getShownX() {
+        return normalisedLeftPadding * stageWidth;
+    }
+
+    float getHiddenX() {
+        return stageWidth;
+    }
+
+    float getY() {
+        return normalisedTopPadding * stageHeight;
+    }
+
     public void hide() {
-        background.addAction(Actions.moveTo(stageWidth, normalisedTopPadding * stageHeight, 0.33f, Interpolation.slowFast));
-        table.addAction(Actions.moveTo(stageWidth, normalisedTopPadding * stageHeight, 0.33f, Interpolation.slowFast));
+        background.addAction(Actions.moveTo(getHiddenX(), getY(), 0.33f, Interpolation.slowFast));
+        table.addAction(Actions.moveTo(getHiddenX(), getY(), 0.33f, Interpolation.slowFast));
+        visible = false;
     }
 
     public void show() {
-        background.addAction(Actions.moveTo(normalisedLeftPadding * stageWidth, normalisedTopPadding * stageHeight, 0.33f, Interpolation.fastSlow));
-        table.addAction(Actions.moveTo(normalisedLeftPadding * stageWidth, normalisedTopPadding * stageHeight, 0.33f, Interpolation.fastSlow));
+        background.addAction(Actions.moveTo(getShownX(), getY(), 0.33f, Interpolation.fastSlow));
+        table.addAction(Actions.moveTo(getShownX(), getY(), 0.33f, Interpolation.fastSlow));
+        visible = true;
     }
 
     public void toggleVisibility() {
-        if (background.getX() == stageWidth) {
-            show();
-        } else {
+        if (visible) {
             hide();
+        } else {
+            show();
         }
     }
 }
