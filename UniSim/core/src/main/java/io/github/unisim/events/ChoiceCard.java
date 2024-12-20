@@ -1,8 +1,10 @@
 package io.github.unisim.events;
 
 import java.lang.Math;
-
+import java.time.Duration;
+import io.github.unisim.achievements.ScoreModifierTemplate;
 import io.github.unisim.finance.MoneyTracker;
+import io.github.unisim.scoring.SatisfactionModifier;
 import io.github.unisim.scoring.SatisfactionTracker;
 
 public class ChoiceCard {
@@ -10,13 +12,13 @@ public class ChoiceCard {
     private String title;
     private String description;
     private int moneyEffect;
-    private float satisfactionEffect;
+    private SatisfactionModifier satisfactionModifier;
 
-    public ChoiceCard(String title, String description, int moneyEffect, float satisfactionEffect) {
+    public ChoiceCard(String title, String description, int moneyEffect, ScoreModifierTemplate satisfactionTemplate, float satisfactionEffect) {
         this.title = title;
         this.description = description;
         this.moneyEffect = moneyEffect;
-        this.satisfactionEffect = satisfactionEffect;
+        this.satisfactionModifier = new SatisfactionModifier(satisfactionTemplate, satisfactionEffect, Duration.ofSeconds(10));
     }
 
     public String getTitle() {
@@ -26,13 +28,13 @@ public class ChoiceCard {
     public String getDescription() {
         return description;
     }
-    
+
     public int getMoneyEffect() {
         return moneyEffect;
     }
 
-    public float getSatisfactionEffect() {
-        return satisfactionEffect;
+    public SatisfactionModifier getSatisfactionModifier() {
+        return satisfactionModifier;
     }
 
     public void applyEffects(MoneyTracker moneyTracker, SatisfactionTracker satisfactionTracker) {
@@ -41,7 +43,8 @@ public class ChoiceCard {
         } else {
             moneyTracker.addMoney(moneyEffect);
         }
-        satisfactionTracker.changeSatisfaction(satisfactionEffect);
+        satisfactionModifier.renewEndTime();
+        satisfactionTracker.addModifier(satisfactionModifier);
     }
 
 }

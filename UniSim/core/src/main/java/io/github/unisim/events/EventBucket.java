@@ -3,9 +3,10 @@ package io.github.unisim.events;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
+import io.github.unisim.achievements.ScoreModifierTemplate;
 
 public class EventBucket {
-    
+
     private List<EventCard> events;
     private Random random;
 
@@ -21,9 +22,9 @@ public class EventBucket {
             "Advertisements on Campus",
             "Would you like to put advertisements across campus?",
             List.of(
-                new ChoiceCard("Yes", "+ $1500, - 5% Satisfaction", 1500, -5),
-                new ChoiceCard("No", "+ 2.5% Satisfaction", 0, 2.5f),
-                new ChoiceCard("Ignore", "No changes.", 0, 0)
+                new ChoiceCard("Yes", "+ $1500, - 5% Satisfaction", 1500, ScoreModifierTemplate.ADD, -5),
+                new ChoiceCard("No", "+ 2.5% Satisfaction", 0, ScoreModifierTemplate.ADD, 2.5f),
+                new ChoiceCard("Ignore", "No changes.", 0, ScoreModifierTemplate.ADD, 0)
             )
         ));
 
@@ -31,9 +32,9 @@ public class EventBucket {
             "Lay Off Staff",
             "Do you want to lay off some staff?",
             List.of(
-                new ChoiceCard("Yes", "+ $5000, - 10% Satisfaction", 5000, -10),
-                new ChoiceCard("No", "+ 2.5% Satisfaction", 0, 2.5f),
-                new ChoiceCard("Ignore", "No changes.", 0, 0)
+                new ChoiceCard("Yes", "+ $5000, - 10% Satisfaction", 5000, ScoreModifierTemplate.ADD, -10),
+                new ChoiceCard("No", "+ 2.5% Satisfaction", 0, ScoreModifierTemplate.ADD, 2.5f),
+                new ChoiceCard("Ignore", "No changes.", 0, ScoreModifierTemplate.ADD, 0)
             )
         ));
 
@@ -41,9 +42,9 @@ public class EventBucket {
             "Hackathon!",
             "Would you like to organize a hackathon?",
             List.of(
-                new ChoiceCard("Yes", "+ 5% Satisfaction, - $1000", -1000, 5),
-                new ChoiceCard("No", "- 5% Satisfaction", 0, -5),
-                new ChoiceCard("Ignore", "No changes.", 0, 0)
+                new ChoiceCard("Yes", "+ 5% Satisfaction, - $1000", -1000, ScoreModifierTemplate.ADD, 5),
+                new ChoiceCard("No", "- 5% Satisfaction", 0, ScoreModifierTemplate.ADD, -5),
+                new ChoiceCard("Ignore", "No changes.", 0, ScoreModifierTemplate.ADD, 0)
             )
         ));
 
@@ -51,9 +52,9 @@ public class EventBucket {
             "Guest Lecturer",
             "Do you want to invite a guest lecturer?",
             List.of(
-                new ChoiceCard("Yes", "+ 2.5% Satisfaction, - $500", -500, 2.5f),
-                new ChoiceCard("No", "- 5% Satisfaction", 0, -5),
-                new ChoiceCard("Ignore", "No changes.", 0, 0)
+                new ChoiceCard("Yes", "+ 2.5% Satisfaction, - $500", -500, ScoreModifierTemplate.ADD, 2.5f),
+                new ChoiceCard("No", "- 5% Satisfaction", 0, ScoreModifierTemplate.ADD, -5),
+                new ChoiceCard("Ignore", "No changes.", 0, ScoreModifierTemplate.ADD, 0)
             )
         ));
 
@@ -61,19 +62,19 @@ public class EventBucket {
             "Talent Show!",
             "Would you like to organize a talent show?",
             List.of(
-                new ChoiceCard("Yes", "+ 10% Satisfaction, - $2000", -2000, 10),
-                new ChoiceCard("No", "- 5% Satisfaction", 0, -5),
-                new ChoiceCard("Ignore", "No changes.", 0, 0)
+                new ChoiceCard("Yes", "+ 10% Satisfaction, - $2000", -2000, ScoreModifierTemplate.ADD, 10),
+                new ChoiceCard("No", "- 5% Satisfaction", 0, ScoreModifierTemplate.ADD, -5),
+                new ChoiceCard("Ignore", "No changes.", 0, ScoreModifierTemplate.ADD, 0)
             )
         ));
-        
+
         events.add(new EventCard(
             "Open Day!",
             "Do you want to organize an open day?",
             List.of(
-                new ChoiceCard("Yes", "+ 2.5% Satisfaction, - $1000", -1000, 2.5f),
-                new ChoiceCard("No", "- 2.5% Satisfaction", 0, -2.5f),
-                new ChoiceCard("Ignore", "No changes.", 0, 0)
+                new ChoiceCard("Yes", "+ 2.5% Satisfaction, - $1000", -1000, ScoreModifierTemplate.ADD, 2.5f),
+                new ChoiceCard("No", "- 2.5% Satisfaction", 0, ScoreModifierTemplate.ADD, -2.5f),
+                new ChoiceCard("Ignore", "No changes.", 0, ScoreModifierTemplate.ADD, 0)
             )
         ));
     }
