@@ -8,12 +8,18 @@ import io.github.unisim.achievements.ScoreModifierTemplate;
 public class SatisfactionModifier implements Comparable<SatisfactionModifier> {
     private final float value;
     private final ScoreModifierTemplate template;
-    private final Instant endTime;
+    private final Duration duration;
+    private Instant endTime;
 
     public SatisfactionModifier(ScoreModifierTemplate template, float value, Duration duration) {
         this.value = value;
         this.template = template;
-        this.endTime = Instant.now().plus(duration);
+        this.duration = duration;
+        renewEndTime();
+    }
+
+    public void renewEndTime() {
+        endTime = Instant.now().plus(duration);
     }
 
     public Function<Float, Float> getModifierFunction() {
