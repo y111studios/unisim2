@@ -20,4 +20,9 @@ public class LeaderboardEntryTest {
     public void testConstructorWithInvalidImputs() {
         assertThrows(IllegalArgumentException.class, () -> new LeaderboardEntry("", -1));
     }
+
+    @Test
+    public void testConstructorWithNullName() {
+        assertThrows(IllegalArgumentException.class, () -> new LeaderboardEntry(null, 100));
+    }
 }
