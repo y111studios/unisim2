@@ -16,6 +16,7 @@ import com.badlogic.gdx.files.FileHandle;
 public class LeaderboardTest {
 
     private Leaderboard leaderboard;
+    private static final int MAX_ENTRIES = 10;
 
     @AfterAll
     static void cleanUp() {
@@ -88,12 +89,76 @@ public class LeaderboardTest {
         assertTrue(file.exists());
     }
 
+    // Testing addEntry
     @Test
-    public void testAddEntry() {
+    public void testAddEntryWhenNotFull() {
         leaderboard.addEntry(new LeaderboardEntry("Alice", 42));
         assertEquals(1, leaderboard.entries().size());
         assertEquals("Alice", leaderboard.entries().get(0).name());
         assertEquals(42, leaderboard.entries().get(0).score());
+    }
+
+    @Test
+    public void testAddEntryWhenFull() {
+        for (int i = 0; i < MAX_ENTRIES; i++) {
+            leaderboard.addEntry(new LeaderboardEntry("Player" + (i+1), (i+1)));
+        }
+        assertEquals(10, leaderboard.entries().size());
+    }
+
+    @Test
+    public void testAddEntryWhenNotHighScore() {
+        for (int i = 0; i < MAX_ENTRIES; i++) {
+            leaderboard.addEntry(new LeaderboardEntry("Player" + (i+1), (i+1)));
+        }
+        leaderboard.addEntry(new LeaderboardEntry("Player11", 0));
+        assertEquals(10, leaderboard.entries().size());
+        assertEquals("Player1", leaderboard.entries().get(9).name());
+        assertEquals(1, leaderboard.entries().get(9).score());
+    }
+
+    @Test
+    public void testAddEntryWhenHighScore() {
+        for (int i = 0; i < MAX_ENTRIES; i++) {
+            leaderboard.addEntry(new LeaderboardEntry("Player" + (i+1), (i+1)));
+        }
+        leaderboard.addEntry(new LeaderboardEntry("Player11", 11));
+        assertEquals(10, leaderboard.entries().size());
+        assertEquals("Player11", leaderboard.entries().get(0).name());
+        assertEquals(11, leaderboard.entries().get(0).score());
+    }
+
+    @Test
+    public void testAddEntryWhenFullAndHigherScore() {
+        for (int i = 0; i < MAX_ENTRIES; i++) {
+            leaderboard.addEntry(new LeaderboardEntry("Player" + (i+1), (i+1)));
+        }
+        leaderboard.addEntry(new LeaderboardEntry("Player11", 11));
+        assertEquals(10, leaderboard.entries().size());
+        assertEquals("Player11", leaderboard.entries().get(0).name());
+        assertEquals(11, leaderboard.entries().get(0).score());
+    }
+
+    @Test
+    public void testAddEntryWhenFullAndLowerScore() {
+        for (int i = 0; i < MAX_ENTRIES; i++) {
+            leaderboard.addEntry(new LeaderboardEntry("Player" + (i+1), (i+1)));
+        }
+        leaderboard.addEntry(new LeaderboardEntry("Player11", 0));
+        assertEquals(10, leaderboard.entries().size());
+        assertEquals("Player1", leaderboard.entries().get(9).name());
+        assertEquals(1, leaderboard.entries().get(9).score());
+    }
+
+    @Test
+    public void testAddEntryWhenFullAndEqualScore() {
+        for (int i = 0; i < MAX_ENTRIES; i++) {
+            leaderboard.addEntry(new LeaderboardEntry("Player" + (i+1), (i+1)));
+        }
+        leaderboard.addEntry(new LeaderboardEntry("Player11", 1));
+        assertEquals(10, leaderboard.entries().size());
+        assertEquals("Player1", leaderboard.entries().get(9).name());
+        assertEquals(1, leaderboard.entries().get(9).score());
     }
 
     // Definition of example JSON strings
