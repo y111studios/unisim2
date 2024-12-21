@@ -69,4 +69,22 @@ public class ScoreTrackerTest {
         scoreTracker.update();
         assertEquals(10, scoreTracker.getScore());
     }
+
+    @Test
+    public void testUpdateWhenConditionIsMet() {
+        scoreTracker.addScoreObject(mockScoringObject);
+        Instant lastUpdateTime = Instant.now().minus(Duration.ofMinutes(10));
+        scoreTracker.getLastUpdateTimes().put(mockScoringObject, lastUpdateTime);
+        scoreTracker.update();
+        assertEquals(20, scoreTracker.getScore());
+    }
+
+    @Test
+    public void testUpdateWhenConditionIsNotMet() {
+        scoreTracker.addScoreObject(mockScoringObject);
+        Instant lastUpdateTime = Instant.now().minus(Duration.ofMinutes(1));
+        scoreTracker.getLastUpdateTimes().put(mockScoringObject, lastUpdateTime);
+        scoreTracker.update();
+        assertEquals(0, scoreTracker.getScore());
+    }
 }
