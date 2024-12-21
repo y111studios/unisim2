@@ -57,4 +57,34 @@ public class SatisfactionNeedsTest {
         float satisfaction = new SatisfactionNeeds().getSatisfaction(buildings, 100);
         assertEquals(0.25, satisfaction);
     }
+
+    @Test
+    public void testGetSatisfactionWithZeroHousingCapacity() {
+        List<Building> buildings = new ArrayList<>();
+        buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.SLEEPING, "", 0, 0));
+        buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.LEARNING, "", 100, 0));
+        buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.EATING, "", 100, 0));
+        float satisfaction = new SatisfactionNeeds().getSatisfaction(buildings, 100);
+        assertEquals(0, satisfaction);
+    }
+
+    @Test
+    public void testGetSatisfactionWithZeroCateringCapacity() {
+        List<Building> buildings = new ArrayList<>();
+        buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.SLEEPING, "", 100, 0));
+        buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.LEARNING, "", 100, 0));
+        buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.EATING, "", 0, 0));
+        float satisfaction = new SatisfactionNeeds().getSatisfaction(buildings, 100);
+        assertEquals(0, satisfaction);
+    }
+
+    @Test
+    public void testGetSatisfactionWithZeroTeachingCapacity() {
+        List<Building> buildings = new ArrayList<>();
+        buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.SLEEPING, "", 100, 0));
+        buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.LEARNING, "", 0, 0));
+        buildings.add(new Building(null, 0.0f, null, null, null, false, BuildingType.EATING, "", 100, 0));
+        float satisfaction = new SatisfactionNeeds().getSatisfaction(buildings, 100);
+        assertEquals(0, satisfaction);
+    }
 }
