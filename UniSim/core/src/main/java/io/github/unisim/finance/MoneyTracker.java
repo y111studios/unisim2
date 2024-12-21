@@ -2,6 +2,7 @@ package io.github.unisim.finance;
 
 import java.time.Duration;
 import java.time.Instant;
+
 import io.github.unisim.GameState;
 
 public class MoneyTracker {
@@ -51,5 +52,9 @@ public class MoneyTracker {
             return;
         }
         money += amount;
+    }
+
+    public void setLastUpdateTime(Instant lastUpdateTime) {
+        this.lastUpdateTime = lastUpdateTime;
     }
 }
