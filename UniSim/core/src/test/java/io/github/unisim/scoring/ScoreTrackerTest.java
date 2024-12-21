@@ -87,4 +87,13 @@ public class ScoreTrackerTest {
         scoreTracker.update();
         assertEquals(0, scoreTracker.getScore());
     }
+
+    @Test
+    public void testUpdateWhenConditionIsMetMultipleTimes() {
+        scoreTracker.addScoreObject(mockScoringObject);
+        Instant lastUpdateTime = Instant.now().minus(Duration.ofSeconds(2));
+        scoreTracker.getLastUpdateTimes().put(mockScoringObject, lastUpdateTime);
+        scoreTracker.update();
+        assertEquals(20, scoreTracker.getScore());
+    }
 }
