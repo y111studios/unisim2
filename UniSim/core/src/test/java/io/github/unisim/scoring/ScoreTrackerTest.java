@@ -15,7 +15,7 @@ public class ScoreTrackerTest {
     @BeforeEach
     public void setUp() {
         scoreTracker = new ScoreTracker();
-        mockScoringObject = new MockScoringObject(10.0f, Duration.ofSeconds(0));
+        mockScoringObject = new MockScoringObject(10.0f, Duration.ofSeconds(1));
     }
 
     public class MockScoringObject implements ScoringObject {
