@@ -134,7 +134,7 @@ public class MoneyTrackerTest {
     @Test
     public void testUpdateMoneyTimeSinceLastUpateIsLessThanInterval() {
         tracker = new MoneyTracker(0);
-        tracker.setLastUpdateTime(Instant.now());
+        tracker.lastUpdateTime = Instant.now();
         int money = tracker.getMoney();
         tracker.updateMoney();
         assertEquals(money, tracker.getMoney());
@@ -143,7 +143,7 @@ public class MoneyTrackerTest {
     @Test
     public void testUpdateMoneyTimeSinceLastUpdateIsGreaterThanOrEqualToInterval() {
         tracker = new MoneyTracker(0);
-        tracker.setLastUpdateTime(Instant.now().minusSeconds(2));
+        tracker.lastUpdateTime = Instant.now().minusSeconds(2);
         tracker.updateMoney();
         assertEquals(100, tracker.getMoney());
     }

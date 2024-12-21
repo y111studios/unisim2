@@ -9,8 +9,8 @@ public class MoneyTracker {
     private static final Duration MONEY_UPDATE_INTERVAL = Duration.ofSeconds(1);
     private static final int MONEY_UPDATE_AMOUNT = 100;
 
-    private int money;
-    private Instant lastUpdateTime;
+    int money;
+    Instant lastUpdateTime;
 
     public MoneyTracker(int initialMoney) {
         money = Math.max(initialMoney, 0);
@@ -52,9 +52,5 @@ public class MoneyTracker {
             return;
         }
         money += amount;
-    }
-
-    public void setLastUpdateTime(Instant lastUpdateTime) {
-        this.lastUpdateTime = lastUpdateTime;
     }
 }
