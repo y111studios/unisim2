@@ -5,8 +5,20 @@ buildscript {
 }
 
 allprojects {
+  apply plugin: 'java-library'
   apply plugin: 'eclipse'
   apply plugin: 'idea'
+
+  java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+  }
+
+  compileJava.options.release = 17
+
+  compileJava {
+    options.incremental = true
+  }
 
   // This allows you to "Build and run using IntelliJ IDEA", an option in IDEA's Settings.
   idea {
@@ -18,12 +30,7 @@ allprojects {
 }
 
 configure(subprojects) {
-  apply plugin: 'java-library'
   apply plugin: 'jacoco'
-
-  java {
-    sourceCompatibility = JavaVersion.VERSION_17
-  }
 
   // From https://lyze.dev/2021/04/29/libGDX-Internal-Assets-List/
   // The article can be helpful when using assets.txt in your project.
@@ -44,10 +51,6 @@ configure(subprojects) {
     }
   }
   processResources.dependsOn 'generateAssetList'
-
-  compileJava {
-    options.incremental = true
-  }
 }
 
 subprojects {

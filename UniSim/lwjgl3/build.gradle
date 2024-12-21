@@ -20,15 +20,6 @@ application {
 
 eclipse.project.name = appName + '-lwjgl3'
 
-java {
-  sourceCompatibility = JavaVersion.VERSION_17
-  targetCompatibility = JavaVersion.VERSION_17
-}
-
-if (JavaVersion.current().isJava9Compatible()) {
-  compileJava.options.release.set(17)
-}
-
 dependencies {
   implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
   implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
