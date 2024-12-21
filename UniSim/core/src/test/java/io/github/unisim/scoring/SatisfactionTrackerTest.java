@@ -1,5 +1,6 @@
 package io.github.unisim.scoring;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,5 +81,13 @@ public class SatisfactionTrackerTest {
     public void testChangeSatisfaction() {
         satisfactiontracker.changeSatisfaction(50);
         assertEquals(50, satisfactiontracker.getSatisfaction());
+    }
+
+    // Testing updateInterval
+    @Test
+    public void testUpdateInterval() {
+        satisfactiontracker.getUpdateInterval();
+        Duration expectedInterval = Duration.ofSeconds(1);
+        assertEquals(expectedInterval, satisfactiontracker.getUpdateInterval());
     }
 }
