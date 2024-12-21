@@ -208,5 +208,33 @@ public class LeaderboardTest {
         assertEquals(MULTIPLE_ENTRIES_JSON, file.readString());
     }
 
+    // Testing fileExists
+    @Test
+    public void testFileExists() {
+        FileHandle file = Gdx.files.local(Leaderboard.FILE_ADDRESS);
+        file.writeString("[]", false);
+        assertTrue(Leaderboard.fileExists());
+    }
 
+    @Test
+    public void testFileDoesNotExist() {
+        FileHandle file = Gdx.files.local(Leaderboard.FILE_ADDRESS);
+        if (file.exists()) {
+            file.delete();
+        }
+        assertTrue(!Leaderboard.fileExists());
+    }
+
+    // Testing createFile
+    @Test
+    public void testCreateFile() {
+        assertTrue(Leaderboard.fileExists());
+    }
+
+    @Test
+    public void testCreateFileWhenFileExists() {
+        FileHandle file = Gdx.files.local(Leaderboard.FILE_ADDRESS);
+        file.writeString("[]", false);
+        assertTrue(Leaderboard.fileExists());
+    }
 }
