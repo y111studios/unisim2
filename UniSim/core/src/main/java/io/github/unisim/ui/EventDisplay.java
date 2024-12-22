@@ -5,8 +5,10 @@ import java.time.Instant;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -17,13 +19,12 @@ import io.github.unisim.events.EventCard;
 import io.github.unisim.finance.MoneyTracker;
 import io.github.unisim.scoring.SatisfactionTracker;
 import io.github.unisim.utils.ResizableComponents;
-import io.github.unisim.GameState;
 import io.github.unisim.events.EventBucket;
 
 public class EventDisplay {
 
     private Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-    private ShapeActor dialog;
+    private Image dialog;
     private ShapeActor timerBar;
     private Table table;
 
@@ -50,28 +51,31 @@ public class EventDisplay {
     private ResizableComponents resizableComponents;
     private ResizableComponents timerComponent;
 
+    private Texture dialogTexture;
+
     public EventDisplay(Stage stage, MoneyTracker moneyTracker, SatisfactionTracker satisfactionTracker) {
         this.moneyTracker = moneyTracker;
         this.satisfactionTracker = satisfactionTracker;
 
-        this.dialog = new ShapeActor(GameState.UISecondaryColour);
+        dialogTexture = new Texture("ui/event_dialog.png");
+        this.dialog = new Image(dialogTexture);
         this.table = new Table();
 
-        eventTitleLabel = new Label("",skin);
-        eventDescriptionLabel = new Label("",skin);
+        eventTitleLabel = new Label("", skin);
+        eventDescriptionLabel = new Label("", skin);
         choice1 = new TextButton("", skin);
         choice2 = new TextButton("", skin);
         choice3 = new TextButton("", skin);
 
-        table.add(eventTitleLabel).padBottom(10);
-        table.row();
-        table.add(eventDescriptionLabel).padBottom(15);
-        table.row();
-        table.add(choice1).padBottom(5);
-        table.row();
-        table.add(choice2).padBottom(5);
-        table.row();
-        table.add(choice3).padBottom(5);
+        table.add(eventTitleLabel);
+        table.row().padTop(15);
+        table.add(eventDescriptionLabel);
+        table.row().padTop(30);
+        table.add(choice1).width(300).height(30);
+        table.row().padTop(5);
+        table.add(choice2).width(300).height(30);
+        table.row().padTop(5);
+        table.add(choice3).width(300).height(30);
 
         timerBar = new ShapeActor(Color.GREEN);
 
@@ -108,7 +112,10 @@ public class EventDisplay {
         eventCard = eventBucket.getRandomEvent();
 
         eventTitleLabel.setText(eventCard.getTitle());
+        eventTitleLabel.setColor(new Color(0.65f, 0.15f, 0.15f, 1.0f));
+
         eventDescriptionLabel.setText(eventCard.getDescription());
+        eventDescriptionLabel.setColor(new Color(0.65f, 0.15f, 0.15f, 1.0f));
 
         choice1.setText(eventCard.getChoices().get(0).getTitle() + " --> " + eventCard.getChoices().get(0).getDescription());
         choice1.addListener(new ClickListener() {
@@ -171,4 +178,5 @@ public class EventDisplay {
         long remainingTime = Duration.between(Instant.now(), displayEndTime).toMillis();
         timerComponent.setNormalisedWidth((remainingTime / (float) DISPLAY_TIME.toMillis()) * normalisedWidth);
     }
+
 }
