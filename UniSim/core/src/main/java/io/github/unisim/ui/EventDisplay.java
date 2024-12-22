@@ -43,6 +43,7 @@ public class EventDisplay {
     final static float normalisedHeight = 0.4f;
 
     private float stageWidth;
+    private float stageHeight;
 
     public EventDisplay(Stage stage, MoneyTracker moneyTracker, SatisfactionTracker satisfactionTracker) {
 
@@ -50,17 +51,11 @@ public class EventDisplay {
         this.satisfactionTracker = satisfactionTracker;
 
         this.stageWidth = stage.getWidth();
-
-        float stageWidth = stage.getWidth();
-        float stageHeight = stage.getHeight();
+        this.stageHeight = stage.getHeight();
 
         this.dialog = new ShapeActor(GameState.UISecondaryColour);
-        this.dialog.setPosition(stageWidth / 2, stageHeight / 2);
-        this.dialog.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
 
         this.table = new Table();
-        this.table.setPosition(stageWidth / 2, stageHeight / 2);
-        this.table.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
 
         eventTitleLabel = new Label("",skin);
         eventDescriptionLabel = new Label("",skin);
@@ -79,8 +74,7 @@ public class EventDisplay {
         table.add(choice3).padBottom(5);
 
         timerBar = new ShapeActor(Color.GREEN);
-        timerBar.setPosition(dialog.getX(), dialog.getY() + dialog.getHeight());
-        timerBar.setSize(dialog.getWidth(), 8f);
+
 
         stage.addActor(dialog);
         stage.addActor(timerBar);
@@ -91,13 +85,7 @@ public class EventDisplay {
 
     private void hide() {
         displayEndTime = null;
-        this.dialog.setVisible(false);
-        this.timerBar.setVisible(false);
-        this.table.setVisible(false);
-
-        this.dialog.moveBy(stageWidth, 0);
-        this.timerBar.moveBy(stageWidth, 0);
-        this.table.moveBy(stageWidth, 0);
+        positionElements();
     }
 
     private void setEvent() {
@@ -136,14 +124,8 @@ public class EventDisplay {
 
     public void show() {
         setEvent();
-        this.dialog.setVisible(true);
-        this.timerBar.setVisible(true);
-        this.table.setVisible(true);
         displayEndTime = Instant.now().plus(DISPLAY_TIME);
-
-        this.dialog.moveBy(-stageWidth, 0);
-        this.timerBar.moveBy(-stageWidth, 0);
-        this.table.moveBy(-stageWidth, 0);
+        positionElements();
     }
 
     public void update() {
@@ -157,6 +139,39 @@ public class EventDisplay {
             float width = (remainingTime / (float) DISPLAY_TIME.toMillis()) * dialog.getWidth();
             timerBar.setSize(width, 8f);
         }
+    }
+
+    void positionElements() {
+        final float xPos = isHidden() ? getHiddenX() : getShownX();
+        final float yPos = getY();
+        dialog.setPosition(xPos, yPos);
+        dialog.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
+        table.setPosition(xPos, yPos);
+        table.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
+        timerBar.setPosition(xPos, yPos + dialog.getHeight());
+        timerBar.setSize(dialog.getWidth(), 8f);
+    }
+
+    public void resize(int width, int height) {
+        this.stageWidth = width;
+        this.stageHeight = height;
+        positionElements();
+    }
+
+    private float getY() {
+        return stageHeight / 2;
+    }
+
+    private float getShownX() {
+        return (stageWidth * (1 - normalisedWidth)) / 2;
+    }
+
+    private float getHiddenX() {
+        return (1 + normalisedWidth) * stageWidth;
+    }
+
+    private boolean isHidden() {
+        return displayEndTime == null;
     }
 
 }
