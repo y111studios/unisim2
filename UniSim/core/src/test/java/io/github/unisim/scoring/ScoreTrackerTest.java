@@ -49,7 +49,7 @@ public class ScoreTrackerTest {
     @Test
     public void testAddScoreObject() {
         scoreTracker.addScoreObject(mockScoringObject);
-        assertEquals(1, scoreTracker.getLastUpdateTimes().size());
+        assertEquals(1, scoreTracker.lastUpdateTimes.size());
     }
 
     // Testing getFinalScore
@@ -79,7 +79,7 @@ public class ScoreTrackerTest {
     public void testUpdateWhenConditionIsNotMet() {
         scoreTracker.addScoreObject(mockScoringObject);
         Instant lastUpdateTime = Instant.now().plus(Duration.ofMinutes(1));
-        scoreTracker.getLastUpdateTimes().put(mockScoringObject, lastUpdateTime);
+        scoreTracker.lastUpdateTimes.put(mockScoringObject, lastUpdateTime);
         scoreTracker.update();
         assertEquals(0, scoreTracker.getScore());
     }
@@ -88,7 +88,7 @@ public class ScoreTrackerTest {
     public void testUpdateWhenConditionIsMetMultipleTimes() {
         scoreTracker.addScoreObject(mockScoringObject);
         Instant lastUpdateTime = Instant.now().minus(Duration.ofMinutes(2));
-        scoreTracker.getLastUpdateTimes().put(mockScoringObject, lastUpdateTime);
+        scoreTracker.lastUpdateTimes.put(mockScoringObject, lastUpdateTime);
         scoreTracker.update();
         assertEquals(20, scoreTracker.getScore());
     }
