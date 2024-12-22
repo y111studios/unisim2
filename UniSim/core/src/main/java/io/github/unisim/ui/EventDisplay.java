@@ -55,9 +55,7 @@ public class EventDisplay {
 
         this.dialog = new ShapeActor(GameState.UISecondaryColour);
 
-
         this.table = new Table();
-
 
         eventTitleLabel = new Label("",skin);
         eventDescriptionLabel = new Label("",skin);
@@ -87,13 +85,7 @@ public class EventDisplay {
 
     private void hide() {
         displayEndTime = null;
-        this.dialog.setVisible(false);
-        this.timerBar.setVisible(false);
-        this.table.setVisible(false);
-
-        this.dialog.moveBy(stageWidth, 0);
-        this.timerBar.moveBy(stageWidth, 0);
-        this.table.moveBy(stageWidth, 0);
+        positionElements();
     }
 
     private void setEvent() {
@@ -132,14 +124,8 @@ public class EventDisplay {
 
     public void show() {
         setEvent();
-        this.dialog.setVisible(true);
-        this.timerBar.setVisible(true);
-        this.table.setVisible(true);
         displayEndTime = Instant.now().plus(DISPLAY_TIME);
-
-        this.dialog.moveBy(-stageWidth, 0);
-        this.timerBar.moveBy(-stageWidth, 0);
-        this.table.moveBy(-stageWidth, 0);
+        positionElements();
     }
 
     public void update() {
@@ -156,11 +142,13 @@ public class EventDisplay {
     }
 
     void positionElements() {
-        dialog.setPosition(stageWidth / 2, stageHeight / 2);
+        final float xPos = isHidden() ? getHiddenX() : getShownX();
+        final float yPos = getY();
+        dialog.setPosition(xPos, yPos);
         dialog.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
-        table.setPosition(stageWidth / 2, stageHeight / 2);
+        table.setPosition(xPos, yPos);
         table.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
-        timerBar.setPosition(dialog.getX(), dialog.getY() + dialog.getHeight());
+        timerBar.setPosition(xPos, yPos + dialog.getHeight());
         timerBar.setSize(dialog.getWidth(), 8f);
     }
 
@@ -168,6 +156,22 @@ public class EventDisplay {
         this.stageWidth = width;
         this.stageHeight = height;
         positionElements();
+    }
+
+    private float getY() {
+        return stageHeight / 2;
+    }
+
+    private float getShownX() {
+        return stageWidth / 2;
+    }
+
+    private float getHiddenX() {
+        return (1 + normalisedWidth) * stageWidth;
+    }
+
+    private boolean isHidden() {
+        return displayEndTime == null;
     }
 
 }
