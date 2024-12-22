@@ -7,7 +7,7 @@ import java.util.Map;
 public class ScoreTracker {
 
     private float score;
-    private Map<ScoringObject, Instant> lastUpdateTimes;
+    Map<ScoringObject, Instant> lastUpdateTimes;
 
     public ScoreTracker() {
         score = 0;
@@ -42,10 +42,6 @@ public class ScoreTracker {
 
     void incrementScore(ScoringObject scoringObject, float multiplier) {
         score += scoringObject.getScore() * multiplier;
-    }
-
-    public Map<ScoringObject, Instant> getLastUpdateTimes() {
-        return lastUpdateTimes;
     }
 
 }
