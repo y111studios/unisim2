@@ -91,7 +91,9 @@ public class World {
   }
 
   public void update() {
-    moneyTracker.updateMoney();
+    if (!GameState.gameOver && !GameState.paused) {
+      moneyTracker.updateMoney();
+    }
     satisfactionTracker.updateSatisfaction(buildingManager.getBuildings(), buildingManager.getPreviewBuilding(), numberOfStudents);
     scoreTracker.update();
 

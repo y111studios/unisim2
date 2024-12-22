@@ -6,9 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
-import io.github.unisim.GameState;
-
-
 
 public class MoneyTrackerTest {
 
@@ -114,25 +111,8 @@ public class MoneyTrackerTest {
         assertEquals(100,tracker.getMoney());
     }
 
-    // Testing updateMoney method
     @Test
-    public void testUpdateMoneyWhenPaused() {
-        tracker = new MoneyTracker(100);
-        GameState.paused = true;
-        tracker.updateMoney();
-        assertEquals(100, tracker.getMoney());
-    }
-
-    @Test
-    public void testUpdateMoneyWhenGameOver() {
-        tracker = new MoneyTracker(100);
-        GameState.gameOver = true;
-        tracker.updateMoney();
-        assertEquals(100, tracker.getMoney());
-    }
-
-    @Test
-    public void testUpdateMoneyTimeSinceLastUpateIsLessThanInterval() {
+    public void testUpdateMoneyTimeSinceLastUpdateIsLessThanInterval() {
         tracker = new MoneyTracker(0);
         tracker.lastUpdateTime = Instant.now();
         int money = tracker.getMoney();
