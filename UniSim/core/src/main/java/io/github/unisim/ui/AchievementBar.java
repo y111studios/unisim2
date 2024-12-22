@@ -32,6 +32,7 @@ public class AchievementBar {
     final static float normalisedHeight = 0.1f;
     final static float normalisedLeftPadding = (1 - normalisedWidth) / 2;
     final static float normalisedTopPadding = 1 - 0.1f - normalisedHeight;
+    static final float normalisedHiddenPadding = 1;
 
     private ResizableComponents resizableComponents;
 
@@ -92,7 +93,7 @@ public class AchievementBar {
             Actions.delay(duration.toMillis() / 1000f),
             Actions.moveTo(resizableComponents.getX(), resizableComponents.getStageHeight(), 0.25f, Interpolation.fastSlow),
             Actions.run(() -> {
-                resizableComponents.setNormalisedY(1);
+                resizableComponents.setNormalisedY(normalisedHiddenPadding);
             })
         );
         resizableComponents.addAction(actionGenerator);

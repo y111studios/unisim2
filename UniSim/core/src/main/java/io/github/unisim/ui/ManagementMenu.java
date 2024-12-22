@@ -29,6 +29,7 @@ public class ManagementMenu {
     private static final float normalisedHeight = 0.85f;
     private static final float normalisedLeftPadding = (0.975f - normalisedWidth);
     private static final float normalisedTopPadding = (1 - normalisedHeight) / 2;
+    private static final float normalisedHiddenPadding = 1;
 
     private Label studentEnrollmentLabel;
     private TextField studentEnrollmentField;
@@ -99,7 +100,7 @@ public class ManagementMenu {
         Function<Void, Action> actionGenerator = (Void) -> Actions.sequence(
             Actions.moveTo(resizableComponents.getStageWidth(), resizableComponents.getY(), 0.33f, Interpolation.slowFast),
             Actions.run(() -> {
-                resizableComponents.setNormalisedX(1);
+                resizableComponents.setNormalisedX(normalisedHiddenPadding);
             })
         );
         resizableComponents.addAction(actionGenerator);

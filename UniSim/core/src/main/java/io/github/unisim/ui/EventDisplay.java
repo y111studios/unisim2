@@ -45,6 +45,7 @@ public class EventDisplay {
     final static float normalisedHeight = 0.4f;
     final static float normalisedLeftPadding = (1 - normalisedWidth) / 2;
     final static float normalisedTopPadding = 0.5f;
+    static final float normalisedHiddenPadding = 1;
 
     private ResizableComponents resizableComponents;
     private ResizableComponents timerComponent;
@@ -79,7 +80,7 @@ public class EventDisplay {
             .addActor(table)
             .setNormalisedWidth(normalisedWidth)
             .setNormalisedHeight(normalisedHeight)
-            .setNormalisedX(1)
+            .setNormalisedX(normalisedHiddenPadding)
             .setNormalisedY(normalisedTopPadding)
             .build();
 
@@ -87,7 +88,7 @@ public class EventDisplay {
             .addActor((Actor) timerBar)
             .setNormalisedWidth(normalisedWidth)
             .setNormalisedHeight(0.015f)
-            .setNormalisedX(1)
+            .setNormalisedX(normalisedHiddenPadding)
             .setNormalisedY(normalisedTopPadding + normalisedHeight)
             .build();
 
@@ -98,8 +99,8 @@ public class EventDisplay {
 
     private void hide() {
         displayEndTime = null;
-        resizableComponents.setNormalisedX(1);
-        timerComponent.setNormalisedX(1);
+        resizableComponents.setNormalisedX(normalisedHiddenPadding);
+        timerComponent.setNormalisedX(normalisedHiddenPadding);
         timerComponent.setNormalisedWidth(0);
     }
 
@@ -165,6 +166,7 @@ public class EventDisplay {
     private void adjustTimerWidth() {
         if (displayEndTime == null) {
             timerComponent.setNormalisedWidth(0);
+            return;
         }
         long remainingTime = Duration.between(Instant.now(), displayEndTime).toMillis();
         timerComponent.setNormalisedWidth((remainingTime / (float) DISPLAY_TIME.toMillis()) * normalisedWidth);
