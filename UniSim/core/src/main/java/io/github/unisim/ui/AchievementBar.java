@@ -1,9 +1,11 @@
 package io.github.unisim.ui;
 
 import java.time.Duration;
-import java.time.Instant;
+import java.util.function.Function;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
@@ -13,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import io.github.unisim.GameState;
 import io.github.unisim.achievements.Achievement;
+import io.github.unisim.utils.ResizableComponents;
 
 public class AchievementBar {
     private Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
@@ -23,8 +26,6 @@ public class AchievementBar {
     private Label descriptionLabel;
     private Cell<Image> iconCell;
 
-    private Instant displayEndTime;
-
     private static final Duration DISPLAY_TIME = Duration.ofSeconds(8);
 
     final static float normalisedWidth = 0.4f;
@@ -32,12 +33,9 @@ public class AchievementBar {
     final static float normalisedLeftPadding = (1 - normalisedWidth) / 2;
     final static float normalisedTopPadding = 1 - 0.1f - normalisedHeight;
 
-    private float stageHeight;
-    private float stageWidth;
+    private ResizableComponents resizableComponents;
 
     public AchievementBar(Stage stage) {
-        stageWidth = stage.getWidth();
-        stageHeight = stage.getHeight();
         bar = new ShapeActor(GameState.UIPrimaryColour);
 
         table = new Table();
@@ -52,44 +50,23 @@ public class AchievementBar {
 
         table.add(rightColumn).expand().fill();
 
-        resize((int) stage.getWidth(), (int) stage.getHeight());
+        ResizableComponents.Builder resizeBuilder = new ResizableComponents.Builder(stage);
+        resizableComponents = resizeBuilder
+            .addActor((Actor) bar)
+            .addActor(table)
+            .setNormalisedWidth(normalisedWidth)
+            .setNormalisedHeight(normalisedHeight)
+            .setNormalisedX(normalisedLeftPadding)
+            .setNormalisedY(1)
+            .build();
 
         stage.addActor(bar);
         stage.addActor(table);
     }
 
     public void resize(int width, int height) {
-        stageWidth = width;
-        stageHeight = height;
-        positionElements();
-    }
-
-    void positionElements() {
-        final float yPos = isHidden() ? getHiddenY() : getShownY();
-
-        bar.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
-        bar.setPosition(getX(), yPos);
-
-        table.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
-        table.setPosition(getX(), yPos);
-
-        iconCell.size(0.95f * bar.getHeight()).padLeft(0.025f * bar.getHeight());
-    }
-
-    float getX() {
-        return normalisedLeftPadding * stageWidth;
-    }
-
-    float getShownY() {
-        return normalisedTopPadding * stageHeight;
-    }
-
-    float getHiddenY() {
-        return (1 + normalisedHeight) * stageHeight;
-    }
-
-    boolean isHidden() {
-        return displayEndTime == null;
+        resizableComponents.resize(width, height);
+        iconCell.size(0.95f * resizableComponents.getHeight()).padLeft(0.025f * resizableComponents.getHeight());
     }
 
     public void setAchievement(Achievement achievement) {
@@ -106,27 +83,19 @@ public class AchievementBar {
         showFor(DISPLAY_TIME);
     }
 
-    private void hide() {
-        displayEndTime = null;
-
-        bar.addAction(Actions.moveTo(getX(), getHiddenY(), 0.25f, Interpolation.slowFast));
-        table.addAction(Actions.moveTo(getX(), getHiddenY(), 0.25f, Interpolation.slowFast));
-    }
-
     private void showFor(Duration duration) {
-        displayEndTime = Instant.now().plus(duration);
-
-        bar.addAction(Actions.moveTo(getX(), getShownY(), 0.25f, Interpolation.fastSlow));
-        table.addAction(Actions.moveTo(getX(), getShownY(), 0.25f, Interpolation.fastSlow));
-    }
-
-    public void update() {
-        if (isHidden()) {
-            return;
-        }
-        if (Instant.now().isAfter(displayEndTime)) {
-            hide();
-        }
+        Function<Void, Action> actionGenerator = (Void) -> Actions.sequence(
+            Actions.moveTo(resizableComponents.getX(), normalisedTopPadding * resizableComponents.getStageHeight(), 0.25f, Interpolation.fastSlow),
+            Actions.run(() -> {
+                resizableComponents.setNormalisedY(normalisedTopPadding);
+            }),
+            Actions.delay(duration.toMillis() / 1000f),
+            Actions.moveTo(resizableComponents.getX(), resizableComponents.getStageHeight(), 0.25f, Interpolation.fastSlow),
+            Actions.run(() -> {
+                resizableComponents.setNormalisedY(1);
+            })
+        );
+        resizableComponents.addAction(actionGenerator);
     }
 
 }

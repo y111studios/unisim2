@@ -83,7 +83,6 @@ public class GameScreen implements Screen {
     stage.act(dt);
     infoBar.update();
     buildingMenu.update();
-    achievementBar.update();
     stage.draw();
 
     if (GameState.gameOver) {
