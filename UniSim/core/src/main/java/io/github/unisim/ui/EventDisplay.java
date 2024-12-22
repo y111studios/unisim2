@@ -5,6 +5,7 @@ import java.time.Instant;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.github.unisim.events.EventCard;
 import io.github.unisim.finance.MoneyTracker;
 import io.github.unisim.scoring.SatisfactionTracker;
+import io.github.unisim.utils.ResizableComponents;
 import io.github.unisim.GameState;
 import io.github.unisim.events.EventBucket;
 
@@ -41,20 +43,17 @@ public class EventDisplay {
 
     final static float normalisedWidth = 0.4f;
     final static float normalisedHeight = 0.4f;
+    final static float normalisedLeftPadding = (1 - normalisedWidth) / 2;
+    final static float normalisedTopPadding = 0.5f;
 
-    private float stageWidth;
-    private float stageHeight;
+    private ResizableComponents resizableComponents;
+    private ResizableComponents timerComponent;
 
     public EventDisplay(Stage stage, MoneyTracker moneyTracker, SatisfactionTracker satisfactionTracker) {
-
         this.moneyTracker = moneyTracker;
         this.satisfactionTracker = satisfactionTracker;
 
-        this.stageWidth = stage.getWidth();
-        this.stageHeight = stage.getHeight();
-
         this.dialog = new ShapeActor(GameState.UISecondaryColour);
-
         this.table = new Table();
 
         eventTitleLabel = new Label("",skin);
@@ -75,17 +74,33 @@ public class EventDisplay {
 
         timerBar = new ShapeActor(Color.GREEN);
 
+        resizableComponents = new ResizableComponents.Builder(stage)
+            .addActor((Actor) dialog)
+            .addActor(table)
+            .setNormalisedWidth(normalisedWidth)
+            .setNormalisedHeight(normalisedHeight)
+            .setNormalisedX(1)
+            .setNormalisedY(normalisedTopPadding)
+            .build();
+
+        timerComponent = new ResizableComponents.Builder(stage)
+            .addActor((Actor) timerBar)
+            .setNormalisedWidth(normalisedWidth)
+            .setNormalisedHeight(0.015f)
+            .setNormalisedX(1)
+            .setNormalisedY(normalisedTopPadding + normalisedHeight)
+            .build();
 
         stage.addActor(dialog);
         stage.addActor(timerBar);
         stage.addActor(table);
-
-        hide();
     }
 
     private void hide() {
         displayEndTime = null;
-        positionElements();
+        resizableComponents.setNormalisedX(1);
+        timerComponent.setNormalisedX(1);
+        timerComponent.setNormalisedWidth(0);
     }
 
     private void setEvent() {
@@ -125,7 +140,9 @@ public class EventDisplay {
     public void show() {
         setEvent();
         displayEndTime = Instant.now().plus(DISPLAY_TIME);
-        positionElements();
+        resizableComponents.setNormalisedX(normalisedLeftPadding);
+        timerComponent.setNormalisedX(normalisedLeftPadding);
+        timerComponent.setNormalisedWidth(normalisedWidth);
     }
 
     public void update() {
@@ -135,43 +152,21 @@ public class EventDisplay {
         if (Instant.now().isAfter(displayEndTime)) {
             hide();
         } else {
-            long remainingTime = Duration.between(Instant.now(), displayEndTime).toMillis();
-            float width = (remainingTime / (float) DISPLAY_TIME.toMillis()) * dialog.getWidth();
-            timerBar.setSize(width, 8f);
+            adjustTimerWidth();
         }
     }
 
-    void positionElements() {
-        final float xPos = isHidden() ? getHiddenX() : getShownX();
-        final float yPos = getY();
-        dialog.setPosition(xPos, yPos);
-        dialog.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
-        table.setPosition(xPos, yPos);
-        table.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
-        timerBar.setPosition(xPos, yPos + dialog.getHeight());
-        timerBar.setSize(dialog.getWidth(), 8f);
-    }
-
     public void resize(int width, int height) {
-        this.stageWidth = width;
-        this.stageHeight = height;
-        positionElements();
+        resizableComponents.resize(width, height);
+        timerComponent.resize(width, height);
+        adjustTimerWidth();
     }
 
-    private float getY() {
-        return stageHeight / 2;
+    private void adjustTimerWidth() {
+        if (displayEndTime == null) {
+            timerComponent.setNormalisedWidth(0);
+        }
+        long remainingTime = Duration.between(Instant.now(), displayEndTime).toMillis();
+        timerComponent.setNormalisedWidth((remainingTime / (float) DISPLAY_TIME.toMillis()) * normalisedWidth);
     }
-
-    private float getShownX() {
-        return (stageWidth * (1 - normalisedWidth)) / 2;
-    }
-
-    private float getHiddenX() {
-        return (1 + normalisedWidth) * stageWidth;
-    }
-
-    private boolean isHidden() {
-        return displayEndTime == null;
-    }
-
 }

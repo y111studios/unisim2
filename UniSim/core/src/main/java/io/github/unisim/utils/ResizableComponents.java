@@ -66,6 +66,16 @@ public class ResizableComponents {
         positionComponents();
     }
 
+    public void setNormalisedWidth(float width) {
+        normalisedWidth = width;
+        positionComponents();
+    }
+
+    public void setNormalisedHeight(float height) {
+        normalisedHeight = height;
+        positionComponents();
+    }
+
     public float getX() {
         return normalisedX * stageWidth;
     }
