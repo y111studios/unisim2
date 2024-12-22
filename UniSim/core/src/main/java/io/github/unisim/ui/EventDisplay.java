@@ -163,7 +163,7 @@ public class EventDisplay {
     }
 
     private float getShownX() {
-        return stageWidth / 2;
+        return (stageWidth * (1 - normalisedWidth)) / 2;
     }
 
     private float getHiddenX() {
