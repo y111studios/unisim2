@@ -15,7 +15,7 @@ public class ScoreTracker {
     }
 
     public ScoreTracker addScoreObject(ScoringObject scoringObject) {
-        lastUpdateTimes.put(scoringObject, Instant.MIN);
+        lastUpdateTimes.put(scoringObject, Instant.now());
         return this;
     }
 
@@ -32,8 +32,9 @@ public class ScoreTracker {
             ScoringObject scoringObject = entry.getKey();
             Instant lastUpdateTime = entry.getValue();
             final Instant now = Instant.now();
-            if (lastUpdateTime.plus(scoringObject.getUpdateInterval()).compareTo(now) <= 0) {
-                score += scoringObject.getScore();
+            if (lastUpdateTime.plus(scoringObject.getUpdateInterval()).isBefore(now)) {
+                float durationMultiples =  (float) ((lastUpdateTime.toEpochMilli() - now.toEpochMilli()) / scoringObject.getUpdateInterval().toMillis());
+                score += scoringObject.getScore() * (int) durationMultiples;
                 lastUpdateTimes.put(scoringObject, now);
             }
         }
