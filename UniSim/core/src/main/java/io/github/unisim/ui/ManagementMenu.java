@@ -1,8 +1,11 @@
 package io.github.unisim.ui;
 
+import java.util.function.Function;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -12,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import io.github.unisim.GameState;
+import io.github.unisim.utils.ResizableComponents;
 import io.github.unisim.world.World;
 
 public class ManagementMenu {
@@ -25,13 +29,12 @@ public class ManagementMenu {
     private static final float normalisedHeight = 0.85f;
     private static final float normalisedLeftPadding = (0.975f - normalisedWidth);
     private static final float normalisedTopPadding = (1 - normalisedHeight) / 2;
-
-    private float stageWidth;
-    private float stageHeight;
-    private boolean visible;
+    private static final float normalisedHiddenPadding = 1;
 
     private Label studentEnrollmentLabel;
     private TextField studentEnrollmentField;
+
+    private ResizableComponents resizableComponents;
 
     public ManagementMenu(Stage stage, World world) {
         this.world = world;
@@ -63,8 +66,17 @@ public class ManagementMenu {
         });
         table.add(studentEnrollmentField).padLeft(25);
 
-        visible = false;
-        resize((int) stage.getWidth(), (int) stage.getHeight());
+        ResizableComponents.Builder resizeBuilder = new ResizableComponents.Builder(stage);
+        resizableComponents = resizeBuilder
+            .addActor((Actor) background)
+            .addActor(table)
+            .setNormalisedWidth(normalisedWidth)
+            .setNormalisedHeight(normalisedHeight)
+            .setNormalisedX(normalisedLeftPadding)
+            .setNormalisedY(normalisedTopPadding)
+            .build();
+
+        resizableComponents.setNormalisedX(1);
 
         stage.addActor(background);
         stage.addActor(table);
@@ -81,47 +93,31 @@ public class ManagementMenu {
     }
 
     public void resize(int width, int height) {
-        stageWidth = width;
-        stageHeight = height;
-        positionElements();
-    }
-
-    void positionElements() {
-        final float xPos = visible ? getShownX() : getHiddenX();
-
-        background.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
-        background.setPosition(xPos, getY());
-
-        table.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
-        table.setPosition(xPos, getY());
-    }
-
-    float getShownX() {
-        return normalisedLeftPadding * stageWidth;
-    }
-
-    float getHiddenX() {
-        return stageWidth;
-    }
-
-    float getY() {
-        return normalisedTopPadding * stageHeight;
+        resizableComponents.resize(width, height);
     }
 
     public void hide() {
-        background.addAction(Actions.moveTo(getHiddenX(), getY(), 0.33f, Interpolation.slowFast));
-        table.addAction(Actions.moveTo(getHiddenX(), getY(), 0.33f, Interpolation.slowFast));
-        visible = false;
+        Function<Void, Action> actionGenerator = (Void) -> Actions.sequence(
+            Actions.moveTo(resizableComponents.getStageWidth(), resizableComponents.getY(), 0.33f, Interpolation.slowFast),
+            Actions.run(() -> {
+                resizableComponents.setNormalisedX(normalisedHiddenPadding);
+            })
+        );
+        resizableComponents.addAction(actionGenerator);
     }
 
     public void show() {
-        background.addAction(Actions.moveTo(getShownX(), getY(), 0.33f, Interpolation.fastSlow));
-        table.addAction(Actions.moveTo(getShownX(), getY(), 0.33f, Interpolation.fastSlow));
-        visible = true;
+        Function<Void, Action> actionGenerator = (Void) -> Actions.sequence(
+            Actions.moveTo(normalisedLeftPadding * resizableComponents.getStageWidth(), resizableComponents.getY(), 0.33f, Interpolation.fastSlow),
+            Actions.run(() -> {
+                resizableComponents.setNormalisedX(normalisedLeftPadding);
+            })
+        );
+        resizableComponents.addAction(actionGenerator);
     }
 
     public void toggleVisibility() {
-        if (visible) {
+        if (resizableComponents.onScreen()) {
             hide();
         } else {
             show();
