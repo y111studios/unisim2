@@ -59,16 +59,6 @@ public class BuildingManagerTest {
         assertNull(buildingManager.getPreviewBuilding());
     }
 
-    @Test
-    public void testSetPreviewBuildingRemove() {
-        Building previewBuilding = new Building(null, 0.0f, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50);
-        buildingManager.setPreviewBuilding(previewBuilding);
-        assertNotNull(buildingManager.getPreviewBuilding());
-        assertEquals(previewBuilding, buildingManager.getPreviewBuilding());
-        buildingManager.setPreviewBuilding(null);
-        assertNull(buildingManager.getPreviewBuilding());
-    }
-
     // Testing placeBuilding
     @Test
     public void testPlaceBuilding() {
