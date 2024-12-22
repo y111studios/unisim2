@@ -139,6 +139,8 @@ public class GameOverMenu {
     table.setBounds(0, 0, width, height * 0.1f);
     bar.setBounds(0, 0, width, height * 0.1f);
     buttonCell.width(width * 0.3f).height(height * 0.1f);
+    leaderboardBackground.setBounds(width * 0.08f, height * 0.14f, width * 0.24f, height * 0.74f);
+    leaderboardTable.setBounds(width * 0.08f, height * 0.14f, width * 0.24f, height * 0.74f);
   }
 
   public InputProcessor getInputProcessor() {
