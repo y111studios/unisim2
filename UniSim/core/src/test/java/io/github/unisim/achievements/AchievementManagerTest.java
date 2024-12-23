@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
@@ -92,8 +93,9 @@ public class AchievementManagerTest {
         assertNotNull(achievementManager.getUnlockedScoreModifiers());
     }
 
+    // Testing getDefinedAchievement
     @Test
-    void testGetDefinedAchivement() {
+    void testGetDefinedAchievement() {
         DefinedAchievements definedAchievement = DefinedAchievements.values()[0];
         Achievement fetchedAchievement = achievementManager.getAchievement(definedAchievement);
         assertNotNull(fetchedAchievement);
