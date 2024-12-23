@@ -1,10 +1,9 @@
 package io.github.unisim.building;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -67,7 +66,6 @@ public class BuildingManagerTest {
 
     // Testing the constructor
     @Test
-
     public void testConstructor() {
         assertNotNull(buildingManager);
         assertNotNull(buildingManager.getBuildings());
@@ -97,6 +95,18 @@ public class BuildingManagerTest {
         assertNotNull(buildingManager.getBuildings());
     }
 
+    @Test
+    public void testPlaceBuildingOrder() {
+        Building building1 = new Building(null, 0.0f, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50);
+        Building building2 = new Building(null, 0.0f, null, new Point(1,1), new Point(2,2), false, BuildingType.SLEEPING, "", 0, 50);
+        Building building3 = new Building(null, 0.0f, null, new Point(2,1), new Point(1,1), false, BuildingType.EATING, "", 0, 50);
+        buildingManager.placeBuilding(building1);
+        int count1 = buildingManager.placeBuilding(building2);
+        assertEquals(1, count1);
+        int count2 = buildingManager.placeBuilding(building3);
+        assertEquals(2, count2);
+    }
+
     // Testing removeBuilding
     @Test
     public void testRemoveBuilding() {
@@ -104,6 +114,14 @@ public class BuildingManagerTest {
         buildingManager.placeBuilding(building);
         boolean removed = buildingManager.removeBuilding(building);
         assertTrue(removed);
+        assertEquals(0, buildingManager.getBuildingCount(buildingType.RECREATION));
+    }
+
+    @Test
+    public void testRemoveBuildingWithNoBuilding() {
+        boolean removed = buildingManager.removeBuilding(building);
+        assertFalse(removed);
+        assertEquals(0, buildingManager.getBuildingCount(buildingType.RECREATION));
     }
 
     // Testing getBuildingCount
@@ -177,21 +195,5 @@ public class BuildingManagerTest {
         buildingManager.placeBuilding(building);
         Building buildingAt = buildingManager.getBuildingAt(new Point(1,1));
         assertEquals(building, buildingAt);
-    }
-
-    // Testing decrementBuildingCount
-    @Test
-    public void testDecrementBuildingCount() {
-        Map<BuildingType, Integer> buildingCounts = new HashMap<>();
-        buildingCounts.put(buildingType.RECREATION, 1);
-        Integer count = buildingCounts.get(buildingType.RECREATION);
-        assertEquals(1, count);
-    }
-
-    @Test
-    public void testDecrementBuildingCountWithNull() {
-        Map<BuildingType, Integer> buildingCounts = new HashMap<>();
-        Integer count = buildingCounts.get(buildingType.RECREATION);
-        assertEquals(null, count);
     }
 }
