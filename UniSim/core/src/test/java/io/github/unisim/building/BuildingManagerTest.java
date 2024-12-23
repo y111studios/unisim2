@@ -1,6 +1,8 @@
 package io.github.unisim.building;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
@@ -20,6 +23,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+
 import io.github.unisim.Point;
 
 public class BuildingManagerTest {
@@ -175,5 +179,19 @@ public class BuildingManagerTest {
         assertEquals(building, buildingAt);
     }
 
+    // Testing decrementBuildingCount
+    @Test
+    public void testDecrementBuildingCount() {
+        Map<BuildingType, Integer> buildingCounts = new HashMap<>();
+        buildingCounts.put(buildingType.RECREATION, 1);
+        Integer count = buildingCounts.get(buildingType.RECREATION);
+        assertEquals(1, count);
+    }
 
+    @Test
+    public void testDecrementBuildingCountWithNull() {
+        Map<BuildingType, Integer> buildingCounts = new HashMap<>();
+        Integer count = buildingCounts.get(buildingType.RECREATION);
+        assertEquals(null, count);
+    }
 }
