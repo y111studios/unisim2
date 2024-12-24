@@ -8,6 +8,9 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
 
+/**
+ * A class that represents the leaderboard.
+ */
 public class Leaderboard {
     static final String FILE_ADDRESS = "leaderboard.json";
     private static final int MAX_ENTRIES = 10;
@@ -18,6 +21,10 @@ public class Leaderboard {
         return entries;
     }
 
+    /**
+     * Constructs a new leaderboard, loading the entries from the file if it exists, otherwise
+     * creating a new file.
+     */
     public Leaderboard() {
         if (createFile()) {
             entries = new ArrayList<>(MAX_ENTRIES);
@@ -27,6 +34,9 @@ public class Leaderboard {
         }
     }
 
+    /**
+     * Saves the leaderboard to the file as a JSON array.
+     */
     public final void save() {
         FileHandle f = getFile();
         JsonValue root = new JsonValue(JsonValue.ValueType.array);
@@ -39,6 +49,13 @@ public class Leaderboard {
         f.writeString(root.toJson(JsonWriter.OutputType.json), false);
     }
 
+    /**
+     * Adds a new entry to the leaderboard if it is within the top {@value #MAX_ENTRIES} entries.
+     * If the entry is not added, the method returns false.
+     *
+     * @param newEntry The new entry to add.
+     * @return true if the entry was added, false otherwise.
+     */
     public boolean addEntry(LeaderboardEntry newEntry) {
         boolean shouldAdd = entries.size() < MAX_ENTRIES;
         shouldAdd |= entries.stream().anyMatch(e -> e.score() < newEntry.score());
@@ -53,6 +70,9 @@ public class Leaderboard {
         return true;
     }
 
+    /**
+     * Loads the leaderboard from the file.
+     */
     public final void load() {
         entries = new ArrayList<>(MAX_ENTRIES);
         FileHandle f = getFile();
@@ -63,6 +83,9 @@ public class Leaderboard {
         sort();
     }
 
+    /**
+     * Sorts the entries in descending order by score.
+     */
     private final void sort() {
         entries.sort((a, b) -> Integer.compare(b.score(), a.score()));
     }
@@ -75,6 +98,11 @@ public class Leaderboard {
         return getFile().exists();
     }
 
+    /**
+     * Creates an empty file for the leaderboard if it does not exist.
+     *
+     * @return true if the file was created, false otherwise
+     */
     private static boolean createFile() {
         try {
             return getFile().file().createNewFile();
