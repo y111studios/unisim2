@@ -15,7 +15,7 @@ public class SatisfactionTracker implements ScoringObject {
     private float satisfaction;
     private SatisfactionNeeds satisfactionNeeds;
 
-    List<SatisfactionModifier> modifiers = new ArrayList<>();
+    List<SatisfactionModifier> modifiers;
 
     /**
      * Initializes the satisfaction tracker to 0 with no modifiers.
@@ -23,6 +23,7 @@ public class SatisfactionTracker implements ScoringObject {
     public SatisfactionTracker() {
         satisfactionNeeds = new SatisfactionNeeds();
         satisfaction = 0;
+        modifiers = new ArrayList<>();
     }
 
     public float getSatisfaction() {
@@ -59,10 +60,6 @@ public class SatisfactionTracker implements ScoringObject {
             }
         }
         modifiers.removeIf(SatisfactionModifier::isExpired);
-    }
-
-    public void changeSatisfaction(float change) {
-        satisfaction += change;
     }
 
     /**
