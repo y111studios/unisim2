@@ -5,12 +5,22 @@ import java.time.Instant;
 import java.util.function.Function;
 import io.github.unisim.achievements.ScoreModifierTemplate;
 
+/**
+ * A class that represents a satisfaction modifier.
+ */
 public class SatisfactionModifier implements Comparable<SatisfactionModifier> {
     private final float value;
     private final ScoreModifierTemplate template;
     private final Duration duration;
     private Instant endTime;
 
+    /**
+     * Constructs a new satisfaction modifier with the specified template, value, and duration.
+     *
+     * @param template The template of the modifier.
+     * @param value The value for the template to use.
+     * @param duration The duration of the modifier.
+     */
     public SatisfactionModifier(ScoreModifierTemplate template, float value, Duration duration) {
         this.value = value;
         this.template = template;
@@ -18,10 +28,19 @@ public class SatisfactionModifier implements Comparable<SatisfactionModifier> {
         renewEndTime();
     }
 
+    /**
+     * Renews the end time of the modifier to the current time plus the duration. This method should
+     * be called whenever the modifier is activated after initialization.
+     */
     public void renewEndTime() {
         endTime = Instant.now().plus(duration);
     }
 
+    /**
+     * Returns the function that modifies the score based on the template and value of the modifier.
+     *
+     * @return The function that modifies the score.
+     */
     public Function<Float, Float> getModifierFunction() {
         switch (template) {
             case ADD:
