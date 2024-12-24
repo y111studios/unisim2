@@ -25,7 +25,7 @@ public class Achievement {
     private static String MISSING_ICON_PATH = "achievements/missing_icon.png";
 
     /**
-     * Internal constructor for creating a default state achievement from a definition in
+     * Internal constructor for creating a locked achievement from a definition in
      * {@link DefinedAchievements}.
      *
      * @param definition the definition of the achievement
