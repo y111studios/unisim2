@@ -5,17 +5,34 @@ import java.util.ArrayList;
 import java.util.Random;
 import io.github.unisim.achievements.ScoreModifierTemplate;
 
+/**
+ * Bucket class to hold all choice events that can be triggered in the game.
+ * This class is used to randomly select an event to trigger.
+ */
 public class EventBucket {
 
+    /**
+     * List of all the event cards remaining in the bucket.
+     */
     private List<EventCard> events;
+    /**
+     * Reference to the random number generator.
+     */
     private Random random;
 
+    /**
+     * Constructor to initialize the event bucket with all the events and
+     * a randomly seeded random number generator.
+     */
     public EventBucket() {
         events = new ArrayList<>();
         random = new Random();
         initializeEvents();
     }
 
+    /**
+     * Adds all the events into the events list.
+     */
     private void initializeEvents() {
 
         events.add(new EventCard(
@@ -112,6 +129,11 @@ public class EventBucket {
         return events.isEmpty();
     }
 
+    /**
+     * Get a random event from the bucket.
+     *
+     * @return a random event from the bucket
+     */
     public EventCard getRandomEvent() {
         if (events.isEmpty()) {
             return null;
