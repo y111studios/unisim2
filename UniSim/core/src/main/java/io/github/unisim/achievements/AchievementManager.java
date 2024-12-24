@@ -15,14 +15,33 @@ import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
 
+/**
+ * Manager class for achievements in the game.
+ */
 public class AchievementManager {
 
+    /**
+     * The default file path for the achievements file. This is used when the game is played.
+     */
     final static String DEFAULT_FILE_PATH = "achievements.json";
+    /**
+     * The file handle for this manager's achievements file.
+     */
     private FileHandle fileHandle;
 
+    /**
+     * A list containing all of the achievements in the game. This includes both unlocked and locked
+     * achievements.
+     */
     List<Achievement> achievements;
+    /**
+     * A set containing all of the achievements that have been unlocked in the current session.
+     */
     Set<Achievement> sessionAchievements;
 
+    /**
+     * Default constructor that creates a new achievement manager with the default file path.
+     */
     public AchievementManager() {
         this(Gdx.files.local(DEFAULT_FILE_PATH));
     }
@@ -44,21 +63,49 @@ public class AchievementManager {
         load();
     }
 
+    /**
+     * Clears the session achievements set.
+     */
     public void clearSessionAchievements() {
         sessionAchievements.clear();
     }
 
+    /**
+     * Returns a list of all achievements in the game.
+     *
+     * @return a list of all achievements in the game
+     */
     public List<Achievement> getAchievements() {
         return achievements;
     }
 
+    /**
+     * Returns an iterator over all of the score modifier functions for the achievements that have
+     * been unlocked in the current session.
+     *
+     * <p>
+     * The score modifier functions are sorted by their template from {@link ScoreModifierTemplate}.
+     * </p>
+     *
+     * @return an iterator over the unlocked achievement's score modifier functions
+     */
     public Iterator<Function<Integer, Integer>> getUnlockedScoreModifiers() {
         return sessionAchievements.stream()
-            .sorted((a, b) -> (a.functionTemplate.compareTo(b.functionTemplate)))
-            .map(Achievement::getScoreModifier)
-            .iterator();
+                .sorted((a, b) -> (a.functionTemplate.compareTo(b.functionTemplate)))
+                .map(Achievement::getScoreModifier).iterator();
     }
 
+    /**
+     * Unlocks the achievement
+     *
+     * <p>
+     * This method will unlock the achievement and save the updated achievement to the file then
+     * return whether the achievement was unlocked for the first time since the session started.
+     * </p>
+     *
+     * @param achievement the achievement to unlock
+     * @return if the achievement was unlocked for the first time since the session started
+     */
     public boolean unlockAchievement(DefinedAchievements achievement) {
         Achievement a = getAchievement(achievement);
         if (a.unlock()) {
@@ -67,12 +114,23 @@ public class AchievementManager {
         return sessionAchievements.add(a);
     }
 
+    /**
+     * Saves all of the achievements to the file as a JSON array.
+     */
     public final void save() {
         JsonValue root = new JsonValue(JsonValue.ValueType.array);
         achievements.stream().map(Achievement::toJsonValue).forEach(root::addChild);
         fileHandle.writeString(root.toJson(JsonWriter.OutputType.json), false);
     }
 
+    /**
+     * Loads all of the achievements from the file.
+     *
+     * <p>
+     * This method will load all achievements from the file and store them into the achievements
+     * list. If any achievements are missing, they will be added to the list and saved to the file.
+     * </p>
+     */
     public final void load() {
         achievements = new ArrayList<>();
         JsonValue root = new JsonReader().parse(fileHandle);
@@ -86,8 +144,8 @@ public class AchievementManager {
             float progress = json.getFloat("progress");
             boolean unlocked = json.getBoolean("unlocked");
             boolean hidden = json.getBoolean("hidden");
-            Achievement achievement = new Achievement(name, description, unlockTime, functionTemplate,
-                    scoreModifierValue, progress, unlocked, hidden);
+            Achievement achievement = new Achievement(name, description, unlockTime,
+                    functionTemplate, scoreModifierValue, progress, unlocked, hidden);
             achievements.add(achievement);
         }
         Optional<List<DefinedAchievements>> undefinedAchievements =
@@ -98,23 +156,46 @@ public class AchievementManager {
         }
     }
 
+    /**
+     * Creates an empty file for the achievements if it does not exist.
+     *
+     * @return true if the file was created, false otherwise
+     */
     private boolean createFile() {
         try {
             return fileHandle.file().createNewFile();
         } catch (Exception e) {
-            Gdx.app.error("AchievementManager file creation", "Failed to create achievements file", e);
+            Gdx.app.error("AchievementManager file creation", "Failed to create achievements file",
+                    e);
         }
         return true;
     }
 
+    /**
+     * Gets the achievement from the list of achievements by its definition.
+     *
+     * @param achievement the definition of the achievement
+     * @return the achievement
+     */
     public Achievement getAchievement(DefinedAchievements achievement) {
         return getAchievement(achievement.name).get();
     }
 
+    /**
+     * Gets the achievement from the list of achievements by its name.
+     *
+     * @param string the name of the achievement
+     * @return the achievement if it exists, otherwise an empty optional
+     */
     private Optional<Achievement> getAchievement(String string) {
         return achievements.stream().filter((a) -> a.name.equals(string)).findFirst();
     }
 
+    /**
+     * Gets the set of achievements that have been unlocked in the current session.
+     *
+     * @return the set of achievements that have been unlocked in the current session
+     */
     public Set<Achievement> getSessionAchievements() {
         return sessionAchievements;
     }

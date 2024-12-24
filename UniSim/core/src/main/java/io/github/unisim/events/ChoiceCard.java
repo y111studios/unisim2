@@ -7,6 +7,9 @@ import io.github.unisim.finance.MoneyTracker;
 import io.github.unisim.scoring.SatisfactionModifier;
 import io.github.unisim.scoring.SatisfactionTracker;
 
+/**
+ * Class representing an event choice.
+ */
 public class ChoiceCard {
 
     private String title;
@@ -14,6 +17,15 @@ public class ChoiceCard {
     private int moneyEffect;
     private SatisfactionModifier satisfactionModifier;
 
+    /**
+     * All arg constructor
+     *
+     * @param title the title of the choice card
+     * @param description the description of the choice card
+     * @param moneyEffect the integer effect on the money tracker
+     * @param satisfactionTemplate the template for the satisfaction modifier
+     * @param satisfactionEffect the float effect on the satisfaction tracker
+     */
     public ChoiceCard(String title, String description, int moneyEffect, ScoreModifierTemplate satisfactionTemplate, float satisfactionEffect) {
         this.title = title;
         this.description = description;
@@ -37,6 +49,12 @@ public class ChoiceCard {
         return satisfactionModifier;
     }
 
+    /**
+     * Apply the effects defined by the choice card.
+     *
+     * @param moneyTracker
+     * @param satisfactionTracker
+     */
     public void applyEffects(MoneyTracker moneyTracker, SatisfactionTracker satisfactionTracker) {
         if (moneyEffect < 0) {
             moneyTracker.subtractMoney(Math.abs(moneyEffect));

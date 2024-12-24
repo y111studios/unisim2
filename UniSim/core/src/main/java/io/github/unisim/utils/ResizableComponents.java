@@ -7,6 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
+/**
+ * A class to manage the resizing of components in a stage.
+ */
 public class ResizableComponents {
 
     float stageWidth;
@@ -19,32 +22,63 @@ public class ResizableComponents {
     float normalisedWidth;
     float normalisedHeight;
 
+    /**
+     * Initialises the ResizableComponents with the width and height of the stage with
+     * no actors.
+     *
+     * @param width The width of the stage
+     * @param height The height of the stage
+     */
     ResizableComponents(float width, float height) {
         stageWidth = width;
         stageHeight = height;
         actors = new ArrayList<>();
     }
 
+    /**
+     * Adds an actor to the list of actors to be resized.
+     *
+     * @param actor The actor to be added
+     */
     public void addActor(Actor actor) {
         actors.add(actor);
         positionComponent(actor);
     }
 
+    /**
+     * Resizes the components to the new width and height of the stage.
+     *
+     * @param width
+     * @param height
+     */
     public void resize(int width, int height) {
         stageWidth = width;
         stageHeight = height;
         positionComponents();
     }
 
+    /**
+     * Positions the components based on the normalised values of the components.
+     */
     void positionComponents() {
         actors.forEach(this::positionComponent);
     }
 
+    /**
+     * Positions the actor based on the normalised values of the component.
+     *
+     * @param actor
+     */
     void positionComponent(Actor actor) {
         actor.setPosition(getX(), getY());
         actor.setSize(getWidth(), getHeight());
     }
 
+    /**
+     * Checks if the component is on the screen.
+     *
+     * @return true if the component is on the screen, false otherwise
+     */
     public boolean onScreen() {
         return normalisedX > 0
             && normalisedX + normalisedWidth <= 1
@@ -52,25 +86,50 @@ public class ResizableComponents {
             && normalisedY + normalisedHeight <= 1;
     }
 
+    /**
+     * Adds an action to all the actors.
+     *
+     * @param actionGenerator A function that generates an action
+     */
     public void addAction(Function<Void, Action> actionGenerator) {
         actors.forEach(actor -> actor.addAction(actionGenerator.apply(null)));
     }
 
+    /**
+     * Updates the normalised x position of the component.
+     * This results in an update to the position of all components.
+     * @param x
+     */
     public void setNormalisedX(float x) {
         normalisedX = x;
         positionComponents();
     }
 
+    /**
+     * Updates the normalised y position of the component.
+     * This results in an update to the position of all components.
+     * @param y
+     */
     public void setNormalisedY(float y) {
         normalisedY = y;
         positionComponents();
     }
 
+    /**
+     * Updates the normalised width of the component.
+     * This results in an update to the width of all components.
+     * @param width
+     */
     public void setNormalisedWidth(float width) {
         normalisedWidth = width;
         positionComponents();
     }
 
+    /**
+     * Updates the normalised height of the component.
+     * This results in an update to the height of all components.
+     * @param height
+     */
     public void setNormalisedHeight(float height) {
         normalisedHeight = height;
         positionComponents();

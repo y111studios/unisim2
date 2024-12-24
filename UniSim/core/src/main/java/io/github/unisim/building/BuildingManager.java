@@ -149,6 +149,12 @@ public class BuildingManager {
     return i;
   }
 
+  /**
+   * Remove a building from the world and decrement the building counters.
+   *
+   * @param building - A reference to the building object to be removed
+   * @return - true if the building was removed, false otherwise
+   */
   public boolean removeBuilding(Building building) {
     boolean removed = buildings.remove(building);
     if (!removed) {
@@ -247,6 +253,17 @@ public class BuildingManager {
     return previewBuilding;
   }
 
+  /**
+   * Get the building at a {@link Point} location.
+   *
+   * <p>
+   * This method returns the building at the location if the point is within the bounds of any
+   * managed building.
+   * </p>
+   *
+   * @param location The location to check for a building
+   * @return The building at the location, or null if no building is present
+   */
   public Building getBuildingAt(Point location) {
     for (Building building : buildings) {
         if (building.location.x > location.x || building.location.x + building.size.x < location.x) {

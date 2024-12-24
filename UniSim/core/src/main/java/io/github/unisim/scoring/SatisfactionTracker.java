@@ -8,21 +8,37 @@ import java.util.stream.StreamSupport;
 import io.github.unisim.achievements.ScoreModifierTemplate;
 import io.github.unisim.building.Building;
 
+/**
+ * A class that tracks the satisfaction of the students.
+ */
 public class SatisfactionTracker implements ScoringObject {
     private float satisfaction;
     private SatisfactionNeeds satisfactionNeeds;
 
-    List<SatisfactionModifier> modifiers = new ArrayList<>();
+    List<SatisfactionModifier> modifiers;
 
+    /**
+     * Initializes the satisfaction tracker to 0 with no modifiers.
+     */
     public SatisfactionTracker() {
         satisfactionNeeds = new SatisfactionNeeds();
         satisfaction = 0;
+        modifiers = new ArrayList<>();
     }
 
     public float getSatisfaction() {
         return satisfaction;
     }
 
+    /**
+     * Updates the satisfaction of the students based on the buildings and the total number of students.
+     * The previewBuilding is used to calculate the satisfaction without the building that has not been built yet.
+     * If previewBuilding is null, all buildings are considered.
+     *
+     * @param buildings The buildings that are currently built
+     * @param previewBuilding The building that is being previewed
+     * @param totalStudents The total number of students
+     */
     public void updateSatisfaction(Iterable<Building> buildings, Building previewBuilding, int totalStudents) {
         if (buildings == null) {
             // Special case where there are no buildings
@@ -46,14 +62,22 @@ public class SatisfactionTracker implements ScoringObject {
         modifiers.removeIf(SatisfactionModifier::isExpired);
     }
 
-    public void changeSatisfaction(float change) {
-        satisfaction += change;
-    }
-
+    /**
+     * Adds a new modifier to the satisfaction tracker.
+     *
+     * @param template The template of the modifier
+     * @param value The value the modifier will change the satisfaction by
+     * @param duration The duration of the modifier
+     */
     public void addModifier(ScoreModifierTemplate template, float value, Duration duration) {
         addModifier(new SatisfactionModifier(template, value, duration));
     }
 
+    /**
+     * Adds a new modifier to the satisfaction tracker.
+     *
+     * @param modifier The modifier to add
+     */
     public void addModifier(SatisfactionModifier modifier) {
         // Insert the modifier in the correct order
         for (int i = 0; i < modifiers.size(); i++) {
