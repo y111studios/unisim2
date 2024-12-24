@@ -146,6 +146,7 @@ public class BuildingManagerTest {
         // float colorA = (float) getPrivateField(batch, "color.a"); // Alpha
         // assertEquals(1.0f, colorA);
         Texture texture = (Texture) getPrivateField(batch, "lastTexture"); // Texture
+        buildingManager.render(batch);
         assertEquals(building.texture, texture);
         // float x = (float) getPrivateField(batch, "invTexWidth"); // X position
         // assertEquals(0, x, EPSILON);
@@ -173,6 +174,7 @@ public class BuildingManagerTest {
         // float colorA = (float) getPrivateField(batch, "color.a"); // Alpha
         // assertEquals(0.5f, colorA);
         Texture texture = (Texture) getPrivateField(batch, "lastTexture"); // Texture
+        buildingManager.render(batch);
         assertEquals(building.texture, texture);
         // float x = (float) getPrivateField(batch, "invTexWidth"); // X position
         // assertEquals(0, x);
