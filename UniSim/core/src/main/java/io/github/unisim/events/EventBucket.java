@@ -96,39 +96,6 @@ public class EventBucket {
         ));
     }
 
-    public EventCard get(int index) {
-        return events.get(index);
-    }
-
-    public EventCard get(String eventTitle) {
-        for (EventCard event : events) {
-            if (event.getTitle().equals(eventTitle)) {
-                return event;
-            }
-        }
-        return null;
-    }
-
-    public void add(EventCard event) {
-        events.add(event);
-    }
-
-    public void remove(int index) {
-        events.remove(index);
-    }
-
-    public void remove(String eventTitle) {
-        events.removeIf(event -> event.getTitle().equals(eventTitle));
-    }
-
-    public void remove(EventCard event) {
-        events.remove(event);
-    }
-
-    public boolean isEmpty() {
-        return events.isEmpty();
-    }
-
     /**
      * Get a random event from the bucket.
      *
