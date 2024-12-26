@@ -47,22 +47,24 @@ public class ManagementMenu {
 
         background = new ShapeActor(GameState.UIPrimaryColour);
         table = new Table();
+        
         buildingCapacityTable = new Table();
         buildingCapacityLabels = new HashMap<>(BuildingType.values().length);
         buildingCapacityTable.setPosition(normalisedHiddenPadding * stage.getWidth(), normalisedHeight * stage.getHeight(), 0);
-        buildingCapacityTable.add(new Label("Accomodation Capacity", skin)).left().padRight(5);
+        buildingCapacityTable.add(new Label("Accomodation Capacity", skin)).left().padRight(15);
         buildingCapacityLabels.put(BuildingType.SLEEPING, buildingCapacityTable.add(new Label("0", skin)));
-        buildingCapacityTable.row();
-        buildingCapacityTable.add(new Label("Catering Capacity", skin)).left().padRight(5);
+        buildingCapacityTable.row().padTop(10);
+        buildingCapacityTable.add(new Label("Catering Capacity", skin)).left().padRight(15);
         buildingCapacityLabels.put(BuildingType.EATING, buildingCapacityTable.add(new Label("0", skin)));
-        buildingCapacityTable.row();
-        buildingCapacityTable.add(new Label("Teaching Capacity", skin)).left().padRight(5);
+        buildingCapacityTable.row().padTop(10);
+        buildingCapacityTable.add(new Label("Teaching Capacity", skin)).left().padRight(15);
         buildingCapacityLabels.put(BuildingType.LEARNING, buildingCapacityTable.add(new Label("0", skin)));
-        buildingCapacityTable.row();
-        buildingCapacityTable.add(new Label("Recreational Capacity", skin)).left().padRight(5);
+        buildingCapacityTable.row().padTop(10);
+        buildingCapacityTable.add(new Label("Recreational Capacity", skin)).left().padRight(15);
         buildingCapacityLabels.put(BuildingType.RECREATION, buildingCapacityTable.add(new Label("0", skin)));
 
         table.add(buildingCapacityTable).expandX().row();
+        table.row().padTop(10);
 
         studentEnrollmentLabel = new Label("Student Enrollment", skin);
         table.add(studentEnrollmentLabel);
