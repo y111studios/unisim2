@@ -110,7 +110,35 @@ public class Achievement {
         }
         unlocked = true;
         unlockTime = Instant.now();
+        progress = 1;
         return true;
+    }
+
+    /**
+     * Progresses the achivement by the specified percentage.
+     *
+     * <p>
+     * If the achievement is already unlocked, this method does nothing. This function returns
+     * false if the achivement was already unlocked or if the percentage is not finite.
+     * </p>
+     *
+     * @param percentage the percentage to progress by, expected to be within [0, 1]
+     * @return if the achievement was unlocked by this action
+     */
+    boolean progress(float percentage) {
+        if (isUnlocked()) {
+            return false;
+        }
+        if (!Float.isFinite(percentage)) {
+            System.err.println("Achievement progress percentage is not finite: " + percentage);
+            return false;
+        }
+        progress += percentage;
+        if (progress >= 1) {
+            return unlock();
+        } else {
+            return false;
+        }
     }
 
     public boolean isUnlocked() {
