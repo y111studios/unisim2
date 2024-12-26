@@ -197,10 +197,7 @@ public class BuildingManager {
    * @return - The number of buildings of that type that have been placed
    */
   public int getBuildingCount(BuildingType type) {
-    if (!buildingCounts.containsKey(type)) {
-      return 0;
-    }
-    return buildingCounts.get(type);
+    return buildingCounts.getOrDefault(type, 0);
   }
 
   /**

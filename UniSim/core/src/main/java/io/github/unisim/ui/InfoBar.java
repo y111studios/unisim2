@@ -1,7 +1,5 @@
 package io.github.unisim.ui;
 
-import java.util.ArrayList;
-import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import io.github.unisim.GameState;
 import io.github.unisim.Timer;
-import io.github.unisim.building.BuildingType;
 import io.github.unisim.world.World;
 
 /**
@@ -24,8 +21,6 @@ public class InfoBar {
   private ShapeActor bar;
   private Table infoTable = new Table();
   private Table titleTable = new Table();
-  private Table buildingCountersTable = new Table();
-  private Label[] buildingCounterLabels = new Label[4];
   private Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
   private Label satisfactionLabel = new Label("", skin);
   private Label titleLabel = new Label("UniSim", skin);
@@ -42,8 +37,6 @@ public class InfoBar {
   private Cell<Label> scoreLabelCell;
   private Cell<Image> pauseButtonCell;
   private Cell<Label> moneyLabelCell;
-  private Cell<Table> buildingCountersTableCell;
-  private List<Cell<Label>> buildingCounterCells;
   private World world;
   /**
    * Create a new infoBar and draws its' components onto the provided stage.
@@ -53,17 +46,6 @@ public class InfoBar {
   public InfoBar(Stage stage, Timer timer, World world) {
     this.timer = timer;
     this.world = world;
-    buildingCounterCells = new ArrayList<Cell<Label>>(4);
-
-    // Building counter table
-    for (int i = 0; i < 4; i++) {
-      buildingCounterLabels[i] = new Label("", skin);
-    }
-    buildingCounterCells.add(buildingCountersTable.add(buildingCounterLabels[0]));
-    buildingCounterCells.add(buildingCountersTable.add(buildingCounterLabels[1]));
-    buildingCountersTable.row();
-    buildingCounterCells.add(buildingCountersTable.add(buildingCounterLabels[2]));
-    buildingCounterCells.add(buildingCountersTable.add(buildingCounterLabels[3]));
 
     satisfactionLabel = new Label(world.satisfactionTracker.getSatisfaction() + "%", skin);
     moneyLabel = new Label("Money: $" + world.moneyTracker.getMoney(), skin);
@@ -72,12 +54,11 @@ public class InfoBar {
     // Info Table
     timerLabel = new Label(timer.getRemainingTime(), skin);
     infoTable.center().center();
-    pauseButtonCell = infoTable.add(playImage).align(Align.center);
-    timerLabelCell = infoTable.add(timerLabel).align(Align.center);
-    satisfacationLabelCell = infoTable.add(satisfactionLabel).align(Align.center);
-    moneyLabelCell = infoTable.add(moneyLabel).align(Align.center);
-    scoreLabelCell = infoTable.add(scoreLabel).align(Align.center);
-    buildingCountersTableCell = infoTable.add(buildingCountersTable).expandX().align(Align.right);
+    pauseButtonCell = infoTable.add(playImage).align(Align.left);
+    timerLabelCell = infoTable.add(timerLabel).align(Align.left);
+    satisfacationLabelCell = infoTable.add(satisfactionLabel).align(Align.left);
+    moneyLabelCell = infoTable.add(moneyLabel).align(Align.left);
+    scoreLabelCell = infoTable.add(scoreLabel).align(Align.left);
 
     // Pause button
     pauseImage.addListener(new ClickListener() {
@@ -103,6 +84,7 @@ public class InfoBar {
     stage.addActor(bar);
     stage.addActor(infoTable);
     stage.addActor(titleTable);
+    resize((int) stage.getWidth(), (int) stage.getHeight());
   }
 
   /**
@@ -113,14 +95,6 @@ public class InfoBar {
     scoreLabel.setText("Score: " + world.scoreTracker.getFinalScore());
     moneyLabel.setText("Money: $" + world.moneyTracker.getMoney());
     timerLabel.setText(timer.getRemainingTime());
-    buildingCounterLabels[0].setText("Recreation: "
-        + Integer.toString(world.getBuildingCount(BuildingType.RECREATION)));
-    buildingCounterLabels[1].setText("Learning: "
-        + Integer.toString(world.getBuildingCount(BuildingType.LEARNING)));
-    buildingCounterLabels[2].setText("Eating: "
-        + Integer.toString(world.getBuildingCount(BuildingType.EATING)));
-    buildingCounterLabels[3].setText("Sleeping: "
-        + Integer.toString(world.getBuildingCount(BuildingType.SLEEPING)));
     pauseButtonCell.setActor(GameState.paused ? playImage : pauseImage);
   }
 
@@ -132,15 +106,8 @@ public class InfoBar {
    */
   public void resize(int width, int height) {
     bar.setBounds(0, height * 0.95f, width, height * 0.05f);
-    infoTable.setBounds(0, height * 0.95f, width, height * 0.05f);
+    infoTable.setBounds(-width * 0.18f, height * 0.95f, width, height * 0.05f);
     titleTable.setBounds(0, height * 0.95f, width, height * 0.05f);
-
-    float counterTableWidth = height * 0.27f;
-    buildingCountersTableCell.width(counterTableWidth).height(height * 0.05f);
-    for (int i = 0; i < 4; i++) {
-      buildingCounterLabels[i].setFontScale(height * 0.0015f);
-      buildingCounterCells.get(i).width(counterTableWidth * 0.5f).height(height * 0.025f);
-    }
 
     timerLabel.setFontScale(height * 0.002f);
     timerLabelCell.width(height * 0.08f).height(height * 0.05f);

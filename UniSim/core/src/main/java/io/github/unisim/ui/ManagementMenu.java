@@ -1,5 +1,7 @@
 package io.github.unisim.ui;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -10,11 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import io.github.unisim.GameState;
+import io.github.unisim.building.BuildingType;
 import io.github.unisim.utils.ResizableComponents;
 import io.github.unisim.world.World;
 
@@ -33,6 +37,8 @@ public class ManagementMenu {
 
     private Label studentEnrollmentLabel;
     private TextField studentEnrollmentField;
+    private Table buildingCapacityTable;
+    private Map<BuildingType, Cell<Label>> buildingCapacityLabels;
 
     private ResizableComponents resizableComponents;
 
@@ -41,9 +47,27 @@ public class ManagementMenu {
 
         background = new ShapeActor(GameState.UIPrimaryColour);
         table = new Table();
+        
+        buildingCapacityTable = new Table();
+        buildingCapacityLabels = new HashMap<>(BuildingType.values().length);
+        buildingCapacityTable.setPosition(normalisedHiddenPadding * stage.getWidth(), normalisedHeight * stage.getHeight(), 0);
+        buildingCapacityTable.add(new Label("Accomodation Capacity", skin)).left().padRight(15);
+        buildingCapacityLabels.put(BuildingType.SLEEPING, buildingCapacityTable.add(new Label("0", skin)));
+        buildingCapacityTable.row().padTop(10);
+        buildingCapacityTable.add(new Label("Catering Capacity", skin)).left().padRight(15);
+        buildingCapacityLabels.put(BuildingType.EATING, buildingCapacityTable.add(new Label("0", skin)));
+        buildingCapacityTable.row().padTop(10);
+        buildingCapacityTable.add(new Label("Teaching Capacity", skin)).left().padRight(15);
+        buildingCapacityLabels.put(BuildingType.LEARNING, buildingCapacityTable.add(new Label("0", skin)));
+        buildingCapacityTable.row().padTop(10);
+        buildingCapacityTable.add(new Label("Recreational Capacity", skin)).left().padRight(15);
+        buildingCapacityLabels.put(BuildingType.RECREATION, buildingCapacityTable.add(new Label("0", skin)));
+
+        table.add(buildingCapacityTable).expandX().row();
+        table.row().padTop(10);
 
         studentEnrollmentLabel = new Label("Student Enrollment", skin);
-        table.add(studentEnrollmentLabel).left();
+        table.add(studentEnrollmentLabel);
         studentEnrollmentField = new TextField(Integer.toString(world.numberOfStudents), skin);
         studentEnrollmentField.setMessageText("Student Number");
         studentEnrollmentField.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
@@ -82,6 +106,12 @@ public class ManagementMenu {
         stage.addActor(table);
     }
 
+    void updateCapacityTable() {
+        for (BuildingType type : BuildingType.values()) {
+            buildingCapacityLabels.get(type).getActor().setText(Integer.toString(world.getBuildingCount(type)));
+        }
+    }
+
     void submitToWorld() {
         try {
             world.setStudentEnrollment(Integer.parseInt(studentEnrollmentField.getText()));
@@ -107,6 +137,7 @@ public class ManagementMenu {
     }
 
     public void show() {
+        updateCapacityTable();
         Function<Void, Action> actionGenerator = (Void) -> Actions.sequence(
             Actions.moveTo(normalisedLeftPadding * resizableComponents.getStageWidth(), resizableComponents.getY(), 0.33f, Interpolation.fastSlow),
             Actions.run(() -> {
