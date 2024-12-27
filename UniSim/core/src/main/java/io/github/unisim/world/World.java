@@ -101,7 +101,7 @@ public class World {
         if (achievementManager.unlockAchievement(DefinedAchievements.Bankruptcy)) {
             achievementBar.setAchievement(achievementManager.getAchievement(DefinedAchievements.Bankruptcy));
         }
-    } else if (moneyTracker.getMoney() >= 100_000) {
+    } else if (moneyTracker.getMoney() >= 10_000) {
         if (achievementManager.unlockAchievement(DefinedAchievements.Capitalist)) {
             achievementBar.setAchievement(achievementManager.getAchievement(DefinedAchievements.Capitalist));
         }

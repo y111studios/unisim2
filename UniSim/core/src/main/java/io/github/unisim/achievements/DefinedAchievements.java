@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 public enum DefinedAchievements {
     Bankruptcy("Bankruptcy", "Lose all your money", ScoreModifierTemplate.ADD, 25f,
         true),
-    Capitalist("Capitalist", "Earn 1000 money", ScoreModifierTemplate.ADD, 100f,
+    Capitalist("Capitalist", "Earn 10,000 money", ScoreModifierTemplate.ADD, 100f,
         false);
 
 
