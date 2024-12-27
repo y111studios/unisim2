@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-
+import java.util.stream.Stream;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.JsonReader;
@@ -90,7 +90,7 @@ public class AchievementManager {
      * @return an iterator over the unlocked achievement's score modifier functions
      */
     public Iterator<Function<Integer, Integer>> getUnlockedScoreModifiers() {
-        return sessionAchievements.stream()
+        return getUnlockedSessionAchievements()
                 .sorted((a, b) -> (a.functionTemplate.compareTo(b.functionTemplate)))
                 .map(Achievement::getScoreModifier).iterator();
     }
@@ -220,11 +220,11 @@ public class AchievementManager {
     }
 
     /**
-     * Gets the set of achievements that have been unlocked in the current session.
+     * Returns a stream of all the achievements unlocked during the current session.
      *
-     * @return the set of achievements that have been unlocked in the current session
+     * @return a stream of all the achievements unlocked during the current session
      */
-    public Set<Achievement> getSessionAchievements() {
-        return sessionAchievements;
+    public Stream<Achievement> getUnlockedSessionAchievements() {
+        return sessionAchievements.stream().filter(Achievement::isUnlocked);
     }
 }
