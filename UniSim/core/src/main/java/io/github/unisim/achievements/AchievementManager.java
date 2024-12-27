@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-
+import java.util.stream.Stream;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.JsonReader;
@@ -90,7 +90,7 @@ public class AchievementManager {
      * @return an iterator over the unlocked achievement's score modifier functions
      */
     public Iterator<Function<Integer, Integer>> getUnlockedScoreModifiers() {
-        return sessionAchievements.stream()
+        return getUnlockedSessionAchievements()
                 .sorted((a, b) -> (a.functionTemplate.compareTo(b.functionTemplate)))
                 .map(Achievement::getScoreModifier).iterator();
     }
@@ -112,6 +112,34 @@ public class AchievementManager {
             save();
         }
         return sessionAchievements.add(a);
+    }
+
+    /**
+     * Progresses the achievement by the given amount.
+     *
+     * <p>
+     * This method will progress the achievement by the given amount, up to 100%. If the achievement is
+     * already unlocked, this method does nothing. This function returns false if the achievement was
+     * already unlocked or if the percentage is not finite.
+     * </p>
+     * <p>
+     * This method will save the updated achievement to the file and return whether the achievement was
+     * unlocked for the first time since the session started.
+     * </p>
+     *
+     * @param achievement the achievement to progress
+     * @param progress the percentage to progress by, expected to be within [0, 1]
+     * @return if the achivement was unlocked for the first time since the session started
+     */
+    public boolean progressAchievement(DefinedAchievements achievement, float progress) {
+        Achievement a = getAchievement(achievement);
+        if (a.progress(progress)) {
+            if (a.isUnlocked()) {
+                save();
+                return sessionAchievements.add(a);
+            }
+        }
+        return false;
     }
 
     /**
@@ -192,11 +220,11 @@ public class AchievementManager {
     }
 
     /**
-     * Gets the set of achievements that have been unlocked in the current session.
+     * Returns a stream of all the achievements unlocked during the current session.
      *
-     * @return the set of achievements that have been unlocked in the current session
+     * @return a stream of all the achievements unlocked during the current session
      */
-    public Set<Achievement> getSessionAchievements() {
-        return sessionAchievements;
+    public Stream<Achievement> getUnlockedSessionAchievements() {
+        return sessionAchievements.stream().filter(Achievement::isUnlocked);
     }
 }
