@@ -73,7 +73,7 @@ public enum DefinedAchievements {
      * @param name the name of the achievement
      * @return the defined achievement if it exists, otherwise an empty optional
      */
-    private static Optional<DefinedAchievements> getByName(String name) {
+    static Optional<DefinedAchievements> getByName(String name) {
         for (DefinedAchievements a : values()) {
             if (a.name.equals(name)) {
                 return Optional.of(a);

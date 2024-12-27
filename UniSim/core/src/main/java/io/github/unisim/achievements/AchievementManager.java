@@ -176,12 +176,71 @@ public class AchievementManager {
                     functionTemplate, scoreModifierValue, progress, unlocked, hidden);
             achievements.add(achievement);
         }
+        if (updateAchievementsToDefinitions(achievements)) {
+            // Save the updated achievements since there was a change
+            save();
+        }
         Optional<List<DefinedAchievements>> undefinedAchievements =
                 DefinedAchievements.getMissingAchievements(achievements);
         if (undefinedAchievements.isPresent()) {
             undefinedAchievements.get().forEach(a -> achievements.add(new Achievement(a)));
             save();
         }
+    }
+
+    /**
+     * Updates the fixed fields of the achievements to match the definitions.
+     *
+     * <p>
+     * This function works in place and modifies the list of achievements internally. This creates a
+     * new instance of the achievement if any of the fixed fields do not match the definitions that
+     * replace the old achievement.
+     * </p>
+     * <p>
+     * This method will update the achievements to match the definitions. This uses the names of
+     * the achievements to match them to the definitions, so the names must be unique and not change.
+     * </p>
+     * <p>
+     * This method will update the fixed fields defined in the {@link DefinedAchievements} enum. This
+     * function will not modify the changing fields of the achievements, such as the progress or
+     * unlock fields.
+     * </p>
+     *
+     * @param achievements the list of achievements to update
+     * @return if any achievements were updated
+     */
+    private static final boolean updateAchievementsToDefinitions(List<Achievement> achievements) {
+        boolean hadUpdate = false;
+        int index = 0;
+        for (Achievement a : achievements) {
+            Optional<DefinedAchievements> definitionOptional = DefinedAchievements.getByName(a.name);
+            if (definitionOptional.isEmpty()) {
+                continue;
+            }
+            DefinedAchievements definition = definitionOptional.get();
+            boolean shouldUpdate = !(a.description.equals(definition.description)
+                    && a.functionTemplate.equals(definition.functionTemplate)
+                    && a.scoreModifierValue == definition.scoreModifierValue
+                    && a.hidden == definition.hidden);
+            if (shouldUpdate) {
+                hadUpdate = true;
+                Achievement newAchievement = new Achievement(definition);
+                // Maintain the tracked fields states
+                newAchievement.progress = a.progress;
+                newAchievement.unlocked = a.unlocked;
+                newAchievement.unlockTime = a.unlockTime;
+                achievements.set(index, newAchievement);
+                Gdx.app.log("AchievementManager update",
+                        "Updated achievement " + a.name + " to match definition");
+            }
+            index += 1;
+        }
+        // Log if there was an update
+        if (hadUpdate) {
+            Gdx.app.log("AchievementManager update", "Updated achievements to match definitions");
+            return true;
+        }
+        return false;
     }
 
     /**
