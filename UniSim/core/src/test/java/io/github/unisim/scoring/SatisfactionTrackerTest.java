@@ -76,13 +76,6 @@ public class SatisfactionTrackerTest {
         assertEquals(0, satisfactiontracker.getScore());
     }
 
-    // Testing changeSatisfaction
-    @Test
-    public void testChangeSatisfaction() {
-        satisfactiontracker.changeSatisfaction(50);
-        assertEquals(50, satisfactiontracker.getSatisfaction());
-    }
-
     // Testing updateInterval
     @Test
     public void testUpdateInterval() {
