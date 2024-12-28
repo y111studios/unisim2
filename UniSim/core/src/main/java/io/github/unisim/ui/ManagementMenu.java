@@ -47,8 +47,10 @@ public class ManagementMenu {
 
         background = new ShapeActor(GameState.UIPrimaryColour);
         table = new Table();
-        
+
         buildingCapacityTable = new Table();
+        Label capacityTitleLabel = new Label("Building Capacities", skin);
+        buildingCapacityTable.add(capacityTitleLabel).colspan(2).center().row();
         buildingCapacityLabels = new HashMap<>(BuildingType.values().length);
         buildingCapacityTable.setPosition(normalisedHiddenPadding * stage.getWidth(), normalisedHeight * stage.getHeight(), 0);
         buildingCapacityTable.add(new Label("Accomodation Capacity", skin)).left().padRight(15);
