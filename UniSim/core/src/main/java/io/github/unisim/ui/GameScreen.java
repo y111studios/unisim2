@@ -83,7 +83,6 @@ public class GameScreen implements Screen {
     stage.act(dt);
     infoBar.update();
     buildingMenu.update();
-    achievementBar.update();
     stage.draw();
 
     if (GameState.gameOver) {
@@ -103,6 +102,7 @@ public class GameScreen implements Screen {
     gameOverMenu.resize(width, height);
     managementMenu.resize(width, height);
     achievementBar.resize(width, height);
+    eventDisplay.resize(width, height);
   }
 
   @Override

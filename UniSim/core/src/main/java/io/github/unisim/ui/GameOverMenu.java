@@ -4,13 +4,16 @@ import java.util.function.Function;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.unisim.GameState;
 import io.github.unisim.achievements.AchievementManager;
@@ -34,7 +37,7 @@ public class GameOverMenu {
   private ScoreTracker scoreTracker;
   private AchievementManager achievementManager;
   private Leaderboard leaderboard;
-  private ShapeActor leaderboardBackground = new ShapeActor(Color.DARK_GRAY);
+  private Image leaderboardBackground = new Image(new Texture("ui/leaderboard_table.png"));
   private Table leaderboardTable;
   private TextField nameField;
   private TextButton submitButton;
@@ -82,17 +85,18 @@ public class GameOverMenu {
   }
 
   private void updateLeaderboardTable() {
-    leaderboardTable.add("Leaderboard").top().padTop(10);
+    leaderboardTable.add("Leaderboard").top().padTop(10).padBottom(20);
     for (LeaderboardEntry entry : leaderboard.entries()) {
-      leaderboardTable.row();
+      leaderboardTable.row().padTop(7);
       leaderboardTable.add(entry.name()).left().padLeft(10);
       leaderboardTable.add(Integer.toString(entry.score())).right().padRight(10);
     }
-    leaderboardTable.row();
+    leaderboardTable.row().padTop(7);
 
     nameField = new TextField("", skin);
     nameField.setMessageText("Enter your name");
-    leaderboardTable.add(nameField).bottom().padTop(10).padBottom(10);
+    nameField.setAlignment(Align.center);
+    leaderboardTable.add(nameField).bottom().padTop(10).padBottom(10).height(25);
 
     submitButton = new TextButton("Submit", skin);
     submitButton.addListener(new ClickListener() {
@@ -120,7 +124,7 @@ public class GameOverMenu {
         updateLeaderboardTable();
       }
     });
-    leaderboardTable.add(submitButton).bottom().padTop(10).padBottom(10);
+    leaderboardTable.add(submitButton).bottom().padTop(10).padBottom(10).width(50).height(25);
   }
 
   public void render(float delta) {
@@ -139,9 +143,12 @@ public class GameOverMenu {
     table.setBounds(0, 0, width, height * 0.1f);
     bar.setBounds(0, 0, width, height * 0.1f);
     buttonCell.width(width * 0.3f).height(height * 0.1f);
+    leaderboardBackground.setBounds(width * 0.08f, height * 0.14f, width * 0.24f, height * 0.74f);
+    leaderboardTable.setBounds(width * 0.08f, height * 0.14f, width * 0.24f, height * 0.74f);
   }
 
   public InputProcessor getInputProcessor() {
     return inputMultiplexer;
   }
+
 }

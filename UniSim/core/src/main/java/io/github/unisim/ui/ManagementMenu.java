@@ -1,17 +1,25 @@
 package io.github.unisim.ui;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import io.github.unisim.GameState;
+import io.github.unisim.building.BuildingType;
+import io.github.unisim.utils.ResizableComponents;
 import io.github.unisim.world.World;
 
 public class ManagementMenu {
@@ -25,22 +33,41 @@ public class ManagementMenu {
     private static final float normalisedHeight = 0.85f;
     private static final float normalisedLeftPadding = (0.975f - normalisedWidth);
     private static final float normalisedTopPadding = (1 - normalisedHeight) / 2;
-
-    private float stageWidth;
-    private float stageHeight;
-    private boolean visible;
+    private static final float normalisedHiddenPadding = 1;
 
     private Label studentEnrollmentLabel;
     private TextField studentEnrollmentField;
+    private Table buildingCapacityTable;
+    private Map<BuildingType, Cell<Label>> buildingCapacityLabels;
+
+    private ResizableComponents resizableComponents;
 
     public ManagementMenu(Stage stage, World world) {
         this.world = world;
 
         background = new ShapeActor(GameState.UIPrimaryColour);
         table = new Table();
+        
+        buildingCapacityTable = new Table();
+        buildingCapacityLabels = new HashMap<>(BuildingType.values().length);
+        buildingCapacityTable.setPosition(normalisedHiddenPadding * stage.getWidth(), normalisedHeight * stage.getHeight(), 0);
+        buildingCapacityTable.add(new Label("Accomodation Capacity", skin)).left().padRight(15);
+        buildingCapacityLabels.put(BuildingType.SLEEPING, buildingCapacityTable.add(new Label("0", skin)));
+        buildingCapacityTable.row().padTop(10);
+        buildingCapacityTable.add(new Label("Catering Capacity", skin)).left().padRight(15);
+        buildingCapacityLabels.put(BuildingType.EATING, buildingCapacityTable.add(new Label("0", skin)));
+        buildingCapacityTable.row().padTop(10);
+        buildingCapacityTable.add(new Label("Teaching Capacity", skin)).left().padRight(15);
+        buildingCapacityLabels.put(BuildingType.LEARNING, buildingCapacityTable.add(new Label("0", skin)));
+        buildingCapacityTable.row().padTop(10);
+        buildingCapacityTable.add(new Label("Recreational Capacity", skin)).left().padRight(15);
+        buildingCapacityLabels.put(BuildingType.RECREATION, buildingCapacityTable.add(new Label("0", skin)));
+
+        table.add(buildingCapacityTable).expandX().row();
+        table.row().padTop(10);
 
         studentEnrollmentLabel = new Label("Student Enrollment", skin);
-        table.add(studentEnrollmentLabel).left();
+        table.add(studentEnrollmentLabel);
         studentEnrollmentField = new TextField(Integer.toString(world.numberOfStudents), skin);
         studentEnrollmentField.setMessageText("Student Number");
         studentEnrollmentField.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
@@ -63,11 +90,26 @@ public class ManagementMenu {
         });
         table.add(studentEnrollmentField).padLeft(25);
 
-        visible = false;
-        resize((int) stage.getWidth(), (int) stage.getHeight());
+        ResizableComponents.Builder resizeBuilder = new ResizableComponents.Builder(stage);
+        resizableComponents = resizeBuilder
+            .addActor((Actor) background)
+            .addActor(table)
+            .setNormalisedWidth(normalisedWidth)
+            .setNormalisedHeight(normalisedHeight)
+            .setNormalisedX(normalisedLeftPadding)
+            .setNormalisedY(normalisedTopPadding)
+            .build();
+
+        resizableComponents.setNormalisedX(1);
 
         stage.addActor(background);
         stage.addActor(table);
+    }
+
+    void updateCapacityTable() {
+        for (BuildingType type : BuildingType.values()) {
+            buildingCapacityLabels.get(type).getActor().setText(Integer.toString(world.getBuildingCount(type)));
+        }
     }
 
     void submitToWorld() {
@@ -81,47 +123,32 @@ public class ManagementMenu {
     }
 
     public void resize(int width, int height) {
-        stageWidth = width;
-        stageHeight = height;
-        positionElements();
-    }
-
-    void positionElements() {
-        final float xPos = visible ? getShownX() : getHiddenX();
-
-        background.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
-        background.setPosition(xPos, getY());
-
-        table.setSize(normalisedWidth * stageWidth, normalisedHeight * stageHeight);
-        table.setPosition(xPos, getY());
-    }
-
-    float getShownX() {
-        return normalisedLeftPadding * stageWidth;
-    }
-
-    float getHiddenX() {
-        return stageWidth;
-    }
-
-    float getY() {
-        return normalisedTopPadding * stageHeight;
+        resizableComponents.resize(width, height);
     }
 
     public void hide() {
-        background.addAction(Actions.moveTo(getHiddenX(), getY(), 0.33f, Interpolation.slowFast));
-        table.addAction(Actions.moveTo(getHiddenX(), getY(), 0.33f, Interpolation.slowFast));
-        visible = false;
+        Function<Void, Action> actionGenerator = (Void) -> Actions.sequence(
+            Actions.moveTo(resizableComponents.getStageWidth(), resizableComponents.getY(), 0.33f, Interpolation.slowFast),
+            Actions.run(() -> {
+                resizableComponents.setNormalisedX(normalisedHiddenPadding);
+            })
+        );
+        resizableComponents.addAction(actionGenerator);
     }
 
     public void show() {
-        background.addAction(Actions.moveTo(getShownX(), getY(), 0.33f, Interpolation.fastSlow));
-        table.addAction(Actions.moveTo(getShownX(), getY(), 0.33f, Interpolation.fastSlow));
-        visible = true;
+        updateCapacityTable();
+        Function<Void, Action> actionGenerator = (Void) -> Actions.sequence(
+            Actions.moveTo(normalisedLeftPadding * resizableComponents.getStageWidth(), resizableComponents.getY(), 0.33f, Interpolation.fastSlow),
+            Actions.run(() -> {
+                resizableComponents.setNormalisedX(normalisedLeftPadding);
+            })
+        );
+        resizableComponents.addAction(actionGenerator);
     }
 
     public void toggleVisibility() {
-        if (visible) {
+        if (resizableComponents.onScreen()) {
             hide();
         } else {
             show();

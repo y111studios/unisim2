@@ -78,7 +78,7 @@ public class AchievementManagerTest {
     @Test
     public void testClearSessionAchievements() {
         achievementManager.clearSessionAchievements();
-        assertTrue(achievementManager.getSessionAchievements().isEmpty());
+        assertTrue(achievementManager.sessionAchievements.isEmpty());
     }
 
     // Testing getAchievements
