@@ -50,22 +50,26 @@ public class ManagementMenu {
 
         buildingCapacityTable = new Table();
         Label capacityTitleLabel = new Label("Building Capacities", skin);
-        buildingCapacityTable.add(capacityTitleLabel).colspan(2).center().row();
+        Table leftColumnTable = new Table();
+        Table rightColumnTable = new Table();
+        buildingCapacityTable.add(capacityTitleLabel).colspan(2).center().padBottom(10).row();
+        buildingCapacityTable.add(leftColumnTable).padRight(10);
+        buildingCapacityTable.add(rightColumnTable).row();
         buildingCapacityLabels = new HashMap<>(BuildingType.values().length);
-        buildingCapacityTable.setPosition(normalisedHiddenPadding * stage.getWidth(), normalisedHeight * stage.getHeight(), 0);
-        buildingCapacityTable.add(new Label("Accomodation Capacity", skin)).left().padRight(15);
-        buildingCapacityLabels.put(BuildingType.SLEEPING, buildingCapacityTable.add(new Label("0", skin)));
-        buildingCapacityTable.row().padTop(10);
-        buildingCapacityTable.add(new Label("Catering Capacity", skin)).left().padRight(15);
-        buildingCapacityLabels.put(BuildingType.EATING, buildingCapacityTable.add(new Label("0", skin)));
-        buildingCapacityTable.row().padTop(10);
-        buildingCapacityTable.add(new Label("Teaching Capacity", skin)).left().padRight(15);
-        buildingCapacityLabels.put(BuildingType.LEARNING, buildingCapacityTable.add(new Label("0", skin)));
-        buildingCapacityTable.row().padTop(10);
-        buildingCapacityTable.add(new Label("Recreational Capacity", skin)).left().padRight(15);
-        buildingCapacityLabels.put(BuildingType.RECREATION, buildingCapacityTable.add(new Label("0", skin)));
+        // Initialise the left column
+        leftColumnTable.add(new Label("Accomodation Capacity", skin)).left().padRight(15);
+        buildingCapacityLabels.put(BuildingType.SLEEPING, leftColumnTable.add(new Label("0", skin)));
+        leftColumnTable.row().padTop(10);
+        leftColumnTable.add(new Label("Catering Capacity", skin)).left().padRight(15);
+        buildingCapacityLabels.put(BuildingType.EATING, leftColumnTable.add(new Label("0", skin)));
+        // Initialise the right column
+        rightColumnTable.add(new Label("Teaching Capacity", skin)).left().padRight(15);
+        buildingCapacityLabels.put(BuildingType.LEARNING, rightColumnTable.add(new Label("0", skin)));
+        rightColumnTable.row().padTop(10);
+        rightColumnTable.add(new Label("Recreational Capacity", skin)).left().padRight(15);
+        buildingCapacityLabels.put(BuildingType.RECREATION, rightColumnTable.add(new Label("0", skin)));
 
-        table.add(buildingCapacityTable).expandX().row();
+        table.add(buildingCapacityTable).colspan(2).expandX().row();
         table.row().padTop(10);
 
         studentEnrollmentLabel = new Label("Student Enrollment", skin);
