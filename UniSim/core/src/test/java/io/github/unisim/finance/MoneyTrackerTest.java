@@ -1,7 +1,10 @@
 package io.github.unisim.finance;
+import java.time.Instant;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
 
 
 public class MoneyTrackerTest {
@@ -9,26 +12,26 @@ public class MoneyTrackerTest {
     private MoneyTracker tracker;
 
     // Testing constructor
-    @org.junit.jupiter.api.Test
+    @Test
     public void testConstructor() {
         tracker = new MoneyTracker(100);
         assertEquals(100, tracker.getMoney());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testConstructorWithZeroMoney() {
         tracker = new MoneyTracker(0);
         assertEquals(0, tracker.getMoney());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testConstructorWithNegativeMoney() {
         tracker = new MoneyTracker(-100);
         assertEquals(0, tracker.getMoney());
     }
 
     // Testing addMoney method
-    @org.junit.jupiter.api.Test
+    @Test
     public void testaddMoney() {
         // Add 100 to 100, expecting 200
         tracker = new MoneyTracker(100);
@@ -41,7 +44,7 @@ public class MoneyTrackerTest {
         assertEquals(100, tracker.getMoney());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testAddNegativeMoney() {
         // Add -200 to 100, expectng no operation
         tracker = new MoneyTracker(100);
@@ -49,7 +52,7 @@ public class MoneyTrackerTest {
         assertEquals(100, tracker.getMoney());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testAddZeroMoney() {
         // Add 0 to 100, expecting 100
         tracker = new MoneyTracker(100);
@@ -63,7 +66,7 @@ public class MoneyTrackerTest {
     }
 
     // Testing subtractMoney method
-    @org.junit.jupiter.api.Test
+    @Test
     public void testSubtractMoney() {
         // Subracting 100 from 100, expecting 0
         tracker = new MoneyTracker(100);
@@ -76,7 +79,7 @@ public class MoneyTrackerTest {
         assertEquals(100, tracker.getMoney());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testSubtractZeroMoney() {
         // Subtracting 0 from 0, expecting 0
         tracker = new MoneyTracker(0);
@@ -89,7 +92,7 @@ public class MoneyTrackerTest {
         assertEquals(100, tracker.getMoney());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     public void testSubtractNegativeMoney() {
         // Subtracting -100 from 100, expecting no operation
         tracker = new MoneyTracker(100);
@@ -98,7 +101,7 @@ public class MoneyTrackerTest {
     }
 
     // Testing getMoney method
-    @org.junit.jupiter.api.Test
+    @Test
     public void testGetMoney() {
         // Instantiate with 0
         tracker = new MoneyTracker(0);
@@ -108,4 +111,20 @@ public class MoneyTrackerTest {
         assertEquals(100,tracker.getMoney());
     }
 
+    @Test
+    public void testUpdateMoneyTimeSinceLastUpdateIsLessThanInterval() {
+        tracker = new MoneyTracker(0);
+        tracker.lastUpdateTime = Instant.now();
+        int money = tracker.getMoney();
+        tracker.updateMoney();
+        assertEquals(money, tracker.getMoney());
+    }
+
+    @Test
+    public void testUpdateMoneyTimeSinceLastUpdateIsGreaterThanOrEqualToInterval() {
+        tracker = new MoneyTracker(0);
+        tracker.lastUpdateTime = Instant.now().minusSeconds(2);
+        tracker.updateMoney();
+        assertEquals(100, tracker.getMoney());
+    }
 }

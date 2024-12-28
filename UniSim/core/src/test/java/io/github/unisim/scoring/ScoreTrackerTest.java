@@ -15,7 +15,7 @@ public class ScoreTrackerTest {
     @BeforeEach
     public void setUp() {
         scoreTracker = new ScoreTracker();
-        mockScoringObject = new MockScoringObject(10.0f, Duration.ofSeconds(0));
+        mockScoringObject = new MockScoringObject(10.0f, Duration.ofMinutes(1));
     }
 
     public class MockScoringObject implements ScoringObject {
@@ -45,20 +45,18 @@ public class ScoreTrackerTest {
         assertEquals(0, scoreTracker.getScore());
     }
 
-
     // Testing AddSocreObject
     @Test
     public void testAddScoreObject() {
         scoreTracker.addScoreObject(mockScoringObject);
-        assertEquals(1, scoreTracker.getLastUpdateTimes().size());
-        assertEquals(Instant.MIN, scoreTracker.getLastUpdateTimes().get(mockScoringObject));
+        assertEquals(1, scoreTracker.lastUpdateTimes.size());
     }
 
     // Testing getFinalScore
     @Test
     public void testGetFinalScore() {
         scoreTracker.addScoreObject(mockScoringObject);
-        scoreTracker.update();
+        scoreTracker.incrementScore(mockScoringObject, 1);
         assertEquals(10, scoreTracker.getFinalScore());
     }
 
@@ -66,7 +64,32 @@ public class ScoreTrackerTest {
     @Test
     public void testUpdate() {
         scoreTracker.addScoreObject(mockScoringObject);
-        scoreTracker.update();
+        scoreTracker.incrementScore(mockScoringObject, 1);
         assertEquals(10, scoreTracker.getScore());
+    }
+
+    @Test
+    public void testUpdateWhenConditionIsMet() {
+        scoreTracker.addScoreObject(mockScoringObject);
+        scoreTracker.incrementScore(mockScoringObject, 1);
+        assertEquals(10, scoreTracker.getScore());
+    }
+
+    @Test
+    public void testUpdateWhenConditionIsNotMet() {
+        scoreTracker.addScoreObject(mockScoringObject);
+        Instant lastUpdateTime = Instant.now().plus(Duration.ofMinutes(1));
+        scoreTracker.lastUpdateTimes.put(mockScoringObject, lastUpdateTime);
+        scoreTracker.update();
+        assertEquals(0, scoreTracker.getScore());
+    }
+
+    @Test
+    public void testUpdateWhenConditionIsMetMultipleTimes() {
+        scoreTracker.addScoreObject(mockScoringObject);
+        Instant lastUpdateTime = Instant.now().minus(Duration.ofMinutes(2));
+        scoreTracker.lastUpdateTimes.put(mockScoringObject, lastUpdateTime);
+        scoreTracker.update();
+        assertEquals(20, scoreTracker.getScore());
     }
 }

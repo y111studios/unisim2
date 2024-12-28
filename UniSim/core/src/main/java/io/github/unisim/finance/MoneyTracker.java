@@ -2,7 +2,6 @@ package io.github.unisim.finance;
 
 import java.time.Duration;
 import java.time.Instant;
-import io.github.unisim.GameState;
 
 /**
  * A class that keeps track of the player's money.
@@ -17,8 +16,8 @@ public class MoneyTracker {
      */
     private static final int MONEY_UPDATE_AMOUNT = 100;
 
-    private int money;
-    private Instant lastUpdateTime;
+    int money;
+    Instant lastUpdateTime;
 
     /**
      * Constructs a MoneyTracker object with the specified initial amount of money.
@@ -69,12 +68,6 @@ public class MoneyTracker {
      * </ul>
      */
     public void updateMoney() {
-        if (GameState.gameOver) {
-            return;
-        }
-        if (GameState.paused) {
-            return;
-        }
         Instant currentTime = Instant.now();
         Duration timeSinceLastUpdate = Duration.between(lastUpdateTime, currentTime);
         if (timeSinceLastUpdate.compareTo(MONEY_UPDATE_INTERVAL) >= 0) {

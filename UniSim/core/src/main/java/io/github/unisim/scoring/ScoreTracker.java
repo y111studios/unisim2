@@ -16,7 +16,7 @@ public class ScoreTracker {
     /**
      * A map of scoring objects and their last update times.
      */
-    private Map<ScoringObject, Instant> lastUpdateTimes;
+    Map<ScoringObject, Instant> lastUpdateTimes;
 
     /**
      * Initialises a new score tracker with a score of 0 and an empty map of scoring objects.
@@ -33,7 +33,7 @@ public class ScoreTracker {
      * @return The score tracker.
      */
     public ScoreTracker addScoreObject(ScoringObject scoringObject) {
-        lastUpdateTimes.put(scoringObject, Instant.MIN);
+        lastUpdateTimes.put(scoringObject, Instant.now());
         return this;
     }
 
@@ -60,15 +60,16 @@ public class ScoreTracker {
             ScoringObject scoringObject = entry.getKey();
             Instant lastUpdateTime = entry.getValue();
             final Instant now = Instant.now();
-            if (lastUpdateTime.plus(scoringObject.getUpdateInterval()).compareTo(now) <= 0) {
-                score += scoringObject.getScore();
+            if (lastUpdateTime.plus(scoringObject.getUpdateInterval()).isBefore(now)) {
+                float durationMultiples =  (float) ((now.toEpochMilli() - lastUpdateTime.toEpochMilli()) / scoringObject.getUpdateInterval().toMillis());
+                incrementScore(scoringObject, durationMultiples);
                 lastUpdateTimes.put(scoringObject, now);
             }
         }
     }
 
-    public Map<ScoringObject, Instant> getLastUpdateTimes() {
-        return lastUpdateTimes;
+    void incrementScore(ScoringObject scoringObject, float multiplier) {
+        score += scoringObject.getScore() * multiplier;
     }
 
 }
