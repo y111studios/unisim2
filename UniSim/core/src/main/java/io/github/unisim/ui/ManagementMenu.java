@@ -127,8 +127,23 @@ public class ManagementMenu {
     }
 
     void updateCapacityTable() {
+        final Map<BuildingType, Integer> capacities = new HashMap<>(BuildingType.values().length);
+        int max = 0;
+        int min = 0;
         for (BuildingType type : BuildingType.values()) {
-            buildingCapacityLabels.get(type).setText(Integer.toString(world.getBuildingCount(type)));
+            Integer capacity = world.getBuildingCount(type);
+            capacities.put(type, capacity);
+            if (capacity > max) {
+                max = capacity;
+            } else if (capacity < min) {
+                min = capacity;
+            }
+        }
+        int range = max - min;
+        for (BuildingType type : BuildingType.values()) {
+            buildingCapacityLabels.get(type).setText(capacities.get(type).toString());
+            ProgressBar bar = buildingCapacityBars.get(type);
+            bar.setValue((float) (range - capacities.get(type)) / range);
         }
     }
 
