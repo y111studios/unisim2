@@ -65,23 +65,23 @@ public class ManagementMenu {
         // Initialise the left column
         leftColumnTable.add(new Label("Accomodation Capacity", skin)).left().colspan(2).center();
         leftColumnTable.row().padTop(10);
-        leftColumnTable.add(buildingCapacityLabels.get(BuildingType.SLEEPING));
         leftColumnTable.add(buildingCapacityBars.get(BuildingType.SLEEPING));
+        leftColumnTable.add(buildingCapacityLabels.get(BuildingType.SLEEPING));
         leftColumnTable.row().padTop(10);
         leftColumnTable.add(new Label("Catering Capacity", skin)).left().colspan(2).center();
         leftColumnTable.row().padTop(10);
-        leftColumnTable.add(buildingCapacityLabels.get(BuildingType.EATING));
         leftColumnTable.add(buildingCapacityBars.get(BuildingType.EATING));
+        leftColumnTable.add(buildingCapacityLabels.get(BuildingType.EATING));
         // Initialise the right column
         rightColumnTable.add(new Label("Teaching Capacity", skin)).left().colspan(2).center();
         rightColumnTable.row().padTop(10);
-        rightColumnTable.add(buildingCapacityLabels.get(BuildingType.LEARNING));
         rightColumnTable.add(buildingCapacityBars.get(BuildingType.LEARNING));
+        rightColumnTable.add(buildingCapacityLabels.get(BuildingType.LEARNING));
         rightColumnTable.row().padTop(10);
         rightColumnTable.add(new Label("Recreational Capacity", skin)).left().colspan(2).center();
         rightColumnTable.row().padTop(10);
-        rightColumnTable.add(buildingCapacityLabels.get(BuildingType.RECREATION));
         rightColumnTable.add(buildingCapacityBars.get(BuildingType.RECREATION));
+        rightColumnTable.add(buildingCapacityLabels.get(BuildingType.RECREATION));
 
         table.add(buildingCapacityTable).colspan(2).expandX().row();
         table.row().padTop(10);
