@@ -31,8 +31,21 @@ public class Achievement {
      * @param definition the definition of the achievement
      */
     Achievement(DefinedAchievements definition) {
-        this(definition.name, definition.description, Instant.EPOCH, definition.functionTemplate,
-                definition.scoreModifierValue, 0, false, definition.hidden);
+        this(definition, Instant.EPOCH, 0, false);
+    }
+
+    /**
+     * Internal constructor for creating an achievement using the DefinedAchievements definition and
+     * the JSON representation of the locking state of the achievement.
+     *
+     * @param definition the definition of the achievement
+     * @param unlockTime the time the achievement was unlocked
+     * @param progress the progress towards the achievement
+     * @param unlocked whether the achievement is unlocked
+     */
+    Achievement(DefinedAchievements definition, Instant unlockTime, float progress, boolean unlocked) {
+        this(definition.name, definition.description, unlockTime, definition.functionTemplate,
+                definition.scoreModifierValue, progress, unlocked, definition.hidden);
     }
 
     /**
@@ -47,7 +60,7 @@ public class Achievement {
      * @param unlocked whether the achievement is unlocked
      * @param hidden whether the achievement is hidden
      */
-    Achievement(String name, String description, Instant unlockTime,
+    private Achievement(String name, String description, Instant unlockTime,
             ScoreModifierTemplate functionTemplate, float scoreModifierValue, float progress,
             boolean unlocked, boolean hidden) {
         this.name = name;
