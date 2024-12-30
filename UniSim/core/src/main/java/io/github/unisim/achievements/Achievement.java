@@ -65,11 +65,21 @@ public class Achievement {
             boolean unlocked, boolean hidden) {
         this.name = name;
         this.description = description;
-        this.unlockTime = unlockTime;
+        if (!unlocked) {
+            this.unlockTime = Instant.EPOCH;
+        } else if (unlockTime == null) {
+            this.unlockTime = Instant.now();
+        } else {
+            this.unlockTime = unlockTime;
+        }
         this.functionTemplate = functionTemplate;
         this.scoreModifierValue = scoreModifierValue;
-        this.progress = progress;
         this.unlocked = unlocked;
+        if (unlocked) {
+            this.progress = 1;
+        } else {
+            this.progress = progress;
+        }
         this.hidden = hidden;
     }
 
