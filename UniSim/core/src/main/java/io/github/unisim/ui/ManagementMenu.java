@@ -116,11 +116,9 @@ public class ManagementMenu {
             .addActor(table)
             .setNormalisedWidth(normalisedWidth)
             .setNormalisedHeight(normalisedHeight)
-            .setNormalisedX(normalisedLeftPadding)
+            .setNormalisedX(normalisedHiddenPadding)
             .setNormalisedY(normalisedTopPadding)
             .build();
-
-        resizableComponents.setNormalisedX(1);
 
         stage.addActor(background);
         stage.addActor(table);
@@ -141,9 +139,20 @@ public class ManagementMenu {
         }
         int range = max - min;
         for (BuildingType type : BuildingType.values()) {
-            buildingCapacityLabels.get(type).setText(capacities.get(type).toString());
+            Label label = buildingCapacityLabels.get(type);
+            label.setText(capacities.get(type).toString());
             ProgressBar bar = buildingCapacityBars.get(type);
             bar.setValue((float) (range - capacities.get(type)) / range);
+        }
+        updateLabelPositions();
+    }
+
+    void updateLabelPositions() {
+        for (BuildingType type : BuildingType.values()) {
+            Label label = buildingCapacityLabels.get(type);
+            ProgressBar bar = buildingCapacityBars.get(type);
+            label.setX(bar.getX() + (bar.getWidth() - label.getWidth()) / 2);
+            label.setY(bar.getY() + (bar.getHeight() - label.getHeight()) / 2);
         }
     }
 
@@ -159,6 +168,7 @@ public class ManagementMenu {
 
     public void resize(int width, int height) {
         resizableComponents.resize(width, height);
+        updateLabelPositions();
     }
 
     public void hide() {
