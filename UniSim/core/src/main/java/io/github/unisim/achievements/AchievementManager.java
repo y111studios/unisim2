@@ -160,26 +160,66 @@ public class AchievementManager {
      * </p>
      */
     public final void load() {
+        boolean errorsCorrected = false;
         achievements = new ArrayList<>();
         JsonValue root = new JsonReader().parse(fileHandle);
         for (JsonValue json : root) {
+            if (!json.has("name")) {
+                Gdx.app.error("AchievementManager load", "Achievement missing name field -- skipping");
+                continue;
+            }
             String name = json.getString("name");
             DefinedAchievements definition = DefinedAchievements.getByName(name).orElse(null);
             if (definition == null) {
                 Gdx.app.error("AchievementManager load",
-                        "Failed to load achievement with name: " + name);
+                        "Failed to load achievement with name: " + name + " has no definition");
                 continue;
             }
-            Instant unlockTime = Instant.ofEpochMilli(json.getLong("unlockTime"));
-            float progress = json.getFloat("progress");
-            boolean unlocked = json.getBoolean("unlocked");
+            boolean unlocked;
+            if (!json.has("unlocked")) {
+                errorsCorrected = true;
+                Gdx.app.error("AchievementManager load", "Achievement missing unlocked field -- assuming locked");
+                achievements.add(new Achievement(definition));
+                continue;
+            }
+            unlocked = json.getBoolean("unlocked");
+            Instant unlockTime;
+            if (json.has("unlockTime")) {
+                unlockTime = Instant.ofEpochMilli(json.getLong("unlockTime"));
+            } else {
+                errorsCorrected = true;
+                if (unlocked) {
+                    Gdx.app.error("AchievementManager load", "Unlocked achievement missing unlockTime field -- assuming now");
+                    unlockTime = Instant.now();
+                } else {
+                    Gdx.app.error("AchievementManager load", "Locked achievement missing unlockTime field -- defaulting");
+                    unlockTime = Instant.EPOCH;
+                }
+            }
+            float progress;
+            if (json.has("progress")) {
+                progress = json.getFloat("progress");
+            } else {
+                errorsCorrected = true;
+                if (unlocked) {
+                    Gdx.app.error("AchievementManager load", "Unlocked achievement missing progress field -- assuming 1");
+                    progress = 1;
+                } else {
+                    Gdx.app.error("AchievementManager load", "Locked achievement missing progress field -- assuming 0");
+                    progress = 0;
+                }
+            }
             Achievement achievement = new Achievement(definition, unlockTime, progress, unlocked);
             achievements.add(achievement);
         }
         Optional<List<DefinedAchievements>> undefinedAchievements =
                 DefinedAchievements.getMissingAchievements(achievements);
         if (undefinedAchievements.isPresent()) {
+            Gdx.app.error("AchievementManager load", "Missing achievements found -- adding");
             undefinedAchievements.get().forEach(a -> achievements.add(new Achievement(a)));
+            save();
+        }
+        if (errorsCorrected) {
             save();
         }
     }
