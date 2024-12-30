@@ -155,20 +155,16 @@ public class Achievement {
     }
 
     /**
-     * Returns a {@link JsonValue} representation of this achievement.
+     * Returns a {@link JsonValue} representation of the non-final fields of this achievement.
      *
      * @return a {@link JsonValue} representation of this achievement
      */
     public JsonValue toJsonValue() {
         JsonValue json = new JsonValue(JsonValue.ValueType.object);
         json.addChild("name", new JsonValue(name));
-        json.addChild("description", new JsonValue(description));
         json.addChild("unlockTime", new JsonValue(unlockTime.toEpochMilli()));
-        json.addChild("functionTemplate", new JsonValue(functionTemplate.name()));
-        json.addChild("scoreModifierValue", new JsonValue(scoreModifierValue));
         json.addChild("progress", new JsonValue(progress));
         json.addChild("unlocked", new JsonValue(unlocked));
-        json.addChild("hidden", new JsonValue(hidden));
         return json;
     }
 
