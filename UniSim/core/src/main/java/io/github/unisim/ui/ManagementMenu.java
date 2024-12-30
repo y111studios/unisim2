@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -39,7 +38,7 @@ public class ManagementMenu {
     private Label studentEnrollmentLabel;
     private TextField studentEnrollmentField;
     private Table buildingCapacityTable;
-    private Map<BuildingType, Cell<Label>> buildingCapacityLabels;
+    private Map<BuildingType, Label> buildingCapacityLabels;
     private Map<BuildingType, ProgressBar> buildingCapacityBars;
 
     private ResizableComponents resizableComponents;
@@ -60,27 +59,28 @@ public class ManagementMenu {
         buildingCapacityLabels = new HashMap<>(BuildingType.values().length);
         buildingCapacityBars = new HashMap<>(BuildingType.values().length);
         for (BuildingType type : BuildingType.values()) {
+            buildingCapacityLabels.put(type, new Label("0", skin));
             buildingCapacityBars.put(type, new ProgressBar(0, 1, 0.001f, false, skin));
         }
         // Initialise the left column
         leftColumnTable.add(new Label("Accomodation Capacity", skin)).left().colspan(2).center();
         leftColumnTable.row().padTop(10);
-        buildingCapacityLabels.put(BuildingType.SLEEPING, leftColumnTable.add(new Label("0", skin)));
+        leftColumnTable.add(buildingCapacityLabels.get(BuildingType.SLEEPING));
         leftColumnTable.add(buildingCapacityBars.get(BuildingType.SLEEPING));
         leftColumnTable.row().padTop(10);
         leftColumnTable.add(new Label("Catering Capacity", skin)).left().colspan(2).center();
         leftColumnTable.row().padTop(10);
-        buildingCapacityLabels.put(BuildingType.EATING, leftColumnTable.add(new Label("0", skin)));
+        leftColumnTable.add(buildingCapacityLabels.get(BuildingType.EATING));
         leftColumnTable.add(buildingCapacityBars.get(BuildingType.EATING));
         // Initialise the right column
         rightColumnTable.add(new Label("Teaching Capacity", skin)).left().colspan(2).center();
         rightColumnTable.row().padTop(10);
-        buildingCapacityLabels.put(BuildingType.LEARNING, rightColumnTable.add(new Label("0", skin)));
+        rightColumnTable.add(buildingCapacityLabels.get(BuildingType.LEARNING));
         rightColumnTable.add(buildingCapacityBars.get(BuildingType.LEARNING));
         rightColumnTable.row().padTop(10);
         rightColumnTable.add(new Label("Recreational Capacity", skin)).left().colspan(2).center();
         rightColumnTable.row().padTop(10);
-        buildingCapacityLabels.put(BuildingType.RECREATION, rightColumnTable.add(new Label("0", skin)));
+        rightColumnTable.add(buildingCapacityLabels.get(BuildingType.RECREATION));
         rightColumnTable.add(buildingCapacityBars.get(BuildingType.RECREATION));
 
         table.add(buildingCapacityTable).colspan(2).expandX().row();
@@ -128,7 +128,7 @@ public class ManagementMenu {
 
     void updateCapacityTable() {
         for (BuildingType type : BuildingType.values()) {
-            buildingCapacityLabels.get(type).getActor().setText(Integer.toString(world.getBuildingCount(type)));
+            buildingCapacityLabels.get(type).setText(Integer.toString(world.getBuildingCount(type)));
         }
     }
 
