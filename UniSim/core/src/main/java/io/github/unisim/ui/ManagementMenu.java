@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.function.Function;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -17,6 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.unisim.GameState;
 import io.github.unisim.building.BuildingType;
 import io.github.unisim.utils.ResizableComponents;
@@ -41,10 +46,37 @@ public class ManagementMenu {
     private Map<BuildingType, Label> buildingCapacityLabels;
     private Map<BuildingType, ProgressBar> buildingCapacityBars;
 
+    private final Map<BuildingType, ProgressBarStyle> barStyles;
+
     private ResizableComponents resizableComponents;
 
     public ManagementMenu(Stage stage, World world) {
         this.world = world;
+
+        barStyles = new HashMap<>(BuildingType.values().length);
+        Pixmap pixmap = new Pixmap(1, 25, Pixmap.Format.RGB888);
+        pixmap.setColor(Color.BLACK);
+        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(new Texture(pixmap));
+        pixmap.setColor(new Color(0x0A_4C_A6_FF));
+        pixmap.fill();
+        ProgressBarStyle barStyle = new ProgressBarStyle(backgroundDrawable, new TextureRegionDrawable(new Texture(pixmap)));
+        barStyle.knobBefore = barStyle.knob;
+        barStyles.put(BuildingType.SLEEPING, barStyle);
+        pixmap.setColor(new Color(0x0A_A6_1F_FF));
+        pixmap.fill();
+        barStyle = new ProgressBarStyle(backgroundDrawable, new TextureRegionDrawable(new Texture(pixmap)));
+        barStyle.knobBefore = barStyle.knob;
+        barStyles.put(BuildingType.EATING, barStyle);
+        pixmap.setColor(new Color(0xA6_58_0A_FF));
+        pixmap.fill();
+        barStyle = new ProgressBarStyle(backgroundDrawable, new TextureRegionDrawable(new Texture(pixmap)));
+        barStyle.knobBefore = barStyle.knob;
+        barStyles.put(BuildingType.LEARNING, barStyle);
+        pixmap.setColor(new Color(0xA6_0A_0A_FF));
+        pixmap.fill();
+        barStyle = new ProgressBarStyle(backgroundDrawable, new TextureRegionDrawable(new Texture(pixmap)));
+        barStyle.knobBefore = barStyle.knob;
+        barStyles.put(BuildingType.RECREATION, barStyle);
 
         background = new ShapeActor(GameState.UIPrimaryColour);
         table = new Table();
@@ -60,7 +92,7 @@ public class ManagementMenu {
         buildingCapacityBars = new HashMap<>(BuildingType.values().length);
         for (BuildingType type : BuildingType.values()) {
             buildingCapacityLabels.put(type, new Label("0", skin));
-            buildingCapacityBars.put(type, new ProgressBar(0, 1, 0.001f, false, skin));
+            buildingCapacityBars.put(type, new ProgressBar(0, 1, 0.001f, false, barStyles.get(type)));
         }
         // Initialise the left column
         leftColumnTable.add(new Label("Accomodation Capacity", skin)).left().colspan(2).center();
