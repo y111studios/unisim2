@@ -174,7 +174,9 @@ public class BuildingMenu {
         }
       });
       navTableMap.get(buildings.get(i).type).addToBuildingTable(buildingImages.get(i));
-      navTableMap.get(buildings.get(i).type).addToCostTable(new Label(String.valueOf(buildings.get(i).cost), new Skin(Gdx.files.internal("ui/uiskin.json"))));
+      Label costLabel = new Label("$" + String.valueOf(buildings.get(i).cost), new Skin(Gdx.files.internal("ui/uiskin.json")));
+      costLabel.setAlignment(Align.center);
+      navTableMap.get(buildings.get(i).type).addToCostTable(costLabel);
     }
 
     buildingInfoTable.add(buildingInfoLabel).expandX().align(Align.center).padBottom(25);
