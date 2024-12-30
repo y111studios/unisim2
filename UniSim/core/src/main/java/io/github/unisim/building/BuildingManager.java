@@ -277,4 +277,17 @@ public class BuildingManager {
   public Matrix4 getIsoTransform() {
     return this.isoTransform;
   }
+
+  public Integer getBuildingCapacities(BuildingType type) {
+    int sum = 0;
+    for (Building building : buildings) {
+        if (building == previewBuilding) {
+            continue;
+        }
+        if (building.type == type) {
+            sum += building.capacity;
+        }
+    }
+    return sum;
+  }
 }

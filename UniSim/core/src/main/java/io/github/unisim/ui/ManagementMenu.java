@@ -131,7 +131,7 @@ public class ManagementMenu {
         int max = 0;
         int min = 0;
         for (BuildingType type : BuildingType.values()) {
-            Integer capacity = world.getBuildingCount(type);
+            Integer capacity = world.getBuildingCapacities(type);
             capacities.put(type, capacity);
             if (capacity > max) {
                 max = capacity;
