@@ -46,37 +46,10 @@ public class ManagementMenu {
     private Map<BuildingType, Label> buildingCapacityLabels;
     private Map<BuildingType, ProgressBar> buildingCapacityBars;
 
-    private final Map<BuildingType, ProgressBarStyle> barStyles;
-
     private ResizableComponents resizableComponents;
 
     public ManagementMenu(Stage stage, World world) {
         this.world = world;
-
-        barStyles = new HashMap<>(BuildingType.values().length);
-        Pixmap pixmap = new Pixmap(1, 25, Pixmap.Format.RGB888);
-        pixmap.setColor(Color.BLACK);
-        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(new Texture(pixmap));
-        pixmap.setColor(new Color(0x0A_4C_A6_FF));
-        pixmap.fill();
-        ProgressBarStyle barStyle = new ProgressBarStyle(backgroundDrawable, new TextureRegionDrawable(new Texture(pixmap)));
-        barStyle.knobBefore = barStyle.knob;
-        barStyles.put(BuildingType.SLEEPING, barStyle);
-        pixmap.setColor(new Color(0x0A_A6_1F_FF));
-        pixmap.fill();
-        barStyle = new ProgressBarStyle(backgroundDrawable, new TextureRegionDrawable(new Texture(pixmap)));
-        barStyle.knobBefore = barStyle.knob;
-        barStyles.put(BuildingType.EATING, barStyle);
-        pixmap.setColor(new Color(0xA6_58_0A_FF));
-        pixmap.fill();
-        barStyle = new ProgressBarStyle(backgroundDrawable, new TextureRegionDrawable(new Texture(pixmap)));
-        barStyle.knobBefore = barStyle.knob;
-        barStyles.put(BuildingType.LEARNING, barStyle);
-        pixmap.setColor(new Color(0xA6_0A_0A_FF));
-        pixmap.fill();
-        barStyle = new ProgressBarStyle(backgroundDrawable, new TextureRegionDrawable(new Texture(pixmap)));
-        barStyle.knobBefore = barStyle.knob;
-        barStyles.put(BuildingType.RECREATION, barStyle);
 
         background = new ShapeActor(GameState.UIPrimaryColour);
         table = new Table();
@@ -92,7 +65,7 @@ public class ManagementMenu {
         buildingCapacityBars = new HashMap<>(BuildingType.values().length);
         for (BuildingType type : BuildingType.values()) {
             buildingCapacityLabels.put(type, new Label("0", skin));
-            buildingCapacityBars.put(type, new ProgressBar(0, 1, 0.001f, false, barStyles.get(type)));
+            buildingCapacityBars.put(type, new ProgressBar(0, 1, 0.001f, false, getBarStyle(type, 25)));
         }
         // Initialise the left column
         leftColumnTable.add(new Label("Accomodation Capacity", skin)).left().colspan(2).center();
@@ -154,6 +127,34 @@ public class ManagementMenu {
 
         stage.addActor(background);
         stage.addActor(table);
+    }
+
+    private Color getTypeColor(BuildingType type) {
+        switch (type) {
+            case SLEEPING:
+                return new Color(0x0A_4C_A6_FF);
+            case EATING:
+                return new Color(0x0A_A6_1F_FF);
+            case LEARNING:
+                return new Color(0xA6_58_0A_FF);
+            case RECREATION:
+                return new Color(0xA6_0A_0A_FF);
+            default:
+                // Should never happen but provides debug information
+                return Color.PINK;
+        }
+    }
+
+    private ProgressBarStyle getBarStyle(BuildingType type, int height) {
+        Pixmap pixmap = new Pixmap(1, height, Pixmap.Format.RGB888);
+        pixmap.setColor(Color.BLACK);
+        pixmap.fill();
+        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(new Texture(pixmap));
+        pixmap.setColor(getTypeColor(type));
+        pixmap.fill();
+        ProgressBarStyle barStyle = new ProgressBarStyle(backgroundDrawable, new TextureRegionDrawable(new Texture(pixmap)));
+        barStyle.knobBefore = barStyle.knob;
+        return barStyle;
     }
 
     void updateCapacityTable() {
