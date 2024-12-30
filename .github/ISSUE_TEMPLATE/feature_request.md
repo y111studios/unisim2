@@ -7,14 +7,14 @@ assignees: ''
 
 ---
 
-**Describe the feature**
+## Describe the feature
 
 A clear and concise description of the feature's scope
 
-**Proposed solution**
+## Proposed solution
 
 How do you suggest to solve this
 
-**Additional context**
+## Additional context
 
 Add any other context about the problem here.
