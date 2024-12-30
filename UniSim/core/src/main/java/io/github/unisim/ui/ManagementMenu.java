@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -39,6 +40,7 @@ public class ManagementMenu {
     private TextField studentEnrollmentField;
     private Table buildingCapacityTable;
     private Map<BuildingType, Cell<Label>> buildingCapacityLabels;
+    private Map<BuildingType, ProgressBar> buildingCapacityBars;
 
     private ResizableComponents resizableComponents;
 
@@ -56,18 +58,30 @@ public class ManagementMenu {
         buildingCapacityTable.add(leftColumnTable).padRight(10);
         buildingCapacityTable.add(rightColumnTable).row();
         buildingCapacityLabels = new HashMap<>(BuildingType.values().length);
+        buildingCapacityBars = new HashMap<>(BuildingType.values().length);
+        for (BuildingType type : BuildingType.values()) {
+            buildingCapacityBars.put(type, new ProgressBar(0, 1, 0.001f, false, skin));
+        }
         // Initialise the left column
-        leftColumnTable.add(new Label("Accomodation Capacity", skin)).left().padRight(15);
-        buildingCapacityLabels.put(BuildingType.SLEEPING, leftColumnTable.add(new Label("0", skin)));
+        leftColumnTable.add(new Label("Accomodation Capacity", skin)).left().colspan(2).center();
         leftColumnTable.row().padTop(10);
-        leftColumnTable.add(new Label("Catering Capacity", skin)).left().padRight(15);
+        buildingCapacityLabels.put(BuildingType.SLEEPING, leftColumnTable.add(new Label("0", skin)));
+        leftColumnTable.add(buildingCapacityBars.get(BuildingType.SLEEPING));
+        leftColumnTable.row().padTop(10);
+        leftColumnTable.add(new Label("Catering Capacity", skin)).left().colspan(2).center();
+        leftColumnTable.row().padTop(10);
         buildingCapacityLabels.put(BuildingType.EATING, leftColumnTable.add(new Label("0", skin)));
+        leftColumnTable.add(buildingCapacityBars.get(BuildingType.EATING));
         // Initialise the right column
-        rightColumnTable.add(new Label("Teaching Capacity", skin)).left().padRight(15);
-        buildingCapacityLabels.put(BuildingType.LEARNING, rightColumnTable.add(new Label("0", skin)));
+        rightColumnTable.add(new Label("Teaching Capacity", skin)).left().colspan(2).center();
         rightColumnTable.row().padTop(10);
-        rightColumnTable.add(new Label("Recreational Capacity", skin)).left().padRight(15);
+        buildingCapacityLabels.put(BuildingType.LEARNING, rightColumnTable.add(new Label("0", skin)));
+        rightColumnTable.add(buildingCapacityBars.get(BuildingType.LEARNING));
+        rightColumnTable.row().padTop(10);
+        rightColumnTable.add(new Label("Recreational Capacity", skin)).left().colspan(2).center();
+        rightColumnTable.row().padTop(10);
         buildingCapacityLabels.put(BuildingType.RECREATION, rightColumnTable.add(new Label("0", skin)));
+        rightColumnTable.add(buildingCapacityBars.get(BuildingType.RECREATION));
 
         table.add(buildingCapacityTable).colspan(2).expandX().row();
         table.row().padTop(10);
