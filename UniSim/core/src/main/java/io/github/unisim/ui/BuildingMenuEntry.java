@@ -1,5 +1,9 @@
 package io.github.unisim.ui;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -70,19 +74,23 @@ public class BuildingMenuEntry {
     costTable.setBounds(0, 0, width, height * 0.025f);
     buildingTable.setBounds(0, height * 0.015f, width, height * 0.1f);
     navTable.setBounds(0, height * 0.1f, width, height * 0.025f);
+    List<Cell> costCells = new ArrayList<>();
+    for (Cell c : costTable.getCells()) {
+      costCells.add(c);
+    }
+    Iterator<Cell> iter = costCells.iterator();
     // we must perform an unchecked type conversion here
     // this is acceptable as we know our table only contains instances of Actors
     for (Cell<Actor> cell : buildingTable.getCells()) {
+      Cell costCell = iter.next();
       Image buildingImage = (Image) (cell.getActor());
       Vector2 textureSize = new Vector2(buildingImage.getWidth(), buildingImage.getHeight());
+      costCell.width(height * 0.1f * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1));
       cell.width(
           height * 0.1f * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1)
       ).height(
           height * 0.1f * (textureSize.y < textureSize.x ? textureSize.y / textureSize.x : 1)
       );
-    }
-    for (Cell<Actor> cell : costTable.getCells()) {
-      cell.pad(width * 0.02f);
     }
   }
 }
