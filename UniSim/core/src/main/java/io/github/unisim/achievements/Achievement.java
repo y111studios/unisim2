@@ -38,6 +38,12 @@ public class Achievement {
      * Internal constructor for creating an achievement using the DefinedAchievements definition and
      * the JSON representation of the locking state of the achievement.
      *
+     * <p>
+     * This constructor enforces that the unlock time must be set to the epoch if the achievement is locked,
+     * and that the progress must be 1 if the achievement is unlocked. If the unlock time is null and the
+     * achievement is unlocked, the unlock time is set to the current time.
+     * </p>
+     *
      * @param definition the definition of the achievement
      * @param unlockTime the time the achievement was unlocked
      * @param progress the progress towards the achievement
@@ -49,7 +55,13 @@ public class Achievement {
     }
 
     /**
-     * Internal all arg constructor
+     * Internal all arg constructor that validates the parameters.
+     *
+     * <p>
+     * This constructor enforces that the unlock time must be set to the epoch if the achievement is locked,
+     * and that the progress must be 1 if the achievement is unlocked. If the unlock time is null and the
+     * achievement is unlocked, the unlock time is set to the current time.
+     * </p>
      *
      * @param name the name of the achievement
      * @param description the description of the achievement
@@ -59,7 +71,12 @@ public class Achievement {
      * @param progress the progress towards the achievement
      * @param unlocked whether the achievement is unlocked
      * @param hidden whether the achievement is hidden
+     *
+     * @deprecated This constructor is deprecated and should not be used. Once all references
+     * to this have been removed, this constructor will be made private. Use the other constructors
+     * instead as they provide stricter validation.
      */
+    @Deprecated(forRemoval = true)
     Achievement(String name, String description, Instant unlockTime,
             ScoreModifierTemplate functionTemplate, float scoreModifierValue, float progress,
             boolean unlocked, boolean hidden) {
