@@ -172,7 +172,8 @@ public class AchievementManager {
             DefinedAchievements definition = DefinedAchievements.getByName(name).orElse(null);
             if (definition == null) {
                 Gdx.app.error("AchievementManager load",
-                        "Failed to load achievement with name: " + name + " has no definition");
+                        "Failed to load achievement with name: " + name + " has no definition -- removing");
+                errorsCorrected = true;
                 continue;
             }
             boolean unlocked;
