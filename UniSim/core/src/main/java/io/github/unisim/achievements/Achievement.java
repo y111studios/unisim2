@@ -60,7 +60,7 @@ public class Achievement {
      * @param unlocked whether the achievement is unlocked
      * @param hidden whether the achievement is hidden
      */
-    private Achievement(String name, String description, Instant unlockTime,
+    Achievement(String name, String description, Instant unlockTime,
             ScoreModifierTemplate functionTemplate, float scoreModifierValue, float progress,
             boolean unlocked, boolean hidden) {
         this.name = name;
