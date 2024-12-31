@@ -59,7 +59,7 @@ public class World {
   public Building selectedBuilding;
   public boolean selectedBuildingUpdated;
   public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
-  public MoneyTracker moneyTracker = new MoneyTracker(500);
+  public MoneyTracker moneyTracker = new MoneyTracker(1000);
   public ScoreTracker scoreTracker = new ScoreTracker();
   public AchievementManager achievementManager = new AchievementManager();
   public AchievementBar achievementBar;
