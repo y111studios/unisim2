@@ -12,9 +12,9 @@ public class MoneyTracker {
      */
     private static final Duration MONEY_UPDATE_INTERVAL = Duration.ofSeconds(1);
     /**
-     * The amount of money to increase by every {@link #MONEY_UPDATE_INTERVAL}.
+     * The amount of money to increase by every {@link #MONEY_UPDATE_INTERVAL} per student.
      */
-    private static final int MONEY_UPDATE_AMOUNT = 100;
+    private static final int MONEY_UPDATE_AMOUNT_PER_STUDENT = 10;
 
     int money;
     Instant lastUpdateTime;
@@ -63,15 +63,20 @@ public class MoneyTracker {
      * <h2>Behavior:</h2>
      * <ul>
      *   <li>If the game is over or paused, nothing happens.</li>
-     *   <li>Otherwise, if the time since the last update is greater than or equal to {@link #MONEY_UPDATE_INTERVAL},
-     *  {@link #MONEY_UPDATE_AMOUNT} is added to the player's money and the last update time is updated.</li>
+     *   <li>Otherwise, if the time since the last update is greater than or equal to
+     *       {@link #MONEY_UPDATE_INTERVAL}, {@link #MONEY_UPDATE_AMOUNT_PER_STUDENT} * studentCount
+     *       is added to the player's money and the last update time is updated.
+     *   </li>
      * </ul>
+     *
+     * @param studentCount The number of students in the game.
      */
-    public void updateMoney() {
+    public void updateMoney(int studentCount) {
+        studentCount = Math.max(studentCount, 0); // Clamp negative values to 0
         Instant currentTime = Instant.now();
         Duration timeSinceLastUpdate = Duration.between(lastUpdateTime, currentTime);
         if (timeSinceLastUpdate.compareTo(MONEY_UPDATE_INTERVAL) >= 0) {
-            addMoney(MONEY_UPDATE_AMOUNT);
+            addMoney(MONEY_UPDATE_AMOUNT_PER_STUDENT * studentCount);
             lastUpdateTime = currentTime;
         }
     }
