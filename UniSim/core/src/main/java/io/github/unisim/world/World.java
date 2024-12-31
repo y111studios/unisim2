@@ -92,7 +92,9 @@ public class World {
 
   public void update() {
     if (!GameState.gameOver && !GameState.paused) {
-      moneyTracker.updateMoney(numberOfStudents);
+      int accomodationCapacity = buildingManager.getBuildingCapacities(BuildingType.SLEEPING);
+      int payingStudents = Math.min(accomodationCapacity, numberOfStudents);
+      moneyTracker.updateMoney(payingStudents);
     }
     satisfactionTracker.updateSatisfaction(buildingManager.getBuildings(), buildingManager.getPreviewBuilding(), numberOfStudents);
     scoreTracker.update();
