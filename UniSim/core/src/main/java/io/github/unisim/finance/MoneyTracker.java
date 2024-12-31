@@ -10,11 +10,11 @@ public class MoneyTracker {
     /**
      * The interval at which money is increased.
      */
-    private static final Duration MONEY_UPDATE_INTERVAL = Duration.ofSeconds(1);
+    static final Duration MONEY_UPDATE_INTERVAL = Duration.ofSeconds(1);
     /**
      * The amount of money to increase by every {@link #MONEY_UPDATE_INTERVAL} per student.
      */
-    private static final int MONEY_UPDATE_AMOUNT_PER_STUDENT = 10;
+    static final int MONEY_UPDATE_AMOUNT_PER_STUDENT = 10;
 
     int money;
     Instant lastUpdateTime;
