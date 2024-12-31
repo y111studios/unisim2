@@ -2,7 +2,11 @@ package io.github.unisim.achievements;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.utils.JsonValue;
@@ -100,5 +104,45 @@ public class AchievementsTest {
         assertEquals(progress, jsonValue.getFloat("progress"));
         assertEquals(unlocked, jsonValue.getBoolean("unlocked"));
         assertEquals(hidden, jsonValue.getBoolean("hidden"));
+    }
+
+    @Test
+    public void testProgressUnlocked() {
+        Achievement achievement = new Achievement("Test", "Description", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, true, false);
+        assertFalse(achievement.progress(0.5f));
+    }
+
+    @Test
+    public void testProgressInvalidValue() {
+        Achievement achievement = new Achievement("Test", "Description", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, false, false);
+        assertFalse(achievement.progress(Float.POSITIVE_INFINITY));
+        assertFalse(achievement.progress(Float.NaN));
+    }
+
+    @Test
+    public void testProgressPartial() {
+        Achievement achievement = new Achievement("Test", "Description", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, false, false);
+        assertFalse(achievement.progress(0.5f));
+        assertEquals(0.5f, achievement.progress);
+    }
+
+    @Test
+    public void testProgressComplete() {
+        Achievement achievement = new Achievement("Test", "Description", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, false, false);
+        assertTrue(achievement.progress(1.0f));
+        assertEquals(1.0f, achievement.progress);
+        assertTrue(achievement.isUnlocked());
+        assertNotEquals(Instant.EPOCH, achievement.unlockTime);
+    }
+
+    @Test
+    public void testProgressAccumulation() {
+        Achievement achievement = new Achievement("Test", "Description", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, false, false);
+        assertFalse(achievement.progress(0.3f));
+        assertFalse(achievement.progress(0.3f));
+        assertFalse(achievement.progress(0.3f));
+        assertTrue(achievement.progress(0.2f));
+        assertTrue(achievement.isUnlocked());
+        assertEquals(1.0f, achievement.progress);
     }
 }
