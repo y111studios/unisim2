@@ -127,4 +127,20 @@ public class MoneyTrackerTest {
         tracker.updateMoney(1);
         assertEquals(MoneyTracker.MONEY_UPDATE_AMOUNT_PER_STUDENT, tracker.getMoney());
     }
+
+    @Test
+    public void testUpdateMoneyWithZeroStudentCount() {
+        tracker = new MoneyTracker(0);
+        tracker.lastUpdateTime = Instant.now().minusSeconds(2);
+        tracker.updateMoney(0);
+        assertEquals(0, tracker.getMoney());
+    }
+
+    @Test
+    public void testUpdateMoneyWithNegativeStudentCount() {
+        tracker = new MoneyTracker(0);
+        tracker.lastUpdateTime = Instant.now().minusSeconds(2);
+        tracker.updateMoney(-1);
+        assertEquals(0, tracker.getMoney());
+    }
 }
