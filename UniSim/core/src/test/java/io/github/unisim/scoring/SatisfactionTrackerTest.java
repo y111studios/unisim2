@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.github.unisim.achievements.ScoreModifierTemplate;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingType;
 
@@ -66,6 +67,19 @@ public class SatisfactionTrackerTest {
         assertEquals(0, satisfactiontracker.getSatisfaction());
     }
 
+    @Test
+    public void testUpdateSatisfactionWithLargeStudentCount() {
+        satisfactiontracker.updateSatisfaction(buildings, null, 10000);
+        assertEquals(100, satisfactiontracker.getSatisfaction());
+    }
+
+    @Test
+    public void testUpdateSatisfactionWithModifier() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 5, Duration.ofSeconds(1));
+        satisfactiontracker.updateSatisfaction(buildings, null, 100);
+        assertEquals(105, satisfactiontracker.getSatisfaction());
+    }
+
     // Testing getScore
     @Test
     public void testGetScore() {
@@ -82,5 +96,62 @@ public class SatisfactionTrackerTest {
         satisfactiontracker.getUpdateInterval();
         Duration expectedInterval = Duration.ofSeconds(1);
         assertEquals(expectedInterval, satisfactiontracker.getUpdateInterval());
+    }
+
+    // Testing addModifier
+    @Test
+    public void testAddModifierWithDuration() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 5, Duration.ofSeconds(1));
+        satisfactiontracker.updateSatisfaction(buildings, null, 100);
+        assertEquals(105, satisfactiontracker.getSatisfaction());
+    }
+
+    @Test
+    public void testAddModifierWithZeroValueWtihDuration() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 0, Duration.ofSeconds(1));
+        satisfactiontracker.updateSatisfaction(buildings, null, 100);
+        assertEquals(100, satisfactiontracker.getSatisfaction());
+    }
+
+    @Test
+    public void testAddModifierWithNegativeValueWithDuration() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, -5, Duration.ofSeconds(1));
+        satisfactiontracker.updateSatisfaction(buildings, null, 100);
+        assertEquals(95, satisfactiontracker.getSatisfaction());
+    }
+
+    @Test
+    public void testAddModifierWithZeroDuration() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 5, Duration.ofSeconds(0));
+        satisfactiontracker.updateSatisfaction(buildings, null, 100);
+        assertEquals(100, satisfactiontracker.getSatisfaction());
+    }
+
+    @Test
+    public void testAddModifierWithNegativeDuration() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 5, Duration.ofSeconds(-1));
+        satisfactiontracker.updateSatisfaction(buildings, null, 100);
+        assertEquals(100, satisfactiontracker.getSatisfaction());
+    }
+
+    @Test
+    public void testAddModifier() {
+        satisfactiontracker.addModifier(new SatisfactionModifier(ScoreModifierTemplate.ADD, 5, Duration.ofSeconds(1)));
+        satisfactiontracker.updateSatisfaction(buildings, null, 100);
+        assertEquals(105, satisfactiontracker.getSatisfaction());
+    }
+
+    @Test
+    public void testAddModifierWithZeroValue() {
+        satisfactiontracker.addModifier(new SatisfactionModifier(ScoreModifierTemplate.ADD, 0, Duration.ofSeconds(1)));
+        satisfactiontracker.updateSatisfaction(buildings, null, 100);
+        assertEquals(100, satisfactiontracker.getSatisfaction());
+    }
+
+    @Test
+    public void testAddModifierWithNegativeValue() {
+        satisfactiontracker.addModifier(new SatisfactionModifier(ScoreModifierTemplate.ADD, -5, Duration.ofSeconds(1)));
+        satisfactiontracker.updateSatisfaction(buildings, null, 100);
+        assertEquals(95, satisfactiontracker.getSatisfaction());
     }
 }
