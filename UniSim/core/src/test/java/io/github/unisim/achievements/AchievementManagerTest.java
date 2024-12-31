@@ -117,4 +117,27 @@ public class AchievementManagerTest {
         boolean result = achievementManager.unlockAchievement(toUnlock);
         assertFalse(result);
     }
+
+    // Testing progressAchievement
+    @Test
+    public void testProgressAchievement() {
+        DefinedAchievements toProgress = DefinedAchievements.values()[0];
+        assertTrue(achievementManager.progressAchievement(toProgress, 0.5));
+        assertTrue(achievementManager.sessionAchievements.contains(achievementManager.getAchievement(toProgress)));
+    }
+
+    @Test
+    public void testProgressAchievementToUnlock() {
+        DefinedAchievements toProgress = DefinedAchievements.values()[0];
+        assertTrue(achievementManager.progressAchievement(toProgress, 1));
+        assertTrue(achievementManager.sessionAchievements.contains(achievementManager.getAchievement(toProgress)));
+    }
+
+    @Test
+    public void testProgressAchievementToUnlockAndUnlock() {
+        DefinedAchievements toProgress = DefinedAchievements.values()[0];
+        assertTrue(achievementManager.progressAchievement(toProgress, 1));
+        assertTrue(achievementManager.unlockAchievement(toProgress));
+        assertTrue(achievementManager.sessionAchievements.contains(achievementManager.getAchievement(toProgress)));
+    }
 }
