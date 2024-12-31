@@ -123,7 +123,7 @@ public class MoneyTrackerTest {
     @Test
     public void testUpdateMoneyTimeSinceLastUpdateIsGreaterThanOrEqualToInterval() {
         tracker = new MoneyTracker(0);
-        tracker.lastUpdateTime = Instant.now().minusSeconds(2);
+        tracker.lastUpdateTime = Instant.now().minus(MoneyTracker.MONEY_UPDATE_INTERVAL);
         tracker.updateMoney(1);
         assertEquals(MoneyTracker.MONEY_UPDATE_AMOUNT_PER_STUDENT, tracker.getMoney());
     }
@@ -131,7 +131,7 @@ public class MoneyTrackerTest {
     @Test
     public void testUpdateMoneyWithZeroStudentCount() {
         tracker = new MoneyTracker(0);
-        tracker.lastUpdateTime = Instant.now().minusSeconds(2);
+        tracker.lastUpdateTime = Instant.now().minus(MoneyTracker.MONEY_UPDATE_INTERVAL);
         tracker.updateMoney(0);
         assertEquals(0, tracker.getMoney());
     }
@@ -139,7 +139,7 @@ public class MoneyTrackerTest {
     @Test
     public void testUpdateMoneyWithNegativeStudentCount() {
         tracker = new MoneyTracker(0);
-        tracker.lastUpdateTime = Instant.now().minusSeconds(2);
+        tracker.lastUpdateTime = Instant.now().minus(MoneyTracker.MONEY_UPDATE_INTERVAL);
         tracker.updateMoney(-1);
         assertEquals(0, tracker.getMoney());
     }
