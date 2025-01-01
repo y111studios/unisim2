@@ -189,6 +189,10 @@ public class ManagementMenu {
         }
     }
 
+    public void updateElements() {
+        updateCapacityTable();
+    }
+
     void submitToWorld() {
         try {
             world.setStudentEnrollment(Integer.parseInt(studentEnrollmentField.getText()));
@@ -215,7 +219,7 @@ public class ManagementMenu {
     }
 
     public void show() {
-        updateCapacityTable();
+        updateElements();
         Function<Void, Action> actionGenerator = (Void) -> Actions.sequence(
             Actions.moveTo(normalisedLeftPadding * resizableComponents.getStageWidth(), resizableComponents.getY(), 0.33f, Interpolation.fastSlow),
             Actions.run(() -> {

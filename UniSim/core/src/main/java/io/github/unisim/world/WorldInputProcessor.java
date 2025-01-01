@@ -141,7 +141,9 @@ public class WorldInputProcessor implements InputProcessor {
     cursorPos[0] = cursorPosWhenClicked[0] = x;
     cursorPos[1] = cursorPosWhenClicked[1] = y;
     if (world.selectedBuilding == null && world.cursorOverBuilding() && button == Input.Buttons.RIGHT) {
-        world.removeBuilding(world.getCursorGridPos());
+        if (world.removeBuilding(world.getCursorGridPos())) {
+            managementMenu.updateElements();
+        }
     }
     return true;
   }
@@ -154,7 +156,8 @@ public class WorldInputProcessor implements InputProcessor {
     clickedOnWorld = false;
     if (!draggedSinceClick && world.selectedBuilding != null && button == Input.Buttons.LEFT) {
       if (world.placeBuilding()) {
-          draggedSinceClick = true;
+        managementMenu.updateElements();
+        draggedSinceClick = true;
       }
     }
     return false;
