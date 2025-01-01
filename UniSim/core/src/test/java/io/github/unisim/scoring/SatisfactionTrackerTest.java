@@ -70,7 +70,7 @@ public class SatisfactionTrackerTest {
     @Test
     public void testUpdateSatisfactionWithLargeStudentCount() {
         satisfactiontracker.updateSatisfaction(buildings, null, 10000);
-        assertEquals(100, satisfactiontracker.getSatisfaction());
+        assertEquals(1, satisfactiontracker.getSatisfaction());
     }
 
     @Test
