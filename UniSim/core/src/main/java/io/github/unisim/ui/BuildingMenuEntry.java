@@ -74,15 +74,15 @@ public class BuildingMenuEntry {
     costTable.setBounds(0, 0, width, height * 0.025f);
     buildingTable.setBounds(0, height * 0.015f, width, height * 0.1f);
     navTable.setBounds(0, height * 0.1f, width, height * 0.025f);
-    List<Cell> costCells = new ArrayList<>();
-    for (Cell c : costTable.getCells()) {
+    List<Cell<Actor>> costCells = new ArrayList<>();
+    for (Cell<Actor> c : costTable.getCells()) {
       costCells.add(c);
     }
-    Iterator<Cell> iter = costCells.iterator();
+    Iterator<Cell<Actor>> iter = costCells.iterator();
     // we must perform an unchecked type conversion here
     // this is acceptable as we know our table only contains instances of Actors
     for (Cell<Actor> cell : buildingTable.getCells()) {
-      Cell costCell = iter.next();
+      Cell<Actor> costCell = iter.next();
       Image buildingImage = (Image) (cell.getActor());
       Vector2 textureSize = new Vector2(buildingImage.getWidth(), buildingImage.getHeight());
       costCell.width(height * 0.1f * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1));
