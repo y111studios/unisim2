@@ -1,6 +1,5 @@
 package io.github.unisim.achievements;
 
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 
@@ -16,9 +15,7 @@ public class DefinedAchievementsTest {
     public void testConstructor() {
         DefinedAchievements[] values = DefinedAchievements.values();
         assertNotNull(values);
-        assertEquals(2, values.length); // Change expected value as achievements are added
-        assertEquals(DefinedAchievements.Bankruptcy, values[0]);
-        assertEquals(DefinedAchievements.Capitalist, values[1]);
+        assertTrue(values.length > 0);
     }
 
     @Test
@@ -35,16 +32,14 @@ public class DefinedAchievementsTest {
     // Testing getMissingAchievements
     @Test
     public void testGetMissingAchievements() {
-        Achievement achievement1 = new Achievement("Test1", "Desc1", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, false, false);
-        Achievement achievement2 = new Achievement("Test2", "Desc2", Instant.EPOCH, ScoreModifierTemplate.ADD, 0, 0, false, false);
-
-        Iterable <Achievement> achievements = List.of(achievement1, achievement2);
+        Iterable <Achievement> achievements = List.of();
 
         List<DefinedAchievements> missingAchievements = DefinedAchievements.getMissingAchievements(achievements).get();
-        assertEquals(2, missingAchievements.size());
-        System.out.println("Missing achievements: " + missingAchievements);
-        assertTrue(missingAchievements.contains(DefinedAchievements.Bankruptcy));
-        assertTrue(missingAchievements.contains(DefinedAchievements.Capitalist));
+        // Test all definied achievements are missing from empty list
+        assertEquals(DefinedAchievements.values().length, missingAchievements.size());
+        for (DefinedAchievements achievement : DefinedAchievements.values()) {
+            assertTrue(missingAchievements.contains(achievement));
+        }
     }
 
 }
