@@ -33,8 +33,6 @@ public class BuildingManagerTest {
     private SpriteBatch batch;
 
     private static ShaderProgram mockShader;
-    // Precision value of IEEE 754 single-precision floating point
-    private static final float EPSILON = (float) Math.pow(2, -23);
 
     @BeforeAll
     static void initialiseApplication() {
@@ -114,14 +112,14 @@ public class BuildingManagerTest {
         buildingManager.placeBuilding(building);
         boolean removed = buildingManager.removeBuilding(building);
         assertTrue(removed);
-        assertEquals(0, buildingManager.getBuildingCount(buildingType.RECREATION));
+        assertEquals(0, buildingManager.getBuildingCount(BuildingType.RECREATION));
     }
 
     @Test
     public void testRemoveBuildingWithNoBuilding() {
         boolean removed = buildingManager.removeBuilding(building);
         assertFalse(removed);
-        assertEquals(0, buildingManager.getBuildingCount(buildingType.RECREATION));
+        assertEquals(0, buildingManager.getBuildingCount(BuildingType.RECREATION));
     }
 
     // Testing getBuildingCount
