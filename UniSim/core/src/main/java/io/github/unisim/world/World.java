@@ -483,4 +483,8 @@ public class World {
   public Iterable<Building> getBuildings() {
     return buildingManager.getBuildings();
   }
+
+  public Integer getBuildingCapacities(BuildingType type) {
+    return buildingManager.getBuildingCapacities(type);
+  }
 }
