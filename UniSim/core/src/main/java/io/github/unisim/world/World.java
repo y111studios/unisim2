@@ -59,7 +59,7 @@ public class World {
   public Building selectedBuilding;
   public boolean selectedBuildingUpdated;
   public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
-  public MoneyTracker moneyTracker = new MoneyTracker(500);
+  public MoneyTracker moneyTracker = new MoneyTracker(1000);
   public ScoreTracker scoreTracker = new ScoreTracker();
   public AchievementManager achievementManager = new AchievementManager();
   public AchievementBar achievementBar;
@@ -92,7 +92,9 @@ public class World {
 
   public void update() {
     if (!GameState.gameOver && !GameState.paused) {
-      moneyTracker.updateMoney();
+      int accomodationCapacity = buildingManager.getBuildingCapacities(BuildingType.SLEEPING);
+      int payingStudents = Math.min(accomodationCapacity, numberOfStudents);
+      moneyTracker.updateMoney(payingStudents);
     }
     satisfactionTracker.updateSatisfaction(buildingManager.getBuildings(), buildingManager.getPreviewBuilding(), numberOfStudents);
     scoreTracker.update();
@@ -482,5 +484,9 @@ public class World {
 
   public Iterable<Building> getBuildings() {
     return buildingManager.getBuildings();
+  }
+
+  public Integer getBuildingCapacities(BuildingType type) {
+    return buildingManager.getBuildingCapacities(type);
   }
 }
