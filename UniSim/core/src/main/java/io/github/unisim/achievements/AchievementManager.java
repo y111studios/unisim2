@@ -111,6 +111,9 @@ public class AchievementManager {
         if (a.unlock()) {
             save();
         }
+        if (!sessionAchievements.contains(a)) {
+            Gdx.app.log("AchievementManager", "Achievement unlocked: " + a.name);
+        }
         return sessionAchievements.add(a);
     }
 
