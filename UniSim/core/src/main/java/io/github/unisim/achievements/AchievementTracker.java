@@ -10,6 +10,9 @@ public class AchievementTracker {
      * Maintains a count of how many buildings have been place
      */
     public int buildingsPlaced;
+    /**
+     * Tracks whether the satisfaction has reached 10 in this session
+     */
     public boolean satisfactionHasReachedTen;
 
     /**
