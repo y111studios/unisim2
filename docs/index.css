@@ -93,5 +93,6 @@ body {
 #gameplay-image {
     width: 75vw;
     height: 85vh;
-    padding-left: 15vw;
+    padding-left: 10vw;
+    align-items: center;
 }
