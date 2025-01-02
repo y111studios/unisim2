@@ -46,7 +46,8 @@ div > a {
     color: var(--text);
     background-color: var(--primary);
     text-align: center;
-    margin-top: 5vh;
+    margin-top: 2vh;
+    margin-left: 2vh;
     border-radius: 10px;
     transition: background-color 0.3s ease;
 }
