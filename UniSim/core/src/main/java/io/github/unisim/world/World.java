@@ -459,6 +459,12 @@ public class World {
     if (building == null) {
         return false;
     }
+    if (building.type == BuildingType.LEARNING) {
+        if (achievementManager.unlockAchievement(DefinedAchievements.Dropout)) {
+            Achievement achievement = achievementManager.getAchievement(DefinedAchievements.Dropout);
+            achievementBar.setAchievement(achievement);
+        }
+    }
     moneyTracker.addMoney((int) (building.cost * 0.25f));
     boolean removed = buildingManager.removeBuilding(building);
     if (!removed) {
