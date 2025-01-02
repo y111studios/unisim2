@@ -10,12 +10,14 @@ public class AchievementTracker {
      * Maintains a count of how many buildings have been place
      */
     public int buildingsPlaced;
+    public boolean satisfactionHasReachedTen;
 
     /**
      * Creates a new AchievementTracker and initialises all fields to their default values.
      */
     public AchievementTracker() {
         buildingsPlaced = 0;
+        satisfactionHasReachedTen = false;
     }
 
 }

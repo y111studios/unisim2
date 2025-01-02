@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
+import io.github.unisim.achievements.Achievement;
 import io.github.unisim.achievements.AchievementManager;
 import io.github.unisim.achievements.AchievementTracker;
 import io.github.unisim.achievements.DefinedAchievements;
@@ -99,6 +100,22 @@ public class World {
       moneyTracker.updateMoney(payingStudents);
       satisfactionTracker.updateSatisfaction(buildingManager.getBuildings(), buildingManager.getPreviewBuilding(), numberOfStudents);
       scoreTracker.update();
+
+        // Check achivement conditions
+
+        if (!achievementTracker.satisfactionHasReachedTen && satisfactionTracker.getSatisfaction() >= 10) {
+            achievementTracker.satisfactionHasReachedTen = true;
+        }
+        achievementTracker.satisfactionHasReachedTen |= satisfactionTracker.getSatisfaction() >= 10;
+        if (achievementTracker.satisfactionHasReachedTen) {
+            if (satisfactionTracker.getSatisfaction() <= 10) {
+                if (achievementManager.unlockAchievement(DefinedAchievements.Overrated)) {
+                    Achievement achievement = achievementManager.getAchievement(DefinedAchievements.Overrated);
+                    achievementBar.setAchievement(achievement);
+                }
+            }
+        }
+
     }
 
     // Check achievement conditions
