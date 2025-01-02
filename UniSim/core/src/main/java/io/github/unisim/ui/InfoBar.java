@@ -92,6 +92,11 @@ public class InfoBar {
    */
   public void update() {
     satisfactionLabel.setText(world.satisfactionTracker.getStringSatisfaction() + "%");
+    if (world.satisfactionTracker.getSatisfaction() < 0) {
+        satisfactionLabel.setColor(1, 0, 0, 1);
+    } else {
+        satisfactionLabel.setColor(1, 1, 1, 1);
+    }
     scoreLabel.setText("Score: " + world.scoreTracker.getFinalScore());
     moneyLabel.setText("Money: $" + world.moneyTracker.getMoney());
     timerLabel.setText(timer.getRemainingTime());
