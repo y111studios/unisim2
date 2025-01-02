@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
 import io.github.unisim.achievements.AchievementManager;
+import io.github.unisim.achievements.AchievementTracker;
 import io.github.unisim.achievements.DefinedAchievements;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingManager;
@@ -62,6 +63,7 @@ public class World {
   public MoneyTracker moneyTracker = new MoneyTracker(1000);
   public ScoreTracker scoreTracker = new ScoreTracker();
   public AchievementManager achievementManager = new AchievementManager();
+  public AchievementTracker achievementTracker = new AchievementTracker();
   public AchievementBar achievementBar;
   public int numberOfStudents;
   private float minX = 0f; //* Camera bounds for panning and zooming */

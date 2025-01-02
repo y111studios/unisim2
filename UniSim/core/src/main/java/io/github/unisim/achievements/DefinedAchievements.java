@@ -17,7 +17,7 @@ public enum DefinedAchievements {
         false),
     LoveUni("I ♥︎ Uni", "Satisfaction remained above 75% for 3 minutes", ScoreModifierTemplate.MUL, 1.1f,
         false),
-    Minimalist("Minimalist", "Place less than 5 buildings", ScoreModifierTemplate.ADD, 10f,
+    Minimalist("Minimalist", "Place 5 buildings or less", ScoreModifierTemplate.ADD, 10f,
         true),
     Dropout("Dropout", "Delete a teaching building", ScoreModifierTemplate.ADD, 0f,
         false),

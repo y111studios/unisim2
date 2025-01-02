@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.unisim.GameState;
 import io.github.unisim.achievements.AchievementManager;
+import io.github.unisim.achievements.AchievementTracker;
 import io.github.unisim.leaderboard.Leaderboard;
 import io.github.unisim.leaderboard.LeaderboardEntry;
 import io.github.unisim.scoring.ScoreTracker;
@@ -47,7 +48,7 @@ public class GameOverMenu {
   /**
    * Creates a new GameOverMenu and initialises all events and UI elements used in the menu.
    */
-  public GameOverMenu(ScoreTracker scoreTracker, AchievementManager achievementManager) {
+  public GameOverMenu(ScoreTracker scoreTracker, AchievementManager achievementManager, AchievementTracker achievementTracker) {
     addedToLeaderboard = false;
     leaderboard = new Leaderboard();
     this.scoreTracker = scoreTracker;

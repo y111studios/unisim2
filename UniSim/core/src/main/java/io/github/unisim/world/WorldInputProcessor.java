@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
 import io.github.unisim.GameState;
+import io.github.unisim.achievements.AchievementTracker;
 import io.github.unisim.ui.ManagementMenu;
 
 /**
@@ -24,10 +25,13 @@ public class WorldInputProcessor implements InputProcessor {
   private boolean zoomIn = false;
   private boolean zoomOut = false;
 
+  public AchievementTracker achievementTracker;
+
 
   public WorldInputProcessor(World world, ManagementMenu managementMenu) {
     this.world = world;
     this.managementMenu = managementMenu;
+    this.achievementTracker = world.achievementTracker;
   }
 
 
@@ -156,6 +160,7 @@ public class WorldInputProcessor implements InputProcessor {
     clickedOnWorld = false;
     if (!draggedSinceClick && world.selectedBuilding != null && button == Input.Buttons.LEFT) {
       if (world.placeBuilding()) {
+        achievementTracker.buildingsPlaced += 1;
         managementMenu.updateElements();
         draggedSinceClick = true;
       }
