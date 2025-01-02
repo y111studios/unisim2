@@ -26,6 +26,10 @@ public class AchievementTracker {
      * Maintains a count of how many of each building instance has been placed
      */
     public HashMap<Texture, Integer> buildingsPlacedCount;
+    /**
+     * Tracks when the controls screen was opened
+     */
+    public Instant controlsScreenOpened;
 
     /**
      * Creates a new AchievementTracker and initialises all fields to their default values.
@@ -35,6 +39,7 @@ public class AchievementTracker {
         hadInput = false;
         timeSatisfactionReached75 = null;
         buildingsPlacedCount = new HashMap<>();
+        controlsScreenOpened = null;
     }
 
 }

@@ -1,5 +1,7 @@
 package io.github.unisim.ui;
 
+import java.time.Duration;
+import java.time.Instant;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -16,6 +18,9 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import io.github.unisim.GameState;
+import io.github.unisim.achievements.AchievementManager;
+import io.github.unisim.achievements.AchievementTracker;
+import io.github.unisim.achievements.DefinedAchievements;
 
 public class ControlsScreen implements Screen {
 
@@ -29,7 +34,7 @@ public class ControlsScreen implements Screen {
     private Texture titleTexture;
     private Image titleImage;
 
-    public ControlsScreen() {
+    public ControlsScreen(AchievementTracker achievementTracker) {
         stage = new Stage();
         table = new Table();
 
@@ -47,14 +52,14 @@ public class ControlsScreen implements Screen {
         table.setSize(500, 500);
         table.setPosition((Gdx.graphics.getWidth() - table.getWidth()) / 2, ((Gdx.graphics.getHeight() - table.getHeight()) / 2));
         table.setBackground(new TextureRegionDrawable(tableBackgroundTexture));
-        
+
         table.add(actionHeader).padRight(15);
         table.add(controlHeader).padLeft(15);
-        
+
         table.row().padTop(10);
         table.add(new Label("Pan Up", skin)).align(Align.left).padRight(15);
         table.add(new Label("W / Up Arrow / Mouse", skin)).align(Align.left).padLeft(15);
-        
+
         table.row().padTop(10);
         table.add(new Label("Pan Down", skin)).align(Align.left).padRight(15);
         table.add(new Label("S / Down Arrow / Mouse", skin)).align(Align.left).padLeft(15);
@@ -62,47 +67,47 @@ public class ControlsScreen implements Screen {
         table.row().padTop(10);
         table.add(new Label("Pan Left", skin)).align(Align.left).padRight(15);
         table.add(new Label("A / Left Arrow / Mouse", skin)).align(Align.left).padLeft(15);
-        
+
         table.row().padTop(10);
         table.add(new Label("Pan Right", skin)).align(Align.left).padRight(15);
         table.add(new Label("D / Right Arrow / Mouse", skin)).align(Align.left).padLeft(15);
-        
+
         table.row().padTop(10);
         table.add(new Label("Zoom In", skin)).align(Align.left).padRight(15);
         table.add(new Label("Z / Mouse Wheel Up", skin)).align(Align.left).padLeft(15);
-        
+
         table.row().padTop(10);
         table.add(new Label("Zoom Out", skin)).align(Align.left).padRight(15);
         table.add(new Label("X / Mouse Wheel Down", skin)).align(Align.left).padLeft(15);
-        
+
         table.row().padTop(10);
         table.add(new Label("Deselect Building", skin)).align(Align.left).padRight(15);
         table.add(new Label("F", skin)).align(Align.left).padLeft(15);
-        
+
         table.row().padTop(10);
         table.add(new Label("Rotate Building", skin)).align(Align.left).padRight(15);
         table.add(new Label("R", skin)).align(Align.left).padLeft(15);
-        
+
         table.row().padTop(10);
         table.add(new Label("Place Building", skin)).align(Align.left).padRight(15);
         table.add(new Label("Mouse Left Click", skin)).align(Align.left).padLeft(15);
-        
+
         table.row().padTop(10);
         table.add(new Label("Remove Building", skin)).align(Align.left).padRight(15);
         table.add(new Label("Mouse Right Click", skin)).align(Align.left).padLeft(15);
-        
+
         table.row().padTop(10);
         table.add(new Label("Pause Game", skin)).align(Align.left).padRight(15);
         table.add(new Label("Space", skin)).align(Align.left).padLeft(15);
-        
+
         table.row().padTop(10);
         table.add(new Label("Toggle Management Menu", skin)).align(Align.left).padRight(15);
         table.add(new Label("Tab", skin)).align(Align.left).padLeft(15);
-        
+
         table.row().padTop(10);
         table.add(new Label("Toggle Full Screen", skin)).align(Align.left).padRight(15);
         table.add(new Label("F11", skin)).align(Align.left).padLeft(15);
-        
+
         // Back button
         backButton = new TextButton("Back", skin);
         backButton.addListener(new ClickListener() {
@@ -110,11 +115,15 @@ public class ControlsScreen implements Screen {
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
                 // Go back to the start menu
                 GameState.currentScreen = GameState.startScreen;
+                if (Duration.between(achievementTracker.controlsScreenOpened, Instant.now()).toSeconds() < 1) {
+                    AchievementManager achievementManager = new AchievementManager();
+                    achievementManager.unlockAchievement(DefinedAchievements.Tried);
+                }
             }
         });
         table.row().padTop(20);
         table.add(backButton).colspan(2).center().width(75).height(35);
-        
+
         stage.addActor(titleImage);
         stage.addActor(table);
 
@@ -157,5 +166,5 @@ public class ControlsScreen implements Screen {
         tableBackgroundTexture.dispose();
         titleTexture.dispose();
     }
-    
+
 }

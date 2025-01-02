@@ -26,7 +26,7 @@ public class GameState {
   public static final Screen gameScreen = new GameScreen();
   public static final Screen startScreen = new StartMenuScreen();
   public static final Screen settingScreen = new SettingsScreen();
-  public static final Screen controlsScreen = new ControlsScreen();
+  public static final Screen controlsScreen = new ControlsScreen(StartMenuScreen.achievementTracker);
   public static final Screen pauseScreen = new PauseScreen();
   // Create an unmodifiable set containing the IDs of all buildable tiles
   // we use a set to make searching more efficient
