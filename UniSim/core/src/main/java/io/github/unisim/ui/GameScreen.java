@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.unisim.GameState;
 import io.github.unisim.Timer;
-import io.github.unisim.achievements.Achievement;
 import io.github.unisim.achievements.DefinedAchievements;
 import io.github.unisim.world.UiInputProcessor;
 import io.github.unisim.world.World;
@@ -69,10 +68,7 @@ public class GameScreen implements Screen {
       if (!timer.tick(dt * 1000)) {
         GameState.gameOver = true;
         if (world.achievementTracker.buildingsPlaced <= 5) {
-          if (world.achievementManager.unlockAchievement(DefinedAchievements.Minimalist)) {
-              Achievement achievement = world.achievementManager.getAchievement(DefinedAchievements.Minimalist);
-              achievementBar.setAchievement(achievement);
-          }
+          world.achievementManager.unlockAchievement(DefinedAchievements.Minimalist);
         }
         if (world.achievementTracker.hadInput == false) {
             world.achievementManager.unlockAchievement(DefinedAchievements.Useless);
