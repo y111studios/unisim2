@@ -61,8 +61,7 @@ public class ScoreTracker {
             Instant lastUpdateTime = entry.getValue();
             final Instant now = Instant.now();
             if (lastUpdateTime.plus(scoringObject.getUpdateInterval()).isBefore(now)) {
-                float durationMultiples =  (float) ((now.toEpochMilli() - lastUpdateTime.toEpochMilli()) / scoringObject.getUpdateInterval().toMillis());
-                incrementScore(scoringObject, durationMultiples);
+                incrementScore(scoringObject, 1);
                 lastUpdateTimes.put(scoringObject, now);
             }
         }
