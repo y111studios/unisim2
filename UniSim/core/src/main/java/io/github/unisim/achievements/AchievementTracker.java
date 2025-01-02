@@ -14,6 +14,10 @@ public class AchievementTracker {
      * Tracks whether the satisfaction has reached 10 in this session
      */
     public boolean satisfactionHasReachedTen;
+    /**
+     * Tracks whether an input has been received in this session
+     */
+    public boolean hadInput;
 
     /**
      * Creates a new AchievementTracker and initialises all fields to their default values.

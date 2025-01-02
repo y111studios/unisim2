@@ -37,6 +37,7 @@ public class WorldInputProcessor implements InputProcessor {
 
   @Override
   public boolean keyDown(int keycode) {
+    achievementTracker.hadInput = keycode != Keys.SPACE;
     switch (keycode) {
       case Keys.SPACE:
     	 if (GameState.paused) {
@@ -140,6 +141,7 @@ public class WorldInputProcessor implements InputProcessor {
    */
   @Override
   public boolean touchDown(int x, int y, int pointer, int button) {
+    achievementTracker.hadInput = true;
     clickedOnWorld = true;
     draggedSinceClick = false;
     cursorPos[0] = cursorPosWhenClicked[0] = x;
@@ -202,6 +204,7 @@ public class WorldInputProcessor implements InputProcessor {
    */
   @Override
   public boolean scrolled(float amountX, float amountY) {
+    achievementTracker.hadInput = true;
     world.zoom(amountY);
     return true;
   }

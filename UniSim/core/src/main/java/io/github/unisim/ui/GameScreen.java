@@ -42,7 +42,7 @@ public class GameScreen implements Screen {
     world = new World(achievementBar);
     managementMenu = new ManagementMenu(stage, world);
     worldInputProcessor = new WorldInputProcessor(world, managementMenu);
-    timer = new Timer(300_000);
+    timer = new Timer(1_000);
     infoBar = new InfoBar(stage, timer, world);
     buildingMenu = new BuildingMenu(stage, world);
     eventDisplay = new EventDisplay(stage, world.moneyTracker, world.satisfactionTracker);
@@ -73,6 +73,9 @@ public class GameScreen implements Screen {
               Achievement achievement = world.achievementManager.getAchievement(DefinedAchievements.Minimalist);
               achievementBar.setAchievement(achievement);
           }
+        }
+        if (world.achievementTracker.hadInput == false) {
+            world.achievementManager.unlockAchievement(DefinedAchievements.Useless);
         }
         Gdx.input.setInputProcessor(gameOverMenu.getInputProcessor());
       }
