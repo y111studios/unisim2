@@ -30,6 +30,10 @@ public class SatisfactionTracker implements ScoringObject {
         return satisfaction;
     }
 
+    public String getStringSatisfaction() {
+        return String.format("%.1f", satisfaction);
+    }
+
     /**
      * Updates the satisfaction of the students based on the buildings and the total number of students.
      * The previewBuilding is used to calculate the satisfaction without the building that has not been built yet.

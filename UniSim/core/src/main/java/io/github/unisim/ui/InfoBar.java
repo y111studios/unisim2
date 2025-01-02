@@ -47,7 +47,7 @@ public class InfoBar {
     this.timer = timer;
     this.world = world;
 
-    satisfactionLabel = new Label(world.satisfactionTracker.getSatisfaction() + "%", skin);
+    satisfactionLabel = new Label(world.satisfactionTracker.getStringSatisfaction() + "%", skin);
     moneyLabel = new Label("Money: $" + world.moneyTracker.getMoney(), skin);
     scoreLabel = new Label("Score: " + world.scoreTracker.getFinalScore(), skin);
 
@@ -91,7 +91,7 @@ public class InfoBar {
    * Called when the UI needs to be updated, usually on every frame.
    */
   public void update() {
-    satisfactionLabel.setText(world.satisfactionTracker.getSatisfaction() + "%");
+    satisfactionLabel.setText(world.satisfactionTracker.getStringSatisfaction() + "%");
     scoreLabel.setText("Score: " + world.scoreTracker.getFinalScore());
     moneyLabel.setText("Money: $" + world.moneyTracker.getMoney());
     timerLabel.setText(timer.getRemainingTime());
