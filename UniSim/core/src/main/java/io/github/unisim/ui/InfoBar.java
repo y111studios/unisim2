@@ -27,6 +27,7 @@ public class InfoBar {
   private Label moneyLabel;
   private Label timerLabel;
   private Label scoreLabel;
+  private Label satisfactionModifierLabel;
   private Texture pauseTexture = new Texture("ui/pause.png");
   private Texture playTexture = new Texture("ui/play.png");
   private Image pauseImage = new Image(pauseTexture);
@@ -34,6 +35,7 @@ public class InfoBar {
   private Timer timer;
   private Cell<Label> timerLabelCell;
   private Cell<Label> satisfacationLabelCell;
+  private Cell<Label> satisfactionModifierLabelCell;
   private Cell<Label> scoreLabelCell;
   private Cell<Image> pauseButtonCell;
   private Cell<Label> moneyLabelCell;
@@ -48,6 +50,7 @@ public class InfoBar {
     this.world = world;
 
     satisfactionLabel = new Label(world.satisfactionTracker.getStringSatisfaction() + "%", skin);
+    satisfactionModifierLabel = new Label("", skin);
     moneyLabel = new Label("Money: $" + world.moneyTracker.getMoney(), skin);
     scoreLabel = new Label("Score: " + world.scoreTracker.getFinalScore(), skin);
 
@@ -57,6 +60,7 @@ public class InfoBar {
     pauseButtonCell = infoTable.add(playImage).align(Align.left);
     timerLabelCell = infoTable.add(timerLabel).align(Align.left);
     satisfacationLabelCell = infoTable.add(satisfactionLabel).align(Align.left);
+    satisfactionModifierLabelCell = infoTable.add(satisfactionModifierLabel).align(Align.left);
     moneyLabelCell = infoTable.add(moneyLabel).align(Align.left);
     scoreLabelCell = infoTable.add(scoreLabel).align(Align.left);
 
@@ -99,6 +103,14 @@ public class InfoBar {
     } else {
         satisfactionLabel.setColor(1, 1, 1, 1);
     }
+    if (world.satisfactionTracker.getTotalModifierMultiplier() != 1) {
+        satisfactionModifierLabel.setText("x" + world.satisfactionTracker.getTotalModifierMultiplier());
+    } else if (world.satisfactionTracker.getTotalModifierAdditions() != 0) {
+        float additions = world.satisfactionTracker.getTotalModifierAdditions();
+        satisfactionModifierLabel.setText((additions > 0 ? "+" : "") + additions);
+    } else {
+        satisfactionModifierLabel.setText("");
+    }
     scoreLabel.setText("Score: " + world.scoreTracker.getFinalScore());
     moneyLabel.setText("Money: $" + world.moneyTracker.getMoney());
     timerLabel.setText(timer.getRemainingTime());
@@ -121,7 +133,10 @@ public class InfoBar {
     timerLabelCell.padLeft(height * 0.005f);
     satisfactionLabel.setFontScale(height * 0.002f);
     satisfacationLabelCell.width(height * 0.04f).height(height * 0.05f);
-    satisfacationLabelCell.padLeft(Math.min(width, height * 2) * 0.10f);
+    satisfacationLabelCell.padLeft(Math.min(width, height * 2) * 0.075f);
+    satisfactionModifierLabel.setFontScale(height * 0.002f);
+    satisfactionModifierLabelCell.width(height * 0.04f).height(height * 0.05f);
+    satisfactionModifierLabelCell.padLeft(Math.min(width, height * 2) * 0.02f);
     scoreLabel.setFontScale(height * 0.002f);
     scoreLabelCell.width(height * 0.04f).height(height * 0.05f);
     scoreLabelCell.padLeft(Math.min(width, height * 2) * 0.08f);

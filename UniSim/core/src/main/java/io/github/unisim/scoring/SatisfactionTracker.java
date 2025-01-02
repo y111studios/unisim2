@@ -32,7 +32,7 @@ public class SatisfactionTracker implements ScoringObject {
 
     /**
      * Returns the satisfaction as a string to one decimal place.
-     * 
+     *
      * @return The satisfaction as a string
      */
     public String getStringSatisfaction() {
@@ -69,6 +69,46 @@ public class SatisfactionTracker implements ScoringObject {
             }
         }
         modifiers.removeIf(SatisfactionModifier::isExpired);
+    }
+
+    /**
+     * Returns the total sum of all active modifiers that add to the satisfaction.
+     *
+     * @return The total sum of all active modifiers that add to the satisfaction
+     */
+    public float getTotalModifierAdditions() {
+        float sum = 0;
+
+        for (SatisfactionModifier modifier : modifiers) {
+            if (modifier.isExpired()) {
+                continue;
+            }
+            if (modifier.template == ScoreModifierTemplate.ADD) {
+                sum += modifier.value;
+            }
+        }
+
+        return sum;
+    }
+
+    /**
+     * Returns the total product of all active modifiers that multiply the satisfaction.
+     *
+     * @return The total product of all active modifiers that multiply the satisfaction
+     */
+    public float getTotalModifierMultiplier() {
+        float product = 1;
+
+        for (SatisfactionModifier modifier : modifiers) {
+            if (modifier.isExpired()) {
+                continue;
+            }
+            if (modifier.template == ScoreModifierTemplate.MUL) {
+                product *= modifier.value;
+            }
+        }
+
+        return product;
     }
 
     /**
