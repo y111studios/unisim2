@@ -30,6 +30,11 @@ public class SatisfactionTracker implements ScoringObject {
         return satisfaction;
     }
 
+    /**
+     * Returns the satisfaction as a string to one decimal place.
+     * 
+     * @return The satisfaction as a string
+     */
     public String getStringSatisfaction() {
         return String.format("%.1f", satisfaction);
     }
