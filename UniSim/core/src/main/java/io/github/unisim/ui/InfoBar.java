@@ -94,6 +94,8 @@ public class InfoBar {
     satisfactionLabel.setText(world.satisfactionTracker.getStringSatisfaction() + "%");
     if (world.satisfactionTracker.getSatisfaction() < 0) {
         satisfactionLabel.setColor(1, 0, 0, 1);
+    } else if (world.satisfactionTracker.getSatisfaction() > 100) {
+        satisfactionLabel.setColor(0, 1, 0, 1);
     } else {
         satisfactionLabel.setColor(1, 1, 1, 1);
     }
