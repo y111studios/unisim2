@@ -118,6 +118,11 @@ public class BuildingMenu {
         1000
     ));
 
+    // Register the buildings with the achievementTracker
+    for (Building building : buildings) {
+      world.achievementTracker.buildingsPlacedCount.put(building.texture, 0);
+    }
+
     //add arrows and label for each building type
     BuildingType temp = null;
     for (BuildingType type : BuildingType.values()) {

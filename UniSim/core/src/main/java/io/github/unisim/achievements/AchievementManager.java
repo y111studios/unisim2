@@ -111,6 +111,9 @@ public class AchievementManager {
         if (a.unlock()) {
             save();
         }
+        if (!sessionAchievements.contains(a)) {
+            Gdx.app.log("AchievementManager", "Achievement unlocked: " + a.name);
+        }
         return sessionAchievements.add(a);
     }
 
@@ -133,11 +136,10 @@ public class AchievementManager {
      */
     public boolean progressAchievement(DefinedAchievements achievement, float progress) {
         Achievement a = getAchievement(achievement);
-        if (a.progress(progress)) {
-            if (a.isUnlocked()) {
-                save();
-                return sessionAchievements.add(a);
-            }
+        boolean unlocked = a.progress(progress);
+        save();
+        if (unlocked) {
+            return sessionAchievements.add(a);
         }
         return false;
     }

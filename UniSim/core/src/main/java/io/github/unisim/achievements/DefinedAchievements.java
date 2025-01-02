@@ -14,8 +14,23 @@ public enum DefinedAchievements {
     Bankruptcy("Bankruptcy", "Lose all your money", ScoreModifierTemplate.ADD, 25f,
         true),
     Capitalist("Capitalist", "Earn 10,000 money", ScoreModifierTemplate.ADD, 100f,
-        false);
-
+        false),
+    LoveUni("I Love Uni", "Satisfaction remained above 75% for 3 minutes", ScoreModifierTemplate.MUL, 1.1f,
+        false),
+    Minimalist("Minimalist", "Place 5 buildings or less", ScoreModifierTemplate.ADD, 10f,
+        true),
+    Dropout("Dropout", "Delete a teaching building", ScoreModifierTemplate.ADD, 0f,
+        false),
+    OneOfEach("One of Everything", "Place one of each building", ScoreModifierTemplate.ADD, 50f,
+        false),
+    Useless("Useless", "Do nothing during a game", ScoreModifierTemplate.ADD, 0f,
+        true),
+    Overrated("Happiness is Overrated", "Let satisfaction fall below 10%", ScoreModifierTemplate.MUL, 1.1f,
+        true),
+    Hoarder("Achivement Hoarder", "Collect 10 useless achievements", ScoreModifierTemplate.ADD, 100f,
+        true),
+    Tried("You Tried", "Close the controls screen less than a second after opening it", ScoreModifierTemplate.ADD, 0f,
+        true);
 
     DefinedAchievements(String name, String description, ScoreModifierTemplate functionTemplate,
             float scoreModifierValue, boolean hidden) {
