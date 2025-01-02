@@ -162,7 +162,6 @@ public class WorldInputProcessor implements InputProcessor {
     clickedOnWorld = false;
     if (!draggedSinceClick && world.selectedBuilding != null && button == Input.Buttons.LEFT) {
       if (world.placeBuilding()) {
-        achievementTracker.buildingsPlaced += 1;
         managementMenu.updateElements();
         draggedSinceClick = true;
       }

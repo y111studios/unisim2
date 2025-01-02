@@ -41,7 +41,7 @@ public class GameScreen implements Screen {
     world = new World(achievementBar);
     managementMenu = new ManagementMenu(stage, world);
     worldInputProcessor = new WorldInputProcessor(world, managementMenu);
-    timer = new Timer(300_000);
+    timer = new Timer(3_000);
     infoBar = new InfoBar(stage, timer, world);
     buildingMenu = new BuildingMenu(stage, world);
     eventDisplay = new EventDisplay(stage, world.moneyTracker, world.satisfactionTracker);
@@ -67,7 +67,9 @@ public class GameScreen implements Screen {
     if (!GameState.paused && !GameState.gameOver) {
       if (!timer.tick(dt * 1000)) {
         GameState.gameOver = true;
-        if (world.achievementTracker.buildingsPlaced <= 5) {
+        int buildingsPlaced = world.achievementTracker.buildingsPlacedCount
+                                .values().stream().mapToInt(Integer::intValue).sum();
+        if (buildingsPlaced <= 5) {
           world.achievementManager.unlockAchievement(DefinedAchievements.Minimalist);
         }
         if (world.achievementTracker.hadInput == false) {

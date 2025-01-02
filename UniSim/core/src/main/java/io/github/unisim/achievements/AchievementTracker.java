@@ -11,10 +11,6 @@ import com.badlogic.gdx.graphics.Texture;
 public class AchievementTracker {
 
     /**
-     * Maintains a count of how many buildings have been place
-     */
-    public int buildingsPlaced;
-    /**
      * Tracks whether the satisfaction has reached 10 in this session
      */
     public boolean satisfactionHasReachedTen;
@@ -35,7 +31,6 @@ public class AchievementTracker {
      * Creates a new AchievementTracker and initialises all fields to their default values.
      */
     public AchievementTracker() {
-        buildingsPlaced = 0;
         satisfactionHasReachedTen = false;
         hadInput = false;
         timeSatisfactionReached75 = null;
