@@ -1,5 +1,7 @@
 package io.github.unisim.achievements;
 
+import java.time.Instant;
+
 /**
  * Class to track achievements conditions that do not follow the standard
  * progression system on the Achievement screen.
@@ -18,6 +20,10 @@ public class AchievementTracker {
      * Tracks whether an input has been received in this session
      */
     public boolean hadInput;
+    /**
+     * Tracks how long the satisfaction has been above 75
+     */
+    public Instant timeSatisfactionReached75;
 
     /**
      * Creates a new AchievementTracker and initialises all fields to their default values.
@@ -25,6 +31,8 @@ public class AchievementTracker {
     public AchievementTracker() {
         buildingsPlaced = 0;
         satisfactionHasReachedTen = false;
+        hadInput = false;
+        timeSatisfactionReached75 = null;
     }
 
 }

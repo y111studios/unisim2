@@ -1,5 +1,7 @@
 package io.github.unisim.world;
 
+import java.time.Duration;
+import java.time.Instant;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -113,9 +115,20 @@ public class World {
                     Achievement achievement = achievementManager.getAchievement(DefinedAchievements.Overrated);
                     achievementBar.setAchievement(achievement);
                 }
+            } else if (satisfactionTracker.getSatisfaction() >= 75) {
+                Instant now = Instant.now();
+                if (achievementTracker.timeSatisfactionReached75 == null) {
+                    achievementTracker.timeSatisfactionReached75 = now;
+                }
+                Duration timeSinceSatisfactionReached75 = Duration.between(achievementTracker.timeSatisfactionReached75, now);
+                if (timeSinceSatisfactionReached75.compareTo(Duration.ofSeconds(180)) >= 0) {
+                    if (achievementManager.unlockAchievement(DefinedAchievements.LoveUni)) {
+                        Achievement achievement = achievementManager.getAchievement(DefinedAchievements.LoveUni);
+                        achievementBar.setAchievement(achievement);
+                    }
+                }
             }
         }
-
     }
 
     // Check achievement conditions
