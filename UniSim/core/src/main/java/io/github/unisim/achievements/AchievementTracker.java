@@ -1,6 +1,8 @@
 package io.github.unisim.achievements;
 
 import java.time.Instant;
+import java.util.HashMap;
+import com.badlogic.gdx.graphics.Texture;
 
 /**
  * Class to track achievements conditions that do not follow the standard
@@ -24,6 +26,10 @@ public class AchievementTracker {
      * Tracks how long the satisfaction has been above 75
      */
     public Instant timeSatisfactionReached75;
+    /**
+     * Maintains a count of how many of each building instance has been placed
+     */
+    public HashMap<Texture, Integer> buildingsPlacedCount;
 
     /**
      * Creates a new AchievementTracker and initialises all fields to their default values.
@@ -33,6 +39,7 @@ public class AchievementTracker {
         satisfactionHasReachedTen = false;
         hadInput = false;
         timeSatisfactionReached75 = null;
+        buildingsPlacedCount = new HashMap<>();
     }
 
 }

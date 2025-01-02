@@ -142,6 +142,12 @@ public class World {
             achievementBar.setAchievement(achievementManager.getAchievement(DefinedAchievements.Capitalist));
         }
     }
+    if (achievementTracker.buildingsPlacedCount.values().stream().allMatch(x -> x >= 1)) {
+        if (achievementManager.unlockAchievement(DefinedAchievements.OneOfEach)) {
+            Achievement achievement = achievementManager.getAchievement(DefinedAchievements.OneOfEach);
+            achievementBar.setAchievement(achievement);
+        }
+    }
   }
 
   /**
@@ -450,6 +456,8 @@ public class World {
         selectedBuilding.capacity, selectedBuilding.cost
       )
     );
+    achievementTracker.buildingsPlacedCount.put(selectedBuilding.texture,
+        achievementTracker.buildingsPlacedCount.get(selectedBuilding.texture) + 1);
     selectedBuilding = null;
     return true;
   }
