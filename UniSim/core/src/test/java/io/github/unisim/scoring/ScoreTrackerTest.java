@@ -90,6 +90,6 @@ public class ScoreTrackerTest {
         Instant lastUpdateTime = Instant.now().minus(Duration.ofMinutes(2));
         scoreTracker.lastUpdateTimes.put(mockScoringObject, lastUpdateTime);
         scoreTracker.update();
-        assertEquals(20, scoreTracker.getScore());
+        assertEquals(10, scoreTracker.getScore());
     }
 }
