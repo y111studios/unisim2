@@ -71,7 +71,9 @@ public class GameScreen implements Screen {
           world.achievementManager.unlockAchievement(DefinedAchievements.Minimalist);
         }
         if (world.achievementTracker.hadInput == false) {
-            world.achievementManager.unlockAchievement(DefinedAchievements.Useless);
+            if (world.achievementManager.unlockAchievement(DefinedAchievements.Useless)) {
+                world.achievementManager.progressAchievement(DefinedAchievements.Hoarder, 0.1f);
+            }
         }
         Gdx.input.setInputProcessor(gameOverMenu.getInputProcessor());
       }
