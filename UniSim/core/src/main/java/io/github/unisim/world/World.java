@@ -95,9 +95,9 @@ public class World {
       int accomodationCapacity = buildingManager.getBuildingCapacities(BuildingType.SLEEPING);
       int payingStudents = Math.min(accomodationCapacity, numberOfStudents);
       moneyTracker.updateMoney(payingStudents);
+      satisfactionTracker.updateSatisfaction(buildingManager.getBuildings(), buildingManager.getPreviewBuilding(), numberOfStudents);
+      scoreTracker.update();
     }
-    satisfactionTracker.updateSatisfaction(buildingManager.getBuildings(), buildingManager.getPreviewBuilding(), numberOfStudents);
-    scoreTracker.update();
 
     // Check achievement conditions
 
