@@ -24,7 +24,7 @@ public class GameState {
   public static final Color UIPrimaryColour = new Color(0.250f, 0.326f, 0.865f, 1.0f);
   public static final Color UISecondaryColour = new Color(0.722f, 0.646f, 0.953f, 1.0f);
   public static final Skin defaultSkin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-  public static final BitmapFont iconTextFont = loadTtfFont("ui/MartianMonoNerdFont-Medium.ttf", 15);
+  public static final BitmapFont iconTextFont = loadTtfFont("ui/MartianMonoNerdFont-Medium.ttf", 13);
   public static final Settings settings = new Settings();
   public static final InputProcessor fullscreenInputProcessor = new FullscreenInputProcessor();
   public static final Screen gameScreen = new GameScreen();
