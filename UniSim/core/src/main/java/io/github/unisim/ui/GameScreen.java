@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.unisim.GameState;
 import io.github.unisim.Timer;
+import io.github.unisim.achievements.DefinedAchievements;
 import io.github.unisim.world.UiInputProcessor;
 import io.github.unisim.world.World;
 import io.github.unisim.world.WorldInputProcessor;
@@ -51,7 +52,7 @@ public class GameScreen implements Screen {
     inputMultiplexer.addProcessor(uiInputProcessor);
     inputMultiplexer.addProcessor(worldInputProcessor);
 
-    gameOverMenu = new GameOverMenu(world.scoreTracker, world.achievementManager);
+    gameOverMenu = new GameOverMenu(world.scoreTracker, world.achievementManager, world.achievementTracker);
   }
 
   @Override
@@ -66,6 +67,16 @@ public class GameScreen implements Screen {
     if (!GameState.paused && !GameState.gameOver) {
       if (!timer.tick(dt * 1000)) {
         GameState.gameOver = true;
+        int buildingsPlaced = world.achievementTracker.buildingsPlacedCount
+                                .values().stream().mapToInt(Integer::intValue).sum();
+        if (buildingsPlaced <= 5) {
+          world.achievementManager.unlockAchievement(DefinedAchievements.Minimalist);
+        }
+        if (world.achievementTracker.hadInput == false) {
+            if (world.achievementManager.unlockAchievement(DefinedAchievements.Useless)) {
+                world.achievementManager.progressAchievement(DefinedAchievements.Hoarder, 0.1f);
+            }
+        }
         Gdx.input.setInputProcessor(gameOverMenu.getInputProcessor());
       }
 

@@ -88,8 +88,8 @@ public class AchievementsTest {
         Instant unlockTime = Instant.now();
         ScoreModifierTemplate functionTemplate = ScoreModifierTemplate.ADD;
         float scoreModifierValue = 0;
-        float progress = 0;
-        boolean unlocked = false;
+        float progress = 1;
+        boolean unlocked = true;
         boolean hidden = false;
 
         Achievement achievement = new Achievement(name, description, unlockTime, functionTemplate, scoreModifierValue, progress, unlocked, hidden);
@@ -97,13 +97,9 @@ public class AchievementsTest {
 
         assertNotNull(jsonValue);
         assertEquals(name, jsonValue.getString("name"));
-        assertEquals(description, jsonValue.getString("description"));
         assertEquals(unlockTime.toEpochMilli(), jsonValue.getLong("unlockTime"));
-        assertEquals(functionTemplate.toString(), jsonValue.getString("functionTemplate"));
-        assertEquals(scoreModifierValue, jsonValue.getFloat("scoreModifierValue"));
         assertEquals(progress, jsonValue.getFloat("progress"));
         assertEquals(unlocked, jsonValue.getBoolean("unlocked"));
-        assertEquals(hidden, jsonValue.getBoolean("hidden"));
     }
 
     @Test

@@ -3,6 +3,7 @@ package io.github.unisim.ui;
 import java.time.Duration;
 import java.util.function.Function;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import io.github.unisim.GameState;
 import io.github.unisim.achievements.Achievement;
 import io.github.unisim.utils.ResizableComponents;
@@ -44,7 +46,7 @@ public class AchievementBar {
         iconCell = table.add(iconImage).center();
 
         Table rightColumn = new Table();
-        titleLabel = new Label("", skin);
+        titleLabel = new Label("", new LabelStyle(GameState.iconTextFont, Color.WHITE));
         rightColumn.add(titleLabel).center().row();
         descriptionLabel = new Label("", skin);
         rightColumn.add(descriptionLabel).center();

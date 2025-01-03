@@ -31,12 +31,37 @@ public class Achievement {
      * @param definition the definition of the achievement
      */
     Achievement(DefinedAchievements definition) {
-        this(definition.name, definition.description, Instant.EPOCH, definition.functionTemplate,
-                definition.scoreModifierValue, 0, false, definition.hidden);
+        this(definition, Instant.EPOCH, 0, false);
     }
 
     /**
-     * Internal all arg constructor
+     * Internal constructor for creating an achievement using the DefinedAchievements definition and
+     * the JSON representation of the locking state of the achievement.
+     *
+     * <p>
+     * This constructor enforces that the unlock time must be set to the epoch if the achievement is locked,
+     * and that the progress must be 1 if the achievement is unlocked. If the unlock time is null and the
+     * achievement is unlocked, the unlock time is set to the current time.
+     * </p>
+     *
+     * @param definition the definition of the achievement
+     * @param unlockTime the time the achievement was unlocked
+     * @param progress the progress towards the achievement
+     * @param unlocked whether the achievement is unlocked
+     */
+    Achievement(DefinedAchievements definition, Instant unlockTime, float progress, boolean unlocked) {
+        this(definition.name, definition.description, unlockTime, definition.functionTemplate,
+                definition.scoreModifierValue, progress, unlocked, definition.hidden);
+    }
+
+    /**
+     * Internal all arg constructor that validates the parameters.
+     *
+     * <p>
+     * This constructor enforces that the unlock time must be set to the epoch if the achievement is locked,
+     * and that the progress must be 1 if the achievement is unlocked. If the unlock time is null and the
+     * achievement is unlocked, the unlock time is set to the current time.
+     * </p>
      *
      * @param name the name of the achievement
      * @param description the description of the achievement
@@ -46,17 +71,32 @@ public class Achievement {
      * @param progress the progress towards the achievement
      * @param unlocked whether the achievement is unlocked
      * @param hidden whether the achievement is hidden
+     *
+     * @deprecated This constructor is deprecated and should not be used. Once all references
+     * to this have been removed, this constructor will be made private. Use the other constructors
+     * instead as they provide stricter validation.
      */
+    @Deprecated(forRemoval = true)
     Achievement(String name, String description, Instant unlockTime,
             ScoreModifierTemplate functionTemplate, float scoreModifierValue, float progress,
             boolean unlocked, boolean hidden) {
         this.name = name;
         this.description = description;
-        this.unlockTime = unlockTime;
+        if (!unlocked) {
+            this.unlockTime = Instant.EPOCH;
+        } else if (unlockTime == null) {
+            this.unlockTime = Instant.now();
+        } else {
+            this.unlockTime = unlockTime;
+        }
         this.functionTemplate = functionTemplate;
         this.scoreModifierValue = scoreModifierValue;
-        this.progress = progress;
         this.unlocked = unlocked;
+        if (unlocked) {
+            this.progress = 1;
+        } else {
+            this.progress = progress;
+        }
         this.hidden = hidden;
     }
 
@@ -155,20 +195,16 @@ public class Achievement {
     }
 
     /**
-     * Returns a {@link JsonValue} representation of this achievement.
+     * Returns a {@link JsonValue} representation of the non-final fields of this achievement.
      *
      * @return a {@link JsonValue} representation of this achievement
      */
     public JsonValue toJsonValue() {
         JsonValue json = new JsonValue(JsonValue.ValueType.object);
         json.addChild("name", new JsonValue(name));
-        json.addChild("description", new JsonValue(description));
         json.addChild("unlockTime", new JsonValue(unlockTime.toEpochMilli()));
-        json.addChild("functionTemplate", new JsonValue(functionTemplate.name()));
-        json.addChild("scoreModifierValue", new JsonValue(scoreModifierValue));
         json.addChild("progress", new JsonValue(progress));
         json.addChild("unlocked", new JsonValue(unlocked));
-        json.addChild("hidden", new JsonValue(hidden));
         return json;
     }
 

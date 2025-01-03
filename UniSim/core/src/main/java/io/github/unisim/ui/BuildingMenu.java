@@ -84,9 +84,9 @@ public class BuildingMenu {
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/tennisCourt.png")),
         0.0025f,
-        new Vector2(1f, -2.4f),
+        new Vector2(1f, -1.0f),
         new Point(),
-        new Point(6, 9),
+        new Point(7, 10),
         false,
         BuildingType.RECREATION,
         "Tennis Court",
@@ -105,6 +105,23 @@ public class BuildingMenu {
         100,
         1000
     ));
+    buildings.add(new Building(
+        new Texture(Gdx.files.internal("buildings/sleep_white.png")),
+        0.108f,
+        new Vector2(1.0f, -0.9f),
+        new Point(),
+        new Point(10, 10),
+        false,
+        BuildingType.SLEEPING,
+        "Student Accomodation",
+        100,
+        1000
+    ));
+
+    // Register the buildings with the achievementTracker
+    for (Building building : buildings) {
+      world.achievementTracker.buildingsPlacedCount.put(building.texture, 0);
+    }
 
     //add arrows and label for each building type
     BuildingType temp = null;
@@ -162,6 +179,9 @@ public class BuildingMenu {
         }
       });
       navTableMap.get(buildings.get(i).type).addToBuildingTable(buildingImages.get(i));
+      Label costLabel = new Label("$" + String.valueOf(buildings.get(i).cost), new Skin(Gdx.files.internal("ui/uiskin.json")));
+      costLabel.setAlignment(Align.center);
+      navTableMap.get(buildings.get(i).type).addToCostTable(costLabel);
     }
 
     buildingInfoTable.add(buildingInfoLabel).expandX().align(Align.center).padBottom(25);

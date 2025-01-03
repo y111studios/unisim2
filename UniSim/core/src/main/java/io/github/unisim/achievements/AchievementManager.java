@@ -111,6 +111,9 @@ public class AchievementManager {
         if (a.unlock()) {
             save();
         }
+        if (!sessionAchievements.contains(a)) {
+            Gdx.app.log("AchievementManager", "Achievement unlocked: " + a.name);
+        }
         return sessionAchievements.add(a);
     }
 
@@ -133,11 +136,10 @@ public class AchievementManager {
      */
     public boolean progressAchievement(DefinedAchievements achievement, float progress) {
         Achievement a = getAchievement(achievement);
-        if (a.progress(progress)) {
-            if (a.isUnlocked()) {
-                save();
-                return sessionAchievements.add(a);
-            }
+        boolean unlocked = a.progress(progress);
+        save();
+        if (unlocked) {
+            return sessionAchievements.add(a);
         }
         return false;
     }
@@ -160,87 +162,69 @@ public class AchievementManager {
      * </p>
      */
     public final void load() {
+        boolean errorsCorrected = false;
         achievements = new ArrayList<>();
         JsonValue root = new JsonReader().parse(fileHandle);
         for (JsonValue json : root) {
+            if (!json.has("name")) {
+                Gdx.app.error("AchievementManager load", "Achievement missing name field -- skipping");
+                continue;
+            }
             String name = json.getString("name");
-            String description = json.getString("description");
-            Instant unlockTime = Instant.ofEpochMilli(json.getLong("unlockTime"));
-            ScoreModifierTemplate functionTemplate =
-                    ScoreModifierTemplate.valueOf(json.getString("functionTemplate"));
-            float scoreModifierValue = json.getFloat("scoreModifierValue");
-            float progress = json.getFloat("progress");
-            boolean unlocked = json.getBoolean("unlocked");
-            boolean hidden = json.getBoolean("hidden");
-            Achievement achievement = new Achievement(name, description, unlockTime,
-                    functionTemplate, scoreModifierValue, progress, unlocked, hidden);
+            DefinedAchievements definition = DefinedAchievements.getByName(name).orElse(null);
+            if (definition == null) {
+                Gdx.app.error("AchievementManager load",
+                        "Failed to load achievement with name: " + name + " has no definition -- removing");
+                errorsCorrected = true;
+                continue;
+            }
+            boolean unlocked;
+            if (!json.has("unlocked")) {
+                errorsCorrected = true;
+                Gdx.app.error("AchievementManager load", "Achievement missing unlocked field -- assuming locked");
+                achievements.add(new Achievement(definition));
+                continue;
+            }
+            unlocked = json.getBoolean("unlocked");
+            Instant unlockTime;
+            if (json.has("unlockTime")) {
+                unlockTime = Instant.ofEpochMilli(json.getLong("unlockTime"));
+            } else {
+                errorsCorrected = true;
+                if (unlocked) {
+                    Gdx.app.error("AchievementManager load", "Unlocked achievement missing unlockTime field -- assuming now");
+                    unlockTime = Instant.now();
+                } else {
+                    Gdx.app.error("AchievementManager load", "Locked achievement missing unlockTime field -- defaulting");
+                    unlockTime = Instant.EPOCH;
+                }
+            }
+            float progress;
+            if (json.has("progress")) {
+                progress = json.getFloat("progress");
+            } else {
+                errorsCorrected = true;
+                if (unlocked) {
+                    Gdx.app.error("AchievementManager load", "Unlocked achievement missing progress field -- assuming 1");
+                    progress = 1;
+                } else {
+                    Gdx.app.error("AchievementManager load", "Locked achievement missing progress field -- assuming 0");
+                    progress = 0;
+                }
+            }
+            Achievement achievement = new Achievement(definition, unlockTime, progress, unlocked);
             achievements.add(achievement);
-        }
-        if (updateAchievementsToDefinitions(achievements)) {
-            // Save the updated achievements since there was a change
-            save();
         }
         Optional<List<DefinedAchievements>> undefinedAchievements =
                 DefinedAchievements.getMissingAchievements(achievements);
         if (undefinedAchievements.isPresent()) {
+            Gdx.app.error("AchievementManager load", "Missing achievements found -- adding");
             undefinedAchievements.get().forEach(a -> achievements.add(new Achievement(a)));
             save();
         }
-    }
-
-    /**
-     * Updates the fixed fields of the achievements to match the definitions.
-     *
-     * <p>
-     * This function works in place and modifies the list of achievements internally. This creates a
-     * new instance of the achievement if any of the fixed fields do not match the definitions that
-     * replace the old achievement.
-     * </p>
-     * <p>
-     * This method will update the achievements to match the definitions. This uses the names of
-     * the achievements to match them to the definitions, so the names must be unique and not change.
-     * </p>
-     * <p>
-     * This method will update the fixed fields defined in the {@link DefinedAchievements} enum. This
-     * function will not modify the changing fields of the achievements, such as the progress or
-     * unlock fields.
-     * </p>
-     *
-     * @param achievements the list of achievements to update
-     * @return if any achievements were updated
-     */
-    private static final boolean updateAchievementsToDefinitions(List<Achievement> achievements) {
-        boolean hadUpdate = false;
-        int index = 0;
-        for (Achievement a : achievements) {
-            Optional<DefinedAchievements> definitionOptional = DefinedAchievements.getByName(a.name);
-            if (definitionOptional.isEmpty()) {
-                continue;
-            }
-            DefinedAchievements definition = definitionOptional.get();
-            boolean shouldUpdate = !(a.description.equals(definition.description)
-                    && a.functionTemplate.equals(definition.functionTemplate)
-                    && a.scoreModifierValue == definition.scoreModifierValue
-                    && a.hidden == definition.hidden);
-            if (shouldUpdate) {
-                hadUpdate = true;
-                Achievement newAchievement = new Achievement(definition);
-                // Maintain the tracked fields states
-                newAchievement.progress = a.progress;
-                newAchievement.unlocked = a.unlocked;
-                newAchievement.unlockTime = a.unlockTime;
-                achievements.set(index, newAchievement);
-                Gdx.app.log("AchievementManager update",
-                        "Updated achievement " + a.name + " to match definition");
-            }
-            index += 1;
+        if (errorsCorrected) {
+            save();
         }
-        // Log if there was an update
-        if (hadUpdate) {
-            Gdx.app.log("AchievementManager update", "Updated achievements to match definitions");
-            return true;
-        }
-        return false;
     }
 
     /**

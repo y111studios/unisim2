@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.function.Function;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -12,11 +15,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.unisim.GameState;
 import io.github.unisim.building.BuildingType;
 import io.github.unisim.utils.ResizableComponents;
@@ -38,7 +43,8 @@ public class ManagementMenu {
     private Label studentEnrollmentLabel;
     private TextField studentEnrollmentField;
     private Table buildingCapacityTable;
-    private Map<BuildingType, Cell<Label>> buildingCapacityLabels;
+    private Map<BuildingType, Label> buildingCapacityLabels;
+    private Map<BuildingType, ProgressBar> buildingCapacityBars;
 
     private ResizableComponents resizableComponents;
 
@@ -47,23 +53,42 @@ public class ManagementMenu {
 
         background = new ShapeActor(GameState.UIPrimaryColour);
         table = new Table();
-        
-        buildingCapacityTable = new Table();
-        buildingCapacityLabels = new HashMap<>(BuildingType.values().length);
-        buildingCapacityTable.setPosition(normalisedHiddenPadding * stage.getWidth(), normalisedHeight * stage.getHeight(), 0);
-        buildingCapacityTable.add(new Label("Accomodation Capacity", skin)).left().padRight(15);
-        buildingCapacityLabels.put(BuildingType.SLEEPING, buildingCapacityTable.add(new Label("0", skin)));
-        buildingCapacityTable.row().padTop(10);
-        buildingCapacityTable.add(new Label("Catering Capacity", skin)).left().padRight(15);
-        buildingCapacityLabels.put(BuildingType.EATING, buildingCapacityTable.add(new Label("0", skin)));
-        buildingCapacityTable.row().padTop(10);
-        buildingCapacityTable.add(new Label("Teaching Capacity", skin)).left().padRight(15);
-        buildingCapacityLabels.put(BuildingType.LEARNING, buildingCapacityTable.add(new Label("0", skin)));
-        buildingCapacityTable.row().padTop(10);
-        buildingCapacityTable.add(new Label("Recreational Capacity", skin)).left().padRight(15);
-        buildingCapacityLabels.put(BuildingType.RECREATION, buildingCapacityTable.add(new Label("0", skin)));
 
-        table.add(buildingCapacityTable).expandX().row();
+        buildingCapacityTable = new Table();
+        Label capacityTitleLabel = new Label("Building Capacities", skin);
+        Table leftColumnTable = new Table();
+        Table rightColumnTable = new Table();
+        buildingCapacityTable.add(capacityTitleLabel).colspan(2).center().padBottom(10).row();
+        buildingCapacityTable.add(leftColumnTable).padRight(10);
+        buildingCapacityTable.add(rightColumnTable).row();
+        buildingCapacityLabels = new HashMap<>(BuildingType.values().length);
+        buildingCapacityBars = new HashMap<>(BuildingType.values().length);
+        for (BuildingType type : BuildingType.values()) {
+            buildingCapacityLabels.put(type, new Label("0", skin));
+            buildingCapacityBars.put(type, new ProgressBar(0, 1, 0.001f, false, getBarStyle(type, 25)));
+        }
+        // Initialise the left column
+        leftColumnTable.add(new Label("Accomodation Capacity", skin)).left().colspan(2).center();
+        leftColumnTable.row().padTop(10);
+        leftColumnTable.add(buildingCapacityBars.get(BuildingType.SLEEPING));
+        leftColumnTable.add(buildingCapacityLabels.get(BuildingType.SLEEPING));
+        leftColumnTable.row().padTop(10);
+        leftColumnTable.add(new Label("Catering Capacity", skin)).left().colspan(2).center();
+        leftColumnTable.row().padTop(10);
+        leftColumnTable.add(buildingCapacityBars.get(BuildingType.EATING));
+        leftColumnTable.add(buildingCapacityLabels.get(BuildingType.EATING));
+        // Initialise the right column
+        rightColumnTable.add(new Label("Teaching Capacity", skin)).left().colspan(2).center();
+        rightColumnTable.row().padTop(10);
+        rightColumnTable.add(buildingCapacityBars.get(BuildingType.LEARNING));
+        rightColumnTable.add(buildingCapacityLabels.get(BuildingType.LEARNING));
+        rightColumnTable.row().padTop(10);
+        rightColumnTable.add(new Label("Recreational Capacity", skin)).left().colspan(2).center();
+        rightColumnTable.row().padTop(10);
+        rightColumnTable.add(buildingCapacityBars.get(BuildingType.RECREATION));
+        rightColumnTable.add(buildingCapacityLabels.get(BuildingType.RECREATION));
+
+        table.add(buildingCapacityTable).colspan(2).expandX().row();
         table.row().padTop(10);
 
         studentEnrollmentLabel = new Label("Student Enrollment", skin);
@@ -96,20 +121,76 @@ public class ManagementMenu {
             .addActor(table)
             .setNormalisedWidth(normalisedWidth)
             .setNormalisedHeight(normalisedHeight)
-            .setNormalisedX(normalisedLeftPadding)
+            .setNormalisedX(normalisedHiddenPadding)
             .setNormalisedY(normalisedTopPadding)
             .build();
-
-        resizableComponents.setNormalisedX(1);
 
         stage.addActor(background);
         stage.addActor(table);
     }
 
-    void updateCapacityTable() {
-        for (BuildingType type : BuildingType.values()) {
-            buildingCapacityLabels.get(type).getActor().setText(Integer.toString(world.getBuildingCount(type)));
+    private Color getTypeColor(BuildingType type) {
+        switch (type) {
+            case SLEEPING:
+                return new Color(0x0A_4C_A6_FF);
+            case EATING:
+                return new Color(0x0A_A6_1F_FF);
+            case LEARNING:
+                return new Color(0xA6_58_0A_FF);
+            case RECREATION:
+                return new Color(0xA6_0A_0A_FF);
+            default:
+                // Should never happen but provides debug information
+                return Color.PINK;
         }
+    }
+
+    private ProgressBarStyle getBarStyle(BuildingType type, int height) {
+        Pixmap pixmap = new Pixmap(1, height, Pixmap.Format.RGB888);
+        pixmap.setColor(Color.BLACK);
+        pixmap.fill();
+        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(new Texture(pixmap));
+        pixmap.setColor(getTypeColor(type));
+        pixmap.fill();
+        ProgressBarStyle barStyle = new ProgressBarStyle(backgroundDrawable, new TextureRegionDrawable(new Texture(pixmap)));
+        barStyle.knobBefore = barStyle.knob;
+        return barStyle;
+    }
+
+    void updateCapacityTable() {
+        final Map<BuildingType, Integer> capacities = new HashMap<>(BuildingType.values().length);
+        int max = 0;
+        int min = 0;
+        for (BuildingType type : BuildingType.values()) {
+            Integer capacity = world.getBuildingCapacities(type);
+            capacities.put(type, capacity);
+            if (capacity > max) {
+                max = capacity;
+            } else if (capacity < min) {
+                min = capacity;
+            }
+        }
+        int range = max - min;
+        for (BuildingType type : BuildingType.values()) {
+            Label label = buildingCapacityLabels.get(type);
+            label.setText(capacities.get(type).toString());
+            ProgressBar bar = buildingCapacityBars.get(type);
+            bar.setValue((float) (range - capacities.get(type)) / range);
+        }
+        updateLabelPositions();
+    }
+
+    void updateLabelPositions() {
+        for (BuildingType type : BuildingType.values()) {
+            Label label = buildingCapacityLabels.get(type);
+            ProgressBar bar = buildingCapacityBars.get(type);
+            label.setX(bar.getX() + (bar.getWidth() - label.getWidth()) / 2);
+            label.setY(bar.getY() + (bar.getHeight() - label.getHeight()) / 2);
+        }
+    }
+
+    public void updateElements() {
+        updateCapacityTable();
     }
 
     void submitToWorld() {
@@ -124,6 +205,7 @@ public class ManagementMenu {
 
     public void resize(int width, int height) {
         resizableComponents.resize(width, height);
+        updateLabelPositions();
     }
 
     public void hide() {
@@ -137,7 +219,7 @@ public class ManagementMenu {
     }
 
     public void show() {
-        updateCapacityTable();
+        updateElements();
         Function<Void, Action> actionGenerator = (Void) -> Actions.sequence(
             Actions.moveTo(normalisedLeftPadding * resizableComponents.getStageWidth(), resizableComponents.getY(), 0.33f, Interpolation.fastSlow),
             Actions.run(() -> {

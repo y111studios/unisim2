@@ -1,5 +1,7 @@
 package io.github.unisim.world;
 
+import java.time.Duration;
+import java.time.Instant;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,7 +19,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
+import io.github.unisim.achievements.Achievement;
 import io.github.unisim.achievements.AchievementManager;
+import io.github.unisim.achievements.AchievementTracker;
 import io.github.unisim.achievements.DefinedAchievements;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingManager;
@@ -59,9 +63,10 @@ public class World {
   public Building selectedBuilding;
   public boolean selectedBuildingUpdated;
   public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();
-  public MoneyTracker moneyTracker = new MoneyTracker(500);
+  public MoneyTracker moneyTracker = new MoneyTracker(1000);
   public ScoreTracker scoreTracker = new ScoreTracker();
   public AchievementManager achievementManager = new AchievementManager();
+  public AchievementTracker achievementTracker = new AchievementTracker();
   public AchievementBar achievementBar;
   public int numberOfStudents;
   private float minX = 0f; //* Camera bounds for panning and zooming */
@@ -92,10 +97,39 @@ public class World {
 
   public void update() {
     if (!GameState.gameOver && !GameState.paused) {
-      moneyTracker.updateMoney();
+      int accomodationCapacity = buildingManager.getBuildingCapacities(BuildingType.SLEEPING);
+      int payingStudents = Math.min(accomodationCapacity, numberOfStudents);
+      moneyTracker.updateMoney(payingStudents);
+      satisfactionTracker.updateSatisfaction(buildingManager.getBuildings(), buildingManager.getPreviewBuilding(), numberOfStudents);
+      scoreTracker.update();
+
+        // Check achivement conditions
+
+        if (!achievementTracker.satisfactionHasReachedTen && satisfactionTracker.getSatisfaction() >= 10) {
+            achievementTracker.satisfactionHasReachedTen = true;
+        }
+        achievementTracker.satisfactionHasReachedTen |= satisfactionTracker.getSatisfaction() >= 10;
+        if (achievementTracker.satisfactionHasReachedTen) {
+            if (satisfactionTracker.getSatisfaction() <= 10) {
+                if (achievementManager.unlockAchievement(DefinedAchievements.Overrated)) {
+                    Achievement achievement = achievementManager.getAchievement(DefinedAchievements.Overrated);
+                    achievementBar.setAchievement(achievement);
+                }
+            } else if (satisfactionTracker.getSatisfaction() >= 75) {
+                Instant now = Instant.now();
+                if (achievementTracker.timeSatisfactionReached75 == null) {
+                    achievementTracker.timeSatisfactionReached75 = now;
+                }
+                Duration timeSinceSatisfactionReached75 = Duration.between(achievementTracker.timeSatisfactionReached75, now);
+                if (timeSinceSatisfactionReached75.compareTo(Duration.ofSeconds(180)) >= 0) {
+                    if (achievementManager.unlockAchievement(DefinedAchievements.LoveUni)) {
+                        Achievement achievement = achievementManager.getAchievement(DefinedAchievements.LoveUni);
+                        achievementBar.setAchievement(achievement);
+                    }
+                }
+            }
+        }
     }
-    satisfactionTracker.updateSatisfaction(buildingManager.getBuildings(), buildingManager.getPreviewBuilding(), numberOfStudents);
-    scoreTracker.update();
 
     // Check achievement conditions
 
@@ -106,6 +140,12 @@ public class World {
     } else if (moneyTracker.getMoney() >= 10_000) {
         if (achievementManager.unlockAchievement(DefinedAchievements.Capitalist)) {
             achievementBar.setAchievement(achievementManager.getAchievement(DefinedAchievements.Capitalist));
+        }
+    }
+    if (achievementTracker.buildingsPlacedCount.values().stream().allMatch(x -> x >= 1)) {
+        if (achievementManager.unlockAchievement(DefinedAchievements.OneOfEach)) {
+            Achievement achievement = achievementManager.getAchievement(DefinedAchievements.OneOfEach);
+            achievementBar.setAchievement(achievement);
         }
     }
   }
@@ -416,6 +456,8 @@ public class World {
         selectedBuilding.capacity, selectedBuilding.cost
       )
     );
+    achievementTracker.buildingsPlacedCount.put(selectedBuilding.texture,
+        achievementTracker.buildingsPlacedCount.get(selectedBuilding.texture) + 1);
     selectedBuilding = null;
     return true;
   }
@@ -424,6 +466,12 @@ public class World {
     Building building = buildingManager.getBuildingAt(location);
     if (building == null) {
         return false;
+    }
+    if (building.type == BuildingType.LEARNING) {
+        if (achievementManager.unlockAchievement(DefinedAchievements.Dropout)) {
+            Achievement achievement = achievementManager.getAchievement(DefinedAchievements.Dropout);
+            achievementBar.setAchievement(achievement);
+        }
     }
     moneyTracker.addMoney((int) (building.cost * 0.25f));
     boolean removed = buildingManager.removeBuilding(building);
@@ -482,5 +530,9 @@ public class World {
 
   public Iterable<Building> getBuildings() {
     return buildingManager.getBuildings();
+  }
+
+  public Integer getBuildingCapacities(BuildingType type) {
+    return buildingManager.getBuildingCapacities(type);
   }
 }
