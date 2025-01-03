@@ -2,11 +2,13 @@ package io.github.unisim.ui;
 
 import java.time.Duration;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -51,7 +53,7 @@ public class InfoBar {
     this.world = world;
 
     satisfactionLabel = new Label(world.satisfactionTracker.getStringSatisfaction() + "%", skin);
-    satisfactionModifierLabel = new Label("", skin);
+    satisfactionModifierLabel = new Label("", new LabelStyle(GameState.iconTextFont, Color.WHITE));
     moneyLabel = new Label("Money: $" + world.moneyTracker.getMoney(), skin);
     scoreLabel = new Label("Score: " + world.scoreTracker.getFinalScore(), skin);
 
@@ -114,7 +116,7 @@ public class InfoBar {
     }
     if (sb.length() != 0) {
         Duration remainingTime = world.satisfactionTracker.getLongestModifierRemainingDuration();
-        sb.append(String.format("    %02ds", remainingTime.getSeconds()));
+        sb.append(String.format("  %02ds", remainingTime.getSeconds()));
     }
     satisfactionModifierLabel.setText(sb.toString());
     scoreLabel.setText("Score: " + world.scoreTracker.getFinalScore());

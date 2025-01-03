@@ -46,7 +46,7 @@ public class GameState {
     FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 
     parameter.size = size;
-    parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "";
+    parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "";
 
     BitmapFont font = generator.generateFont(parameter);
     generator.dispose();
