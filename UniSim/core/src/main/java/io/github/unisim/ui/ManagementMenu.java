@@ -175,7 +175,7 @@ public class ManagementMenu {
             Label label = buildingCapacityLabels.get(type);
             label.setText(capacities.get(type).toString());
             ProgressBar bar = buildingCapacityBars.get(type);
-            bar.setValue((float) (range - capacities.get(type)) / range);
+            bar.setValue((float) (capacities.get(type) - min) / range);
         }
         updateLabelPositions();
     }
