@@ -55,6 +55,11 @@ public class AchievementManagerTest {
 
     @BeforeEach
     public void setUp() {
+        // Cleanup previous test file
+        if (testFileHandle.exists()) {
+            testFileHandle.writeString("[]", false);
+        }
+        // Create a new achievement manager
         achievementManager = new AchievementManager(testFileHandle);
     }
 
@@ -116,5 +121,28 @@ public class AchievementManagerTest {
         assertTrue(achievementManager.unlockAchievement(toUnlock));
         boolean result = achievementManager.unlockAchievement(toUnlock);
         assertFalse(result);
+    }
+
+    // Testing progressAchievement
+    @Test
+    public void testProgressAchievement() {
+        DefinedAchievements toProgress = DefinedAchievements.values()[0];
+        assertFalse(achievementManager.progressAchievement(toProgress, 0.5f));
+        assertFalse(achievementManager.sessionAchievements.contains(achievementManager.getAchievement(toProgress)));
+    }
+
+    @Test
+    public void testProgressAchievementToUnlock() {
+        DefinedAchievements toProgress = DefinedAchievements.values()[0];
+        assertTrue(achievementManager.progressAchievement(toProgress, 1));
+        assertTrue(achievementManager.sessionAchievements.contains(achievementManager.getAchievement(toProgress)));
+    }
+
+    @Test
+    public void testProgressAchievementToUnlockAndUnlock() {
+        DefinedAchievements toProgress = DefinedAchievements.values()[0];
+        assertTrue(achievementManager.progressAchievement(toProgress, 1));
+        assertFalse(achievementManager.unlockAchievement(toProgress)); // Achievement should already be unlocked
+        assertTrue(achievementManager.sessionAchievements.contains(achievementManager.getAchievement(toProgress)));
     }
 }

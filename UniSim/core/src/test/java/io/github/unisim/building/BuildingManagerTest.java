@@ -33,8 +33,6 @@ public class BuildingManagerTest {
     private SpriteBatch batch;
 
     private static ShaderProgram mockShader;
-    // Precision value of IEEE 754 single-precision floating point
-    private static final float EPSILON = (float) Math.pow(2, -23);
 
     @BeforeAll
     static void initialiseApplication() {
@@ -114,14 +112,14 @@ public class BuildingManagerTest {
         buildingManager.placeBuilding(building);
         boolean removed = buildingManager.removeBuilding(building);
         assertTrue(removed);
-        assertEquals(0, buildingManager.getBuildingCount(buildingType.RECREATION));
+        assertEquals(0, buildingManager.getBuildingCount(BuildingType.RECREATION));
     }
 
     @Test
     public void testRemoveBuildingWithNoBuilding() {
         boolean removed = buildingManager.removeBuilding(building);
         assertFalse(removed);
-        assertEquals(0, buildingManager.getBuildingCount(buildingType.RECREATION));
+        assertEquals(0, buildingManager.getBuildingCount(BuildingType.RECREATION));
     }
 
     // Testing getBuildingCount
@@ -143,22 +141,9 @@ public class BuildingManagerTest {
         building.texture = new Texture(Gdx.files.internal("buildings/library.png"));
         batch.begin();
         buildingManager.drawBuilding(building, batch);
-        // float colorA = (float) getPrivateField(batch, "color.a"); // Alpha
-        // assertEquals(1.0f, colorA);
         Texture texture = (Texture) getPrivateField(batch, "lastTexture"); // Texture
+        buildingManager.render(batch);
         assertEquals(building.texture, texture);
-        // float x = (float) getPrivateField(batch, "invTexWidth"); // X position
-        // assertEquals(0, x, EPSILON);
-        // float y = (float) getPrivateField(batch, "invTexHeight");  // Y position
-        // assertEquals(0, y, EPSILON);
-        // float width = (float) getPrivateField(batch, "invTexWidth"); // Width
-        // assertEquals(building.texture.getWidth(), width, EPSILON);
-        // float height = (float) getPrivateField(batch, "invTexHeight"); // Height
-        // assertEquals(building.texture.getHeight(), height, EPSILON);
-        // boolean flipX = (boolean) getPrivateField(batch, "flipX"); // Flip X
-        // assertEquals(false, flipX);
-        // boolean flipY = (boolean) getPrivateField(batch, "flipY"); // Flip Y
-        // assertEquals(false, flipY);
     }
 
     @Test
@@ -170,22 +155,9 @@ public class BuildingManagerTest {
         batch.begin();
         buildingManager.setPreviewBuilding(building);
         buildingManager.drawBuilding(building, batch);
-        // float colorA = (float) getPrivateField(batch, "color.a"); // Alpha
-        // assertEquals(0.5f, colorA);
         Texture texture = (Texture) getPrivateField(batch, "lastTexture"); // Texture
+        buildingManager.render(batch);
         assertEquals(building.texture, texture);
-        // float x = (float) getPrivateField(batch, "invTexWidth"); // X position
-        // assertEquals(0, x);
-        // float y = (float) getPrivateField(batch, "invTexHeight");  // Y position
-        // assertEquals(0, y);
-        // float width = (float) getPrivateField(batch, "invTexWidth"); // Width
-        // assertEquals(building.texture.getWidth(), width);
-        // float height = (float) getPrivateField(batch, "invTexHeight"); // Height
-        // assertEquals(building.texture.getHeight(), height);
-        // boolean flipX = (boolean) getPrivateField(batch, "flipY"); // Flip X
-        // assertEquals(false, flipX);
-        // boolean flipY = (boolean) getPrivateField(batch, "flipY"); // Flip Y
-        // assertEquals(false, flipY);
     }
 
     // Testing getBuildingAt
