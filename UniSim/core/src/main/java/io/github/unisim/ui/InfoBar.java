@@ -114,7 +114,7 @@ public class InfoBar {
     }
     if (sb.length() != 0) {
         Duration remainingTime = world.satisfactionTracker.getLongestModifierRemainingDuration();
-        sb.append(String.format(" %02ds", remainingTime.getSeconds()));
+        sb.append(String.format("    %02ds", remainingTime.getSeconds()));
     }
     satisfactionModifierLabel.setText(sb.toString());
     scoreLabel.setText("Score: " + world.scoreTracker.getFinalScore());
@@ -142,7 +142,7 @@ public class InfoBar {
     satisfacationLabelCell.padLeft(Math.min(width, height * 2) * 0.075f);
     satisfactionModifierLabel.setFontScale(height * 0.002f);
     satisfactionModifierLabelCell.width(height * 0.04f).height(height * 0.05f);
-    satisfactionModifierLabelCell.padLeft(Math.min(width, height * 2) * 0.02f);
+    satisfactionModifierLabelCell.padLeft(Math.min(width, height * 2) * 0.035f);
     scoreLabel.setFontScale(height * 0.002f);
     scoreLabelCell.width(height * 0.04f).height(height * 0.05f);
     scoreLabelCell.padLeft(Math.min(width, height * 2) * 0.08f);
