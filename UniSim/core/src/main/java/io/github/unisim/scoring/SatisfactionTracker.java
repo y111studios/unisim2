@@ -1,6 +1,7 @@
 package io.github.unisim.scoring;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +29,15 @@ public class SatisfactionTracker implements ScoringObject {
 
     public float getSatisfaction() {
         return satisfaction;
+    }
+
+    /**
+     * Returns the satisfaction as a string to one decimal place.
+     *
+     * @return The satisfaction as a string
+     */
+    public String getStringSatisfaction() {
+        return String.format("%.1f", satisfaction);
     }
 
     /**
@@ -60,6 +70,63 @@ public class SatisfactionTracker implements ScoringObject {
             }
         }
         modifiers.removeIf(SatisfactionModifier::isExpired);
+    }
+
+    /**
+     * Returns the total sum of all active modifiers that add to the satisfaction.
+     *
+     * @return The total sum of all active modifiers that add to the satisfaction
+     */
+    public float getTotalModifierAdditions() {
+        float sum = 0;
+
+        for (SatisfactionModifier modifier : modifiers) {
+            if (modifier.isExpired()) {
+                continue;
+            }
+            if (modifier.template == ScoreModifierTemplate.ADD) {
+                sum += modifier.value;
+            }
+        }
+
+        return sum;
+    }
+
+    /**
+     * Returns the total product of all active modifiers that multiply the satisfaction.
+     *
+     * @return The total product of all active modifiers that multiply the satisfaction
+     */
+    public float getTotalModifierMultiplier() {
+        float product = 1;
+
+        for (SatisfactionModifier modifier : modifiers) {
+            if (modifier.isExpired()) {
+                continue;
+            }
+            if (modifier.template == ScoreModifierTemplate.MUL) {
+                product *= modifier.value;
+            }
+        }
+
+        return product;
+    }
+
+    public Duration getLongestModifierRemainingDuration() {
+        Duration longest = Duration.ZERO;
+        Instant now = Instant.now();
+
+        for (SatisfactionModifier modifier : modifiers) {
+            if (modifier.isExpired()) {
+                continue;
+            }
+            Duration remaining = Duration.between(now, modifier.endTime);
+            if (remaining.compareTo(longest) > 0) {
+                longest = Duration.between(now, modifier.endTime);
+            }
+        }
+
+        return longest;
     }
 
     /**

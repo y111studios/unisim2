@@ -9,10 +9,10 @@ import io.github.unisim.achievements.ScoreModifierTemplate;
  * A class that represents a satisfaction modifier.
  */
 public class SatisfactionModifier implements Comparable<SatisfactionModifier> {
-    private final float value;
-    private final ScoreModifierTemplate template;
-    private final Duration duration;
-    private Instant endTime;
+    final float value;
+    final ScoreModifierTemplate template;
+    final Duration duration;
+    Instant endTime;
 
     /**
      * Constructs a new satisfaction modifier with the specified template, value, and duration.
