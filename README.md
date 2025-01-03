@@ -11,3 +11,9 @@ UniSim is a short 2D game in which you can take control of your own university -
 - Change directory to UniSim/
 - Run the command ```gradlew run``` or ```gradlew build```
 - Source code for the game lives in UniSim/core
+
+### Licenses
+
+#### Fonts
+
+MartianMonoNerdFont-Medium.tff is Copyright 2021 [The Martian Mono Project Authors](github.com/evilmartians/mono) - Licensed under the [OFL-1.1 License](https://github.com/evilmartians/mono?tab=OFL-1.1-1-ov-file).
