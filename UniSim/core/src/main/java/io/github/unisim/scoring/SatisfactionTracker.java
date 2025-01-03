@@ -1,6 +1,7 @@
 package io.github.unisim.scoring;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -109,6 +110,23 @@ public class SatisfactionTracker implements ScoringObject {
         }
 
         return product;
+    }
+
+    public Duration getLongestModifierRemainingDuration() {
+        Duration longest = Duration.ZERO;
+        Instant now = Instant.now();
+
+        for (SatisfactionModifier modifier : modifiers) {
+            if (modifier.isExpired()) {
+                continue;
+            }
+            Duration remaining = Duration.between(now, modifier.endTime);
+            if (remaining.compareTo(longest) > 0) {
+                longest = Duration.between(now, modifier.endTime);
+            }
+        }
+
+        return longest;
     }
 
     /**

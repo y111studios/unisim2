@@ -1,5 +1,6 @@
 package io.github.unisim.ui;
 
+import java.time.Duration;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -103,14 +104,19 @@ public class InfoBar {
     } else {
         satisfactionLabel.setColor(1, 1, 1, 1);
     }
+    StringBuilder sb = new StringBuilder();
     if (world.satisfactionTracker.getTotalModifierMultiplier() != 1) {
-        satisfactionModifierLabel.setText("x" + world.satisfactionTracker.getTotalModifierMultiplier());
+        sb.append(String.format("x%.2f", world.satisfactionTracker.getTotalModifierMultiplier()));
     } else if (world.satisfactionTracker.getTotalModifierAdditions() != 0) {
         float additions = world.satisfactionTracker.getTotalModifierAdditions();
         satisfactionModifierLabel.setText((additions > 0 ? "+" : "") + additions);
-    } else {
-        satisfactionModifierLabel.setText("");
+        sb.append(String.format("%+.0f", additions));
     }
+    if (sb.length() != 0) {
+        Duration remainingTime = world.satisfactionTracker.getLongestModifierRemainingDuration();
+        sb.append(String.format(" %02ds", remainingTime.getSeconds()));
+    }
+    satisfactionModifierLabel.setText(sb.toString());
     scoreLabel.setText("Score: " + world.scoreTracker.getFinalScore());
     moneyLabel.setText("Money: $" + world.moneyTracker.getMoney());
     timerLabel.setText(timer.getRemainingTime());
