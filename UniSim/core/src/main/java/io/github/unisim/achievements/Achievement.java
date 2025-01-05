@@ -2,6 +2,7 @@ package io.github.unisim.achievements;
 
 import java.time.Instant;
 import java.util.function.Function;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
@@ -77,7 +78,7 @@ public class Achievement {
      * instead as they provide stricter validation.
      */
     @Deprecated(forRemoval = true)
-    Achievement(String name, String description, Instant unlockTime,
+    private Achievement(String name, String description, Instant unlockTime,
             ScoreModifierTemplate functionTemplate, float scoreModifierValue, float progress,
             boolean unlocked, boolean hidden) {
         this.name = name;
