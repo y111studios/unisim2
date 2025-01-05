@@ -475,16 +475,7 @@ public class World {
     }
     moneyTracker.addMoney((int) (building.cost * 0.25f));
     boolean removed = buildingManager.removeBuilding(building);
-    if (!removed) {
-        return false;
-    }
-    TiledMapTileLayer mapTiles = getMapTiles();
-    for (int x = building.location.x; x < building.location.x + building.size.x; x++) {
-      for (int y = building.location.y; y < building.location.y + building.size.y; y++) {
-        GameState.buildableTiles.add(mapTiles.getCell(x, y).getTile().getId());
-      }
-    }
-    return true;
+    return removed;
   }
 
   /**
