@@ -1,0 +1,87 @@
+:root {
+    --background: #121212;
+    --background-secondary: #1F1B24;
+    --background-tertiary: #4a4353;
+    --primary: #42a5f5;
+    --secondary: #ab47bc;
+    --text: #fff;
+}
+
+body {
+    background-color: var(--background);
+}
+
+p {
+    color: var(--text);
+}
+
+div > a {
+    color: var(--text);
+}
+
+.title {
+    text-align: center;
+    color: var(--text);
+}
+
+.diagrams {
+    width: 90vw;
+    height: 50vh;
+    background-color: var(--background-secondary);
+    margin-bottom: 5vh;
+    margin-left: 5vw;
+    border: 2px solid var(--background-tertiary);
+}
+
+.diagrams > .title {
+    color: var(--text);
+    text-align: center;
+    border-bottom: 1px solid var(--background-tertiary);
+}
+
+#back, #link, #dl {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: var(--text);
+    background-color: var(--primary);
+    text-align: center;
+    margin-top: 2vh;
+    margin-left: 2vh;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+#back:hover, #link.hover, dl:hover {
+    background-color: var(--secondary);
+}
+
+.diagrams {
+    width: 90vw;
+    height: 60vh;
+    background-color: var(--background-secondary);
+    margin-bottom: 5vh;
+    margin-left: 5vw;
+    border: 2px solid var(--background-tertiary);
+}
+
+.diagrams > .subtitle {
+    color: var(--text);
+    text-align: center;
+    border-bottom: 1px solid var(--background-tertiary);
+}
+
+.oversize-diagrams {
+    width: 90vw;
+    height: 80vh;
+    background-color: var(--background-secondary);
+    margin-bottom: 5vh;
+    margin-left: 5vw;
+    border: 2px solid var(--background-tertiary);
+}
+
+.oversize-diagrams > .subtitle {
+    color: var(--text);
+    text-align: center;
+    border-bottom: 1px solid var(--background-tertiary);
+}
