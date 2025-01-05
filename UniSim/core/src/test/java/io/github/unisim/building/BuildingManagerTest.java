@@ -163,9 +163,29 @@ public class BuildingManagerTest {
     // Testing getBuildingAt
     @Test
     public void testGetBuildingAt() {
-        Building building = new Building(null, 0.0f, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50);
+        Building building = new Building(null, 0.0f, null, new Point(1,1), new Point(3,3), false, BuildingType.RECREATION, "", 0, 50);
         buildingManager.placeBuilding(building);
-        Building buildingAt = buildingManager.getBuildingAt(new Point(1,1));
+        Building buildingAt = buildingManager.getBuildingAt(new Point(2,2));
         assertEquals(building, buildingAt);
+    }
+
+    @Test
+    public void testGetBuildingAtWithNoBuilding() {
+        Building buildingAt = buildingManager.getBuildingAt(new Point(2,2));
+        assertNull(buildingAt);
+    }
+
+    // Testing getBuildingCapacities
+    @Test
+    public void testGetBuildingCapacities() {
+        Building building1 = new Building(null, 0.0f, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50);
+        Building building2 = new Building(null, 0.0f, null, new Point(1,1), new Point(2,2), false, BuildingType.SLEEPING, "", 0, 50);
+        Building building3 = new Building(null, 0.0f, null, new Point(2,1), new Point(1,1), false, BuildingType.EATING, "", 0, 50);
+        buildingManager.placeBuilding(building1);
+        buildingManager.placeBuilding(building2);
+        buildingManager.placeBuilding(building3);
+        assertEquals(50, buildingManager.getBuildingCapacities(BuildingType.RECREATION));
+        assertEquals(50, buildingManager.getBuildingCapacities(BuildingType.SLEEPING));
+        assertEquals(50, buildingManager.getBuildingCapacities(BuildingType.EATING));
     }
 }
