@@ -58,16 +58,40 @@ public class BuildingMenu {
         100
     ));
     buildings.add(new Building(
-        new Texture(Gdx.files.internal("buildings/library.png")),
+        new Texture(Gdx.files.internal("buildings/lectureBuilding.png")),
         0.0075f,
         new Vector2(1.8f, -4.6f),
         new Point(),
         new Point(20, 12),
         false,
         BuildingType.LEARNING,
-        "Library",
+        "Lecture building",
         100,
         1000
+    ));
+    buildings.add(new Building(
+        new Texture(Gdx.files.internal("buildings/labs.png")),
+        0.0075f,
+        new Vector2(1.8f, 3.0f),
+        new Point(),
+        new Point(30, 16),
+        false,
+        BuildingType.LEARNING,
+        "Laboratory",
+        150,
+        1500
+    ));
+    buildings.add(new Building(
+        new Texture(Gdx.files.internal("buildings/library.png")),
+        0.0075f,
+        new Vector2(-0.5f, -0.5f),
+        new Point(),
+        new Point(9, 9),
+        true,
+        BuildingType.LEARNING,
+        "Library",
+        50,
+        500
     ));
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/basketballCourt.png")),
@@ -114,8 +138,8 @@ public class BuildingMenu {
         false,
         BuildingType.SLEEPING,
         "Student Accomodation",
-        100,
-        1000
+        150,
+        1500
     ));
 
     // Register the buildings with the achievementTracker
