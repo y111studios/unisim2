@@ -1,7 +1,7 @@
 package io.github.unisim.building;
 
 import java.lang.reflect.Field;
-
+import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -19,10 +19,13 @@ import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-
 import io.github.unisim.Point;
 
 public class BuildingManagerTest {
@@ -187,5 +190,71 @@ public class BuildingManagerTest {
         assertEquals(50, buildingManager.getBuildingCapacities(BuildingType.RECREATION));
         assertEquals(50, buildingManager.getBuildingCapacities(BuildingType.SLEEPING));
         assertEquals(50, buildingManager.getBuildingCapacities(BuildingType.EATING));
+    }
+
+    static class TileBuildableTests {
+        static final int BUILDABLE_ID = 0;
+        static final int UNBUILDABLE_ID = 1;
+        static final Set<Integer> buildableIds = Set.of(BUILDABLE_ID);
+
+        TiledMapTileLayer layer;
+        BuildingManager buildingManager;
+
+        @BeforeEach
+        void setUp() {
+            buildingManager = new BuildingManager(new Matrix4());
+            layer = new TiledMapTileLayer(10, 10, 5, 5);
+            for (int i = 0; i < 10; i++) {
+                for (int j = 0; j < 10; j++) {
+                    TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
+                    TiledMapTile tile = new StaticTiledMapTile(new TextureRegion());
+                    tile.setId(BUILDABLE_ID);
+                    cell.setTile(tile);
+                    layer.setCell(i, j, cell);
+                }
+            }
+        }
+
+        @Test
+        void testValidPoint() {
+            assertTrue(buildingManager.isBuildable(new Point(0, 0), new Point(1, 1), layer, buildableIds));
+            assertTrue(buildingManager.isBuildable(new Point(8, 8), new Point(9, 9), layer, buildableIds));
+            assertTrue(buildingManager.isBuildable(new Point(3, 3), new Point(8, 8), layer, buildableIds));
+        }
+
+        @Test
+        void testPointOutOfBounds() {
+            assertFalse(buildingManager.isBuildable(new Point(-1, 0), new Point(0, 0), layer, buildableIds));
+            assertFalse(buildingManager.isBuildable(new Point(0, -1), new Point(0, 0), layer, buildableIds));
+            assertFalse(buildingManager.isBuildable(new Point(0, 0), new Point(-1, 0), layer, buildableIds));
+            assertFalse(buildingManager.isBuildable(new Point(0, 0), new Point(0, -1), layer, buildableIds));
+        }
+
+        @Test
+        void testUnbuildableTile() {
+            layer.getCell(3, 3).getTile().setId(UNBUILDABLE_ID);
+            assertTrue(buildingManager.isBuildable(new Point(0, 0), new Point(2, 2), layer, buildableIds));
+            assertFalse(buildingManager.isBuildable(new Point(2, 2), new Point(3, 3), layer, buildableIds));
+            assertFalse(buildingManager.isBuildable(new Point(3, 3), new Point(3, 3), layer, buildableIds));
+        }
+
+        @Test
+        void testBuildingOverlap() {
+            Building building = new Building(null, 0.0f, null, new Point(1,1), new Point(2,3), false, BuildingType.RECREATION, "", 50, 0);
+            buildingManager.placeBuilding(building);
+            assertFalse(buildingManager.isBuildable(new Point(0, 0), new Point(1, 1), layer, buildableIds));
+            assertFalse(buildingManager.isBuildable(new Point(1, 1), new Point(2, 2), layer, buildableIds));
+            assertFalse(buildingManager.isBuildable(new Point(0, 0), new Point(2, 2), layer, buildableIds));
+        }
+
+        @Test
+        void testPreviewBuildingOverlap() {
+            Building building = new Building(null, 0.0f, null, new Point(1,1), new Point(2,3), false, BuildingType.RECREATION, "", 50, 0);
+            buildingManager.setPreviewBuilding(building);
+            assertTrue(buildingManager.isBuildable(new Point(0, 0), new Point(1, 1), layer, buildableIds));
+            assertTrue(buildingManager.isBuildable(new Point(1, 1), new Point(2, 2), layer, buildableIds));
+            assertTrue(buildingManager.isBuildable(new Point(0, 0), new Point(2, 2), layer, buildableIds));
+        }
+
     }
 }
