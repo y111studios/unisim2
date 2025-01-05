@@ -73,11 +73,7 @@ public class Achievement {
      * @param unlocked whether the achievement is unlocked
      * @param hidden whether the achievement is hidden
      *
-     * @deprecated This constructor is deprecated and should not be used. Once all references
-     * to this have been removed, this constructor will be made private. Use the other constructors
-     * instead as they provide stricter validation.
      */
-    @Deprecated(forRemoval = true)
     private Achievement(String name, String description, Instant unlockTime,
             ScoreModifierTemplate functionTemplate, float scoreModifierValue, float progress,
             boolean unlocked, boolean hidden) {
