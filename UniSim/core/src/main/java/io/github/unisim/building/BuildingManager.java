@@ -37,6 +37,9 @@ public class BuildingManager {
    */
   public boolean isBuildable(Point btmLeft, Point topRight, TiledMapTileLayer tileLayer, Set<Integer> buildableTiles) {
     boolean buildable = true;
+    if (topRight.x < btmLeft.x || topRight.y < btmLeft.y) {
+      return false;
+    }
     // we iterate over each tile within the search region and check
     // for any non-buildable tiles.
     for (int x = btmLeft.x; x <= topRight.x && buildable; x++) {
