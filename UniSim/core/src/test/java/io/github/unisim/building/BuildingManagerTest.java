@@ -178,9 +178,9 @@ public class BuildingManagerTest {
     // Testing getBuildingCapacities
     @Test
     public void testGetBuildingCapacities() {
-        Building building1 = new Building(null, 0.0f, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50);
-        Building building2 = new Building(null, 0.0f, null, new Point(1,1), new Point(2,2), false, BuildingType.SLEEPING, "", 0, 50);
-        Building building3 = new Building(null, 0.0f, null, new Point(2,1), new Point(1,1), false, BuildingType.EATING, "", 0, 50);
+        Building building1 = new Building(null, 0.0f, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 50, 0);
+        Building building2 = new Building(null, 0.0f, null, new Point(1,1), new Point(2,2), false, BuildingType.SLEEPING, "", 50, 0);
+        Building building3 = new Building(null, 0.0f, null, new Point(2,1), new Point(1,1), false, BuildingType.EATING, "", 50, 0);
         buildingManager.placeBuilding(building1);
         buildingManager.placeBuilding(building2);
         buildingManager.placeBuilding(building3);
