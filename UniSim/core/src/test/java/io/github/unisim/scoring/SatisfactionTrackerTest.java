@@ -17,6 +17,11 @@ public class SatisfactionTrackerTest {
     private SatisfactionTracker satisfactiontracker;
     private List<Building> buildings;
 
+    /**
+     * Given error margin for time based tests in milliseconds.
+     */
+    private static final float EPSILON_MILLIS = 3f;
+
     @BeforeEach
     public void setUp() {
         satisfactiontracker = new SatisfactionTracker();
@@ -225,7 +230,7 @@ public class SatisfactionTrackerTest {
         satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 5, Duration.ofSeconds(1));
         satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 10, Duration.ofSeconds(2));
         satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 15, Duration.ofSeconds(3));
-        assertEquals(Duration.ofSeconds(3), satisfactiontracker.getLongestModifierRemainingDuration());
+        assertEquals(Duration.ofSeconds(3).toMillis(), satisfactiontracker.getLongestModifierRemainingDuration().toMillis(), EPSILON_MILLIS);
     }
 
     @Test
@@ -233,7 +238,7 @@ public class SatisfactionTrackerTest {
         satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 5, Duration.ofSeconds(0));
         satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 10, Duration.ofSeconds(0));
         satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 15, Duration.ofSeconds(0));
-        assertEquals(Duration.ZERO, satisfactiontracker.getLongestModifierRemainingDuration());
+        assertEquals(Duration.ZERO.toMillis(), satisfactiontracker.getLongestModifierRemainingDuration().toMillis(), EPSILON_MILLIS);
     }
 
     @Test
@@ -241,7 +246,7 @@ public class SatisfactionTrackerTest {
         satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 5, Duration.ofSeconds(-1));
         satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 10, Duration.ofSeconds(-2));
         satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 15, Duration.ofSeconds(-3));
-        assertEquals(Duration.ZERO, satisfactiontracker.getLongestModifierRemainingDuration());
+        assertEquals(Duration.ZERO.toMillis(), satisfactiontracker.getLongestModifierRemainingDuration().toMillis(), EPSILON_MILLIS);
     }
 
     @Test
@@ -249,6 +254,6 @@ public class SatisfactionTrackerTest {
         satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 5, Duration.ofSeconds(1));
         satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 10, Duration.ofSeconds(1));
         satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 15, Duration.ofSeconds(1));
-        assertEquals(Duration.ofSeconds(1), satisfactiontracker.getLongestModifierRemainingDuration());
+        assertEquals(Duration.ofSeconds(1).toMillis(), satisfactiontracker.getLongestModifierRemainingDuration().toMillis(), EPSILON_MILLIS);
     }
 }
