@@ -12,7 +12,6 @@ import io.github.unisim.achievements.ScoreModifierTemplate;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingType;
 
-
 public class SatisfactionTrackerTest {
 
     private SatisfactionTracker satisfactiontracker;
@@ -153,5 +152,103 @@ public class SatisfactionTrackerTest {
         satisfactiontracker.addModifier(new SatisfactionModifier(ScoreModifierTemplate.ADD, -5, Duration.ofSeconds(1)));
         satisfactiontracker.updateSatisfaction(buildings, null, 100);
         assertEquals(95, satisfactiontracker.getSatisfaction());
+    }
+
+    // Testing getStringSatsifaction
+    @Test
+    public void testGetStringSatisfaction() {
+        satisfactiontracker.updateSatisfaction(buildings, null, 100);
+        assertEquals("100.0", satisfactiontracker.getStringSatisfaction());
+    }
+
+    @Test
+    public void testGetStringSatisfactionWithZero() {
+        satisfactiontracker.updateSatisfaction(buildings, null, 0);
+        assertEquals("0.0", satisfactiontracker.getStringSatisfaction());
+    }
+
+    // Testing getTotalModifierAdditions
+    @Test
+    public void testGetTotalModifierAdditions() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 5, Duration.ofSeconds(1));
+        assertEquals(5, satisfactiontracker.getTotalModifierAdditions());
+    }
+
+    @Test
+    public void testGetTotalModifierAdditionsWithZero() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 0, Duration.ofSeconds(1));
+        assertEquals(0, satisfactiontracker.getTotalModifierAdditions());
+    }
+
+    @Test
+    public void testGetTotalModifierAdditionsWithNegative() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, -5, Duration.ofSeconds(1));
+        assertEquals(-5, satisfactiontracker.getTotalModifierAdditions());
+    }
+
+    @Test
+    public void testGetTotalModifierWithMultiple() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 5, Duration.ofSeconds(1));
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 10, Duration.ofSeconds(1));
+        assertEquals(15, satisfactiontracker.getTotalModifierAdditions());
+    }
+
+    // Testing getTotalModifierMultiplier
+    @Test
+    public void testGetTotalModifierMultiplier() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.MUL, 2, Duration.ofSeconds(1));
+        assertEquals(2, satisfactiontracker.getTotalModifierMultiplier());
+    }
+
+    @Test
+    public void testGetTotalModifierMultiplierWithZero() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.MUL, 0, Duration.ofSeconds(1));
+        assertEquals(0, satisfactiontracker.getTotalModifierMultiplier());
+    }
+
+    @Test
+    public void testGetTotalModifierMultiplierWithNegative() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.MUL, -2, Duration.ofSeconds(1));
+        assertEquals(-2, satisfactiontracker.getTotalModifierMultiplier());
+    }
+
+    @Test
+    public void testGetTotalModifierMultiplierWithMultiple() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.MUL, 2, Duration.ofSeconds(1));
+        satisfactiontracker.addModifier(ScoreModifierTemplate.MUL, 3, Duration.ofSeconds(1));
+        assertEquals(6, satisfactiontracker.getTotalModifierMultiplier());
+    }
+
+    // Testing getLongestModifierRemainingDuration
+    @Test
+    public void testGetLongestModifierRemainingDuration() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 5, Duration.ofSeconds(1));
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 10, Duration.ofSeconds(2));
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 15, Duration.ofSeconds(3));
+        assertEquals(Duration.ofSeconds(3), satisfactiontracker.getLongestModifierRemainingDuration());
+    }
+
+    @Test
+    public void testGetLongestModifierRemainingDurationWithZero() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 5, Duration.ofSeconds(0));
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 10, Duration.ofSeconds(0));
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 15, Duration.ofSeconds(0));
+        assertEquals(Duration.ZERO, satisfactiontracker.getLongestModifierRemainingDuration());
+    }
+
+    @Test
+    public void testGetLongestModifierRemainingDurationWithNegative() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 5, Duration.ofSeconds(-1));
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 10, Duration.ofSeconds(-2));
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 15, Duration.ofSeconds(-3));
+        assertEquals(Duration.ZERO, satisfactiontracker.getLongestModifierRemainingDuration());
+    }
+
+    @Test
+    public void testGetLongestModifierRemainingDurationWithEqual() {
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 5, Duration.ofSeconds(1));
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 10, Duration.ofSeconds(1));
+        satisfactiontracker.addModifier(ScoreModifierTemplate.ADD, 15, Duration.ofSeconds(1));
+        assertEquals(Duration.ofSeconds(1), satisfactiontracker.getLongestModifierRemainingDuration());
     }
 }
