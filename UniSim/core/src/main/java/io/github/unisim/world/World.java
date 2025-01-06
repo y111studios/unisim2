@@ -2,6 +2,9 @@ package io.github.unisim.world;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -39,6 +42,8 @@ public class World {
   private OrthographicCamera camera = new OrthographicCamera();
   private Viewport viewport = new ScreenViewport(camera);
   private TiledMap map = new TmxMapLoader().load("map/medium_map.tmx");
+  public final Set<Integer> buildableTiles = Stream.of(
+  14, 15).collect(Collectors.toSet());
   private float unitScale = 1f / 16f;
   private IsometricTiledMapRenderer renderer = new IsometricTiledMapRenderer(map, unitScale);
   private Vector2 camPosition = new Vector2(150f, 0f);
@@ -191,7 +196,7 @@ public class World {
       btmLeft.x -= buildingSize.x / 2;
       btmLeft.y -= buildingSize.y / 2;
       topRight = new Point(btmLeft.x + buildingSize.x - 1, btmLeft.y + buildingSize.y - 1);
-      canBuild = buildingManager.isBuildable(btmLeft, topRight, getMapTiles());
+      canBuild = buildingManager.isBuildable(btmLeft, topRight, getMapTiles(), buildableTiles);
       if (selectedBuilding != null) {
         canBuild = canBuild && moneyTracker.getMoney() >= selectedBuilding.cost;
         selectedBuilding.location = btmLeft;
@@ -475,16 +480,7 @@ public class World {
     }
     moneyTracker.addMoney((int) (building.cost * 0.25f));
     boolean removed = buildingManager.removeBuilding(building);
-    if (!removed) {
-        return false;
-    }
-    TiledMapTileLayer mapTiles = getMapTiles();
-    for (int x = building.location.x; x < building.location.x + building.size.x; x++) {
-      for (int y = building.location.y; y < building.location.y + building.size.y; y++) {
-        GameState.buildableTiles.add(mapTiles.getCell(x, y).getTile().getId());
-      }
-    }
-    return true;
+    return removed;
   }
 
   /**
