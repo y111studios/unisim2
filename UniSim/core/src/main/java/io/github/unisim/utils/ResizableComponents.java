@@ -179,7 +179,11 @@ public class ResizableComponents {
         ResizableComponents internal;
 
         public Builder(Stage stage) {
-            internal = new ResizableComponents(stage.getWidth(), stage.getHeight());
+            this(stage.getWidth(), stage.getHeight());
+        }
+
+        public Builder(float width, float height) {
+            internal = new ResizableComponents(width, height);
         }
 
         public ResizableComponents build() {
