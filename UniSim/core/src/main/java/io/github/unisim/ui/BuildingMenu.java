@@ -120,9 +120,9 @@ public class BuildingMenu {
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/pool.png")),
         0.01f,
-        new Vector2(0.1f, -0.9f),
+        new Vector2(0.3f, 0.3f),
         new Point(),
-        new Point(7, 14),
+        new Point(8, 14),
         false,
         BuildingType.RECREATION,
         "Swimming pool",
@@ -156,9 +156,9 @@ public class BuildingMenu {
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/sleep_white.png")),
         0.108f,
-        new Vector2(1.0f, -0.9f),
+        new Vector2(0.3f, 0.5f),
         new Point(),
-        new Point(10, 10),
+        new Point(12, 10),
         false,
         BuildingType.SLEEPING,
         "Student Accomodation",
