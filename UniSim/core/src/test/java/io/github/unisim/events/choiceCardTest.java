@@ -1,6 +1,7 @@
 package io.github.unisim.events;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import io.github.unisim.achievements.ScoreModifierTemplate;
@@ -80,7 +81,9 @@ public class choiceCardTest {
     @Test
     public void testGetNullScoreModifier() {
         ChoiceCard card = new ChoiceCard("Test", "Test Desc", 1, null, 1);
-        assertEquals(null, card.getSatisfactionModifier());
+        assertEquals(ScoreModifierTemplate.ADD, card.getSatisfactionModifier().template);
+        assertEquals(0, card.getSatisfactionModifier().value);
+        assertTrue(card.getSatisfactionModifier().isExpired());
     }
 
     // Testing applyEffect
