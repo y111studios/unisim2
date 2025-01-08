@@ -3,12 +3,19 @@ package io.github.unisim.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import io.github.unisim.GameState;
@@ -18,6 +25,7 @@ import io.github.unisim.building.BuildingType;
 import io.github.unisim.world.World;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Menu used to place buildings in the world by clicking and dragging them
@@ -29,11 +37,12 @@ public class BuildingMenu {
   private ShapeActor bar = new ShapeActor(GameState.UISecondaryColour);
   private ArrayList<Building> buildings = new ArrayList<>();
   private ArrayList<Image> buildingImages = new ArrayList<>();
-  private HashMap<BuildingType, BuildingMenuEntry> navTableMap = new HashMap<>();
-  private BuildingMenuEntry currMenuEntry;
+  private Map<BuildingType, BuildingMenuEntry> buildingTypes = new HashMap<>();
+  private HorizontalGroup group = new HorizontalGroup();
+  Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
+  private Table mainTable = new Table();
   private Label buildingInfoLabel = new Label(
-      "", new Skin(Gdx.files.internal("ui/uiskin.json"))
-  );
+      "", skin);
   private Table buildingInfoTable = new Table();
   private BuildingPreviewMenu previewMenu;
 
@@ -119,41 +128,24 @@ public class BuildingMenu {
         1000
     ));
 
+    final Button eatB = new TextButton("Eating", skin, "toggle");
+    final Button sleepB = new TextButton("Sleeping", skin, "toggle");
+    final Button recB = new TextButton("Recreation", skin, "toggle");
+    final Button learnB = new TextButton("Learning", skin, "toggle");
+    group.addActor(eatB);
+    group.addActor(sleepB);
+    group.addActor(recB);
+    group.addActor(learnB);
+    mainTable.addActor(group);
+    mainTable.row();
+
     // Register the buildings with the achievementTracker
     for (Building building : buildings) {
       world.achievementTracker.buildingsPlacedCount.put(building.texture, 0);
     }
 
-    //add arrows and label for each building type
-    BuildingType temp = null;
     for (BuildingType type : BuildingType.values()) {
-      navTableMap.put(type, new BuildingMenuEntry());
-      final BuildingType prev = temp;
-      final BuildingType curr = type;
-      if (temp != null) {
-        Image leftArrow = new Image(new Texture(Gdx.files.internal("ui/leftarrow.png")));
-        leftArrow.addListener(new ClickListener() {
-          @Override
-          public void clicked(InputEvent e, float x, float y) {
-            navTableMap.get(curr).removeFromStage();
-            navTableMap.get(prev).addToStage(stage);
-          }
-        });
-        navTableMap.get(type).addToNavTable(leftArrow);
-      }
-      navTableMap.get(type).addToNavTable(new Label(type.toString(), new Skin(Gdx.files.internal("ui/uiskin.json"))));
-      if (temp != null) {
-        Image rightArrow = new Image(new Texture(Gdx.files.internal("ui/rightarrow.png")));
-        rightArrow.addListener(new ClickListener() {
-          @Override
-          public void clicked(InputEvent e, float x, float y) {
-            navTableMap.get(prev).removeFromStage();
-            navTableMap.get(curr).addToStage(stage);
-          }
-        });
-        navTableMap.get(prev).addToNavTable(rightArrow);
-      }
-      temp = type;
+      buildingTypes.put(type, new BuildingMenuEntry());
     }
 
     // Add buildings to the table
@@ -179,17 +171,54 @@ public class BuildingMenu {
           }
         }
       });
-      navTableMap.get(buildings.get(i).type).addToBuildingTable(buildingImages.get(i));
-      Label costLabel = new Label("$" + String.valueOf(buildings.get(i).cost), new Skin(Gdx.files.internal("ui/uiskin.json")));
+      Label costLabel = new Label("$" + String.valueOf(buildings.get(i).cost), skin);
       costLabel.setAlignment(Align.center);
-      navTableMap.get(buildings.get(i).type).addToCostTable(costLabel);
+      buildingTypes.get(buildings.get(i).type).addEntry(buildingImages.get(i), costLabel);
     }
 
     buildingInfoTable.add(buildingInfoLabel).expandX().align(Align.center).padBottom(25);
 
+    for (BuildingMenuEntry e : buildingTypes.values()) {
+      e.addToTable();
+    }
+
+    Stack content = new Stack();
+    final Table eatTable = buildingTypes.get(BuildingType.EATING).getTable();
+    final Table recTable = buildingTypes.get(BuildingType.RECREATION).getTable();
+    final Table sleepTable = buildingTypes.get(BuildingType.SLEEPING).getTable();
+    final Table learnTable = buildingTypes.get(BuildingType.LEARNING).getTable();
+    content.addActor(eatTable);
+    content.addActor(recTable);
+    content.addActor(sleepTable);
+    content.addActor(learnTable);
+
+    mainTable.add(content).expand().fill();
+
+    ChangeListener listener = new ChangeListener() {
+      @Override
+      public void changed(ChangeEvent event, Actor actor) {
+        eatTable.setVisible(eatB.isChecked());
+        recTable.setVisible(recB.isChecked());
+        sleepTable.setVisible(sleepB.isChecked());
+        learnTable.setVisible(learnB.isChecked());
+      }
+    };
+
+    eatB.addListener(listener);
+    recB.addListener(listener);
+    sleepB.addListener(listener);
+    learnB.addListener(listener);
+
+    ButtonGroup<Button> tabs = new ButtonGroup<>();
+    tabs.setMinCheckCount(1);
+    tabs.setMaxCheckCount(1);
+    tabs.add(eatB);
+    tabs.add(recB);
+    tabs.add(sleepB);
+    tabs.add(learnB);
+
     stage.addActor(bar);
-    currMenuEntry = navTableMap.get(BuildingType.RECREATION);
-    currMenuEntry.addToStage(stage);
+    stage.addActor(mainTable);
     stage.addActor(buildingInfoTable);
     previewMenu = new BuildingPreviewMenu(stage);
   }
@@ -203,9 +232,9 @@ public class BuildingMenu {
   public void resize(int width, int height) {
     bar.setBounds(0, 0, width, height * 0.125f);
     buildingInfoTable.setBounds(0, height * 0.125f, width, height * 0.025f);
-    for (BuildingMenuEntry menuEntry : navTableMap.values()) {
-      menuEntry.resize(width, height);
-    }
+    // for (BuildingType menuEntry : navTableMap.values()) {
+    //   menuEntry.resize(width, height);
+    // }
     buildingInfoLabel.setFontScale(height * 0.0015f);
     previewMenu.resize(width, height);
   }
@@ -220,7 +249,7 @@ public class BuildingMenu {
       buildingInfoLabel.setText("");
       previewMenu.hideContent();
     } else {
-        previewMenu.showContent(world.selectedBuilding);
+      previewMenu.showContent(world.selectedBuilding);
     }
   }
 
