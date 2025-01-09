@@ -60,6 +60,7 @@ public class World {
   private Point mousePosInWorld;
   private Point btmLeft;
   private Point topRight;
+  public int menuKey;
   public Building selectedBuilding;
   public boolean selectedBuildingUpdated;
   public SatisfactionTracker satisfactionTracker = new SatisfactionTracker();

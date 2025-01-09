@@ -27,6 +27,10 @@ public class BuildingNavMenu {
     private Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
     private Stack content;
     private HorizontalGroup group;
+    private final Button eatB = new TextButton("Eating", skin, "toggle");
+    private final Button sleepB = new TextButton("Sleeping", skin, "toggle");
+    private final Button recB = new TextButton("Recreation", skin, "toggle");
+    private final Button learnB = new TextButton("Learning", skin, "toggle");
 
     public BuildingNavMenu(ArrayList<Building> buildings) {
         for (BuildingType type : BuildingType.values()) {
@@ -36,10 +40,6 @@ public class BuildingNavMenu {
 
     public void createTable() {
         group = new HorizontalGroup();
-        final Button eatB = new TextButton("Eating", skin, "toggle");
-        final Button sleepB = new TextButton("Sleeping", skin, "toggle");
-        final Button recB = new TextButton("Recreation", skin, "toggle");
-        final Button learnB = new TextButton("Learning", skin, "toggle");
         eatB.pad(5);
         sleepB.pad(5);
         recB.pad(5);
@@ -93,6 +93,25 @@ public class BuildingNavMenu {
 
     public Table getTable() {
         return mainTable;
+    }
+
+    public void changeBuildingType(int i) {
+        switch (i) {
+            case 1:
+                eatB.setChecked(true);
+                break;
+            case 2:
+                sleepB.setChecked(true);
+                break;
+            case 3:
+                recB.setChecked(true);
+                break;
+            case 4:
+                learnB.setChecked(true);
+                break;
+            default:
+                break;
+        }
     }
 
     public void resize(int width, int height) {

@@ -28,11 +28,12 @@ public class BuildingMenu {
   private ShapeActor bar = new ShapeActor(GameState.UISecondaryColour);
   private ArrayList<Building> buildings = new ArrayList<>();
   private ArrayList<Image> buildingImages = new ArrayList<>();
-  BuildingNavMenu navMenu;
+  private BuildingNavMenu navMenu;
   private Label buildingInfoLabel = new Label(
       "", new Skin(Gdx.files.internal("ui/uiskin.json")));
   private Table buildingInfoTable = new Table();
   private BuildingPreviewMenu previewMenu;
+  private int currMenuKey = 1;
 
   /**
    * Create a Building Menu and attach its actors and components to the provided stage.
@@ -179,16 +180,26 @@ public class BuildingMenu {
   public void update() {
     if (GameState.gameOver) {
       buildingInfoLabel.setText("Game Over!");
-    } else if (world.selectedBuilding == null) {
-      buildingInfoLabel.setText("");
-      previewMenu.hideContent();
     } else {
-      previewMenu.showContent(world.selectedBuilding);
+      if (world.menuKey != currMenuKey) {
+        currMenuKey = world.menuKey;
+        navMenu.changeBuildingType(currMenuKey);
+      }
+      if (world.selectedBuilding == null) {
+        buildingInfoLabel.setText("");
+        previewMenu.hideContent();
+      } else {
+        previewMenu.showContent(world.selectedBuilding);
+      }
     }
   }
 
   public void reset() {
     buildingInfoLabel.setText("");
     previewMenu.hideContent();
+  }
+
+  public void changeBuildingType(int i) {
+    navMenu.changeBuildingType(i);
   }
 }
