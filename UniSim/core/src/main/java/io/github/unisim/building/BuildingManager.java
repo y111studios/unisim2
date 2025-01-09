@@ -3,15 +3,13 @@ package io.github.unisim.building;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.Set;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-
-import io.github.unisim.GameState;
 import io.github.unisim.Point;
 
 /**
@@ -37,8 +35,11 @@ public class BuildingManager {
    * @param tileLayer - A reference to the map layer containing all terrain tiles
    * @return - true if the region is made solely of buildable tiles, false otherwise
    */
-  public boolean isBuildable(Point btmLeft, Point topRight, TiledMapTileLayer tileLayer) {
+  public boolean isBuildable(Point btmLeft, Point topRight, TiledMapTileLayer tileLayer, Set<Integer> buildableTiles) {
     boolean buildable = true;
+    if (topRight.x < btmLeft.x || topRight.y < btmLeft.y) {
+      return false;
+    }
     // we iterate over each tile within the search region and check
     // for any non-buildable tiles.
     for (int x = btmLeft.x; x <= topRight.x && buildable; x++) {
@@ -50,7 +51,7 @@ public class BuildingManager {
         }
 
         TiledMapTile currentTile = currentCell.getTile();
-        if (!tileBuildable(currentTile)) {
+        if (!buildableTiles.contains(currentTile.getId())) {
           buildable = false;
         }
       }
@@ -76,16 +77,6 @@ public class BuildingManager {
     }
 
     return buildable;
-  }
-
-  /**
-   * Helper method that determines if the provided tile may be built on.
-
-   * @param tile - A reference to a tile on the terrain layer of the map.
-   * @return - true if the tile is buildable, false otherwise
-   */
-  private static boolean tileBuildable(TiledMapTile tile) {
-    return GameState.buildableTiles.contains(tile.getId());
   }
 
   /**
