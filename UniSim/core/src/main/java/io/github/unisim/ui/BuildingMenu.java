@@ -84,7 +84,7 @@ public class BuildingMenu {
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/labs.png")),
         0.0075f,
-        new Vector2(1.8f, 3.0f),
+        new Vector2(1.8f, 4.0f),
         new Point(),
         new Point(30, 16),
         false,
@@ -132,9 +132,9 @@ public class BuildingMenu {
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/tennisCourt.png")),
         0.0025f,
-        new Vector2(1f, -1.0f),
+        new Vector2(1f, 0.1f),
         new Point(),
-        new Point(7, 10),
+        new Point(7, 11),
         false,
         BuildingType.RECREATION,
         "Tennis Court",
