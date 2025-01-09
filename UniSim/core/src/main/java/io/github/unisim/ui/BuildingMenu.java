@@ -35,6 +35,7 @@ public class BuildingMenu {
       "", new Skin(Gdx.files.internal("ui/uiskin.json"))
   );
   private Table buildingInfoTable = new Table();
+  private BuildingPreviewMenu previewMenu;
 
   /**
    * Create a Building Menu and attach its actors and components to the provided stage.
@@ -238,6 +239,7 @@ public class BuildingMenu {
     currMenuEntry = navTableMap.get(BuildingType.RECREATION);
     currMenuEntry.addToStage(stage);
     stage.addActor(buildingInfoTable);
+    previewMenu = new BuildingPreviewMenu(stage);
   }
 
   /**
@@ -253,6 +255,7 @@ public class BuildingMenu {
       menuEntry.resize(width, height);
     }
     buildingInfoLabel.setFontScale(height * 0.0015f);
+    previewMenu.resize(width, height);
   }
 
   /**
@@ -263,10 +266,14 @@ public class BuildingMenu {
       buildingInfoLabel.setText("Game Over!");
     } else if (world.selectedBuilding == null) {
       buildingInfoLabel.setText("");
+      previewMenu.hideContent();
+    } else {
+        previewMenu.showContent(world.selectedBuilding);
     }
   }
 
   public void reset() {
     buildingInfoLabel.setText("");
+    previewMenu.hideContent();
   }
 }

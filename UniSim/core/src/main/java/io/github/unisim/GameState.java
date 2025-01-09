@@ -13,9 +13,6 @@ import io.github.unisim.ui.PauseScreen;
 import io.github.unisim.ui.SettingsScreen;
 import io.github.unisim.ui.StartMenuScreen;
 import io.github.unisim.ui.ControlsScreen;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Contains a collection of settings and references that should be available globally.
@@ -32,11 +29,6 @@ public class GameState {
   public static final Screen settingScreen = new SettingsScreen();
   public static final Screen controlsScreen = new ControlsScreen(StartMenuScreen.achievementTracker);
   public static final Screen pauseScreen = new PauseScreen();
-  // Create an unmodifiable set containing the IDs of all buildable tiles
-  // we use a set to make searching more efficient
-  public static final Set<Integer> buildableTiles = Stream.of(
-  14, 15).collect(Collectors.toSet()
-  );
   public static boolean gameOver = false;
   public static boolean paused = true;
   public static Screen currentScreen;

@@ -20,6 +20,12 @@ public class ChoiceCard {
     /**
      * All arg constructor
      *
+     * <p>
+     * If the satisfactionTemplate is null, it will default to a modifier that is effectively a no-op.
+     * The specific representation of the no-op is a satisfaction modifier with a template of ADD and
+     * a value of 0 and a 0 length duration.
+     * </p>
+     *
      * @param title the title of the choice card
      * @param description the description of the choice card
      * @param moneyEffect the integer effect on the money tracker
@@ -30,7 +36,13 @@ public class ChoiceCard {
         this.title = title;
         this.description = description;
         this.moneyEffect = moneyEffect;
-        this.satisfactionModifier = new SatisfactionModifier(satisfactionTemplate, satisfactionEffect, Duration.ofSeconds(10));
+        Duration modifierDuration = Duration.ofSeconds(10);
+        if (satisfactionTemplate == null) {
+            satisfactionTemplate = ScoreModifierTemplate.ADD;
+            satisfactionEffect = 0;
+            modifierDuration = Duration.ZERO;
+        }
+        this.satisfactionModifier = new SatisfactionModifier(satisfactionTemplate, satisfactionEffect, modifierDuration);
     }
 
     public String getTitle() {
