@@ -1,6 +1,7 @@
 package io.github.unisim.events;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import io.github.unisim.achievements.ScoreModifierTemplate;
@@ -20,7 +21,8 @@ public class choiceCardTest {
         assertEquals("Test", card.getTitle());
         assertEquals("Test Desc", card.getDescription());
         assertEquals(1, card.getMoneyEffect());
-        assertEquals(ScoreModifierTemplate.ADD, card.getSatisfactionModifier());
+        assertEquals(ScoreModifierTemplate.ADD, card.getSatisfactionModifier().template);
+        assertEquals(1, card.getSatisfactionModifier().value);
     }
 
     // Testing getTitle
@@ -36,7 +38,7 @@ public class choiceCardTest {
         assertEquals(null, card.getTitle());
     }
 
-    // Testing getDescription  
+    // Testing getDescription
     @Test
     public void testGetDescription() {
         ChoiceCard card = new ChoiceCard("Test", "Test Desc", 1, ScoreModifierTemplate.ADD, 1);
@@ -72,13 +74,16 @@ public class choiceCardTest {
     @Test
     public void testGetScoreModifier() {
         ChoiceCard card = new ChoiceCard("Test", "Test Desc", 1, ScoreModifierTemplate.ADD, 1);
-        assertEquals(ScoreModifierTemplate.ADD, card.getSatisfactionModifier());
+        assertEquals(ScoreModifierTemplate.ADD, card.getSatisfactionModifier().template);
+        assertEquals(1, card.getSatisfactionModifier().value);
     }
 
     @Test
     public void testGetNullScoreModifier() {
         ChoiceCard card = new ChoiceCard("Test", "Test Desc", 1, null, 1);
-        assertEquals(null, card.getSatisfactionModifier());
+        assertEquals(ScoreModifierTemplate.ADD, card.getSatisfactionModifier().template);
+        assertEquals(0, card.getSatisfactionModifier().value);
+        assertTrue(card.getSatisfactionModifier().isExpired());
     }
 
     // Testing applyEffect
