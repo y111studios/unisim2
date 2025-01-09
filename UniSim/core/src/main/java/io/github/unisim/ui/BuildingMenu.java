@@ -149,6 +149,8 @@ public class BuildingMenu {
       navMenu.addBuilding(buildings.get(i).type, buildingImages.get(i));
     }
 
+    navMenu.createTable();
+
     buildingInfoTable.add(buildingInfoLabel).expandX().align(Align.center).padBottom(25);
 
     stage.addActor(bar);

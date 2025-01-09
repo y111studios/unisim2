@@ -9,14 +9,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import io.github.unisim.building.Building;
@@ -28,34 +26,41 @@ public class BuildingNavMenu {
     private Map<BuildingType, Table> buildingTypes = new HashMap<>();
     private Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
     private Stack content;
+    private HorizontalGroup group;
 
     public BuildingNavMenu(ArrayList<Building> buildings) {
-        HorizontalGroup group = new HorizontalGroup();
+        for (BuildingType type : BuildingType.values()) {
+            buildingTypes.put(type, new Table());
+        }
+    }
+
+    public void createTable() {
+        group = new HorizontalGroup();
         final Button eatB = new TextButton("Eating", skin, "toggle");
         final Button sleepB = new TextButton("Sleeping", skin, "toggle");
         final Button recB = new TextButton("Recreation", skin, "toggle");
         final Button learnB = new TextButton("Learning", skin, "toggle");
+        eatB.pad(5);
+        sleepB.pad(5);
+        recB.pad(5);
+        learnB.pad(5);
         group.addActor(eatB);
         group.addActor(sleepB);
         group.addActor(recB);
         group.addActor(learnB);
-        mainTable.addActor(group);
-        mainTable.row();
-
-        for (BuildingType type : BuildingType.values()) {
-            buildingTypes.put(type, new Table());
-        }
 
         content = new Stack();
-        Table eatTable = buildingTypes.get(BuildingType.EATING);
-        Table recTable = buildingTypes.get(BuildingType.RECREATION);
-        Table sleepTable = buildingTypes.get(BuildingType.SLEEPING);
-        Table learnTable = buildingTypes.get(BuildingType.LEARNING);
+        final Table eatTable = buildingTypes.get(BuildingType.EATING);
+        final Table recTable = buildingTypes.get(BuildingType.RECREATION);
+        final Table sleepTable = buildingTypes.get(BuildingType.SLEEPING);
+        final Table learnTable = buildingTypes.get(BuildingType.LEARNING);
         content.addActor(eatTable);
         content.addActor(recTable);
         content.addActor(sleepTable);
         content.addActor(learnTable);
 
+        mainTable.add(group);
+        mainTable.row();
         mainTable.add(content).expand().fill();
 
         ChangeListener listener = new ChangeListener() {
@@ -83,23 +88,22 @@ public class BuildingNavMenu {
     }
 
     public void addBuilding(BuildingType type, Image buildingImage) {
-        buildingTypes.get(type).addActor(buildingImage);
+        buildingTypes.get(type).add(buildingImage);
     }
 
     public Table getTable() {
         return mainTable;
     }
 
-    @SuppressWarnings("unchecked")
     public void resize(int width, int height) {
-        mainTable.setBounds(width/2f, height * 0.025f, width, height * 0.1f);
-        Table[] tables = (Table[]) content.getChildren().toArray();
-        for (Table table : tables) {
-            for (Cell<Actor> cell2 : table.getCells()) {
-                System.out.println(cell2);
-                Image buildingImage = (Image) cell2.getActor();
+        mainTable.setBounds(0, height * 0.01f, width, height * 0.1f);
+        Actor[] tables = content.getChildren().toArray();
+        for (Actor a1 : tables) {
+            Table table = (Table) a1;
+            for (Actor a2 : table.getChildren()) {
+                Image buildingImage = (Image) a2;
                 Vector2 textureSize = new Vector2(buildingImage.getWidth(), buildingImage.getHeight());
-                cell2.width(
+                table.getCell(a2).width(
                     height * 0.1f * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1)
                 ).height(
                     height * 0.1f * (textureSize.y < textureSize.x ? textureSize.y / textureSize.x : 1)
