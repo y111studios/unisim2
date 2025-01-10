@@ -17,7 +17,6 @@ import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingType;
 import io.github.unisim.world.World;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Menu used to place buildings in the world by clicking and dragging them
@@ -29,13 +28,12 @@ public class BuildingMenu {
   private ShapeActor bar = new ShapeActor(GameState.UISecondaryColour);
   private ArrayList<Building> buildings = new ArrayList<>();
   private ArrayList<Image> buildingImages = new ArrayList<>();
-  private HashMap<BuildingType, BuildingMenuEntry> navTableMap = new HashMap<>();
-  private BuildingMenuEntry currMenuEntry;
+  private BuildingNavMenu navMenu;
   private Label buildingInfoLabel = new Label(
-      "", new Skin(Gdx.files.internal("ui/uiskin.json"))
-  );
+      "", new Skin(Gdx.files.internal("ui/uiskin.json")));
   private Table buildingInfoTable = new Table();
   private BuildingPreviewMenu previewMenu;
+  private int currMenuKey = 1;
 
   /**
    * Create a Building Menu and attach its actors and components to the provided stage.
@@ -119,41 +117,11 @@ public class BuildingMenu {
         1000
     ));
 
+    navMenu = new BuildingNavMenu(buildings);
+
     // Register the buildings with the achievementTracker
     for (Building building : buildings) {
       world.achievementTracker.buildingsPlacedCount.put(building.texture, 0);
-    }
-
-    //add arrows and label for each building type
-    BuildingType temp = null;
-    for (BuildingType type : BuildingType.values()) {
-      navTableMap.put(type, new BuildingMenuEntry());
-      final BuildingType prev = temp;
-      final BuildingType curr = type;
-      if (temp != null) {
-        Image leftArrow = new Image(new Texture(Gdx.files.internal("ui/leftarrow.png")));
-        leftArrow.addListener(new ClickListener() {
-          @Override
-          public void clicked(InputEvent e, float x, float y) {
-            navTableMap.get(curr).removeFromStage();
-            navTableMap.get(prev).addToStage(stage);
-          }
-        });
-        navTableMap.get(type).addToNavTable(leftArrow);
-      }
-      navTableMap.get(type).addToNavTable(new Label(type.toString(), new Skin(Gdx.files.internal("ui/uiskin.json"))));
-      if (temp != null) {
-        Image rightArrow = new Image(new Texture(Gdx.files.internal("ui/rightarrow.png")));
-        rightArrow.addListener(new ClickListener() {
-          @Override
-          public void clicked(InputEvent e, float x, float y) {
-            navTableMap.get(prev).removeFromStage();
-            navTableMap.get(curr).addToStage(stage);
-          }
-        });
-        navTableMap.get(prev).addToNavTable(rightArrow);
-      }
-      temp = type;
     }
 
     // Add buildings to the table
@@ -179,17 +147,15 @@ public class BuildingMenu {
           }
         }
       });
-      navTableMap.get(buildings.get(i).type).addToBuildingTable(buildingImages.get(i));
-      Label costLabel = new Label("$" + String.valueOf(buildings.get(i).cost), new Skin(Gdx.files.internal("ui/uiskin.json")));
-      costLabel.setAlignment(Align.center);
-      navTableMap.get(buildings.get(i).type).addToCostTable(costLabel);
+      navMenu.addBuilding(buildings.get(i).type, buildingImages.get(i), buildings.get(i).cost);
     }
+
+    navMenu.createTable();
 
     buildingInfoTable.add(buildingInfoLabel).expandX().align(Align.center).padBottom(25);
 
     stage.addActor(bar);
-    currMenuEntry = navTableMap.get(BuildingType.RECREATION);
-    currMenuEntry.addToStage(stage);
+    stage.addActor(navMenu.getTable());
     stage.addActor(buildingInfoTable);
     previewMenu = new BuildingPreviewMenu(stage);
   }
@@ -201,11 +167,9 @@ public class BuildingMenu {
    * @param height - The new height of the window in pixels
    */
   public void resize(int width, int height) {
-    bar.setBounds(0, 0, width, height * 0.125f);
-    buildingInfoTable.setBounds(0, height * 0.125f, width, height * 0.025f);
-    for (BuildingMenuEntry menuEntry : navTableMap.values()) {
-      menuEntry.resize(width, height);
-    }
+    bar.setBounds(0, 0, width, height * 0.16f);
+    buildingInfoTable.setBounds(0, height * 0.16f, width, height * 0.025f);
+    navMenu.resize(width, height);
     buildingInfoLabel.setFontScale(height * 0.0015f);
     previewMenu.resize(width, height);
   }
@@ -216,16 +180,26 @@ public class BuildingMenu {
   public void update() {
     if (GameState.gameOver) {
       buildingInfoLabel.setText("Game Over!");
-    } else if (world.selectedBuilding == null) {
-      buildingInfoLabel.setText("");
-      previewMenu.hideContent();
     } else {
+      if (world.menuKey != currMenuKey) {
+        currMenuKey = world.menuKey;
+        navMenu.changeBuildingType(currMenuKey);
+      }
+      if (world.selectedBuilding == null) {
+        buildingInfoLabel.setText("");
+        previewMenu.hideContent();
+      } else {
         previewMenu.showContent(world.selectedBuilding);
+      }
     }
   }
 
   public void reset() {
     buildingInfoLabel.setText("");
     previewMenu.hideContent();
+  }
+
+  public void changeBuildingType(int i) {
+    navMenu.changeBuildingType(i);
   }
 }

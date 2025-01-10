@@ -91,6 +91,18 @@ public class WorldInputProcessor implements InputProcessor {
       case Keys.X:
         zoomOut = true;
         break;
+      case Keys.NUM_1:
+        world.menuKey = 1;
+        break;
+      case Keys.NUM_2:
+        world.menuKey = 2;
+        break;
+      case Keys.NUM_3:
+        world.menuKey = 3;
+        break;
+      case Keys.NUM_4:
+        world.menuKey = 4;
+        break;
       default:
         break;
     }
