@@ -225,12 +225,15 @@ public class BuildingManager {
     batch.setColor(1, 1, 1, building == previewBuilding ? 0.5f : 1f); //* Set the preview building to semi-transparent */
     batch.draw(
         building.texture,
-        btmLeftPos.x, btmRightPos.y,
+        btmLeftPos.x,
+        btmRightPos.y,
+        0,
+        0,
         building.texture.getWidth() * building.textureScale,
         building.texture.getHeight() * building.textureScale,
+        1.2f, 1.05f, 0,
         0, 0, building.texture.getWidth(), building.texture.getHeight(),
-        building.flipped, false
-    );
+        building.flipped, false);
   }
 
   public Iterable<Building> getBuildings() {

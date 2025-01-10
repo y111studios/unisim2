@@ -47,23 +47,23 @@ public class BuildingMenu {
     this.world = world;
     // Set building images and sizes
     buildings.add(new Building(
-        new Texture(Gdx.files.internal("buildings/restaurant.png")),
-        0.01f,
-        new Vector2(0.35f, -0.9f),
+        new Texture(Gdx.files.internal("buildings/cafe.png")),
+        0.0055f,
+        new Vector2(0.5f, -0.9f),
         new Point(),
-        new Point(3, 3),
+        new Point(6, 6),
         false,
         BuildingType.EATING,
-        "Canteen",
+        "Cafe",
         15,
         100
     ));
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/shop.png")),
         0.0035f,
-        new Vector2(-0.1f, 0.3f),
+        new Vector2(-0.1f, 0.5f),
         new Point(),
-        new Point(4, 4),
+        new Point(5, 4),
         false,
         BuildingType.EATING,
         "Shop",
@@ -72,10 +72,10 @@ public class BuildingMenu {
     ));
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/lectureBuilding.png")),
-        0.0075f,
-        new Vector2(1.8f, -4.6f),
+        0.005f,
+        new Vector2(1.9f, -4.1f),
         new Point(),
-        new Point(20, 12),
+        new Point(10, 18),
         false,
         BuildingType.LEARNING,
         "Lecture building",
@@ -85,9 +85,9 @@ public class BuildingMenu {
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/labs.png")),
         0.0075f,
-        new Vector2(1.8f, 4.0f),
+        new Vector2(0.3f, 1.4f),
         new Point(),
-        new Point(30, 16),
+        new Point(31, 13),
         false,
         BuildingType.LEARNING,
         "Laboratory",
@@ -97,7 +97,7 @@ public class BuildingMenu {
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/library.png")),
         0.0075f,
-        new Vector2(-0.5f, -0.5f),
+        new Vector2(-0.7f, -1.5f),
         new Point(),
         new Point(9, 9),
         true,
@@ -109,9 +109,9 @@ public class BuildingMenu {
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/basketballCourt.png")),
         0.0025f,
-        new Vector2(1f, -2.4f),
+        new Vector2(1.2f, -2.4f),
         new Point(),
-        new Point(6, 9),
+        new Point(7, 12),
         false,
         BuildingType.RECREATION,
         "Basketball Court",
@@ -121,9 +121,9 @@ public class BuildingMenu {
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/pool.png")),
         0.01f,
-        new Vector2(0.3f, 0.3f),
+        new Vector2(-1.0f, -2.0f),
         new Point(),
-        new Point(8, 14),
+        new Point(7, 14),
         false,
         BuildingType.RECREATION,
         "Swimming pool",
@@ -133,7 +133,7 @@ public class BuildingMenu {
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/tennisCourt.png")),
         0.0025f,
-        new Vector2(1f, 0.1f),
+        new Vector2(-0.3f, -1.5f),
         new Point(),
         new Point(7, 11),
         false,
@@ -144,10 +144,10 @@ public class BuildingMenu {
     ));
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/studentHousing.png")),
-        0.108f,
-        new Vector2(1.4f, -2.8f),
+        0.005f,
+        new Vector2(1.5f, -2.0f),
         new Point(),
-        new Point(11, 11),
+        new Point(12, 12),
         false,
         BuildingType.SLEEPING,
         "Student Accomodation",
@@ -156,8 +156,8 @@ public class BuildingMenu {
     ));
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/sleep_white.png")),
-        0.108f,
-        new Vector2(0.3f, 0.5f),
+        0.005f,
+        new Vector2(0.7f, -1.0f),
         new Point(),
         new Point(12, 10),
         false,
