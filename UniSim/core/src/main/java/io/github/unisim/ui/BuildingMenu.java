@@ -147,7 +147,7 @@ public class BuildingMenu {
           }
         }
       });
-      navMenu.addBuilding(buildings.get(i).type, buildingImages.get(i));
+      navMenu.addBuilding(buildings.get(i).type, buildingImages.get(i), buildings.get(i).cost);
     }
 
     navMenu.createTable();
@@ -167,8 +167,8 @@ public class BuildingMenu {
    * @param height - The new height of the window in pixels
    */
   public void resize(int width, int height) {
-    bar.setBounds(0, 0, width, height * 0.125f);
-    buildingInfoTable.setBounds(0, height * 0.125f, width, height * 0.025f);
+    bar.setBounds(0, 0, width, height * 0.16f);
+    buildingInfoTable.setBounds(0, height * 0.16f, width, height * 0.025f);
     navMenu.resize(width, height);
     buildingInfoLabel.setFontScale(height * 0.0015f);
     previewMenu.resize(width, height);

@@ -2,7 +2,9 @@ package io.github.unisim.ui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
@@ -11,11 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingType;
@@ -24,6 +28,7 @@ public class BuildingNavMenu {
 
     private Table mainTable = new Table();
     private Map<BuildingType, Table> buildingTypes = new HashMap<>();
+    private Map<BuildingType, Queue<Label>> buildingCosts = new HashMap<>();
     private Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
     private Stack content;
     private HorizontalGroup group;
@@ -35,15 +40,23 @@ public class BuildingNavMenu {
     public BuildingNavMenu(ArrayList<Building> buildings) {
         for (BuildingType type : BuildingType.values()) {
             buildingTypes.put(type, new Table());
+            buildingCosts.put(type, new LinkedList<>());
         }
     }
 
     public void createTable() {
+        for (BuildingType type : buildingTypes.keySet()) {
+            buildingTypes.get(type).row();
+            while (!buildingCosts.get(type).isEmpty()) {
+                buildingTypes.get(type).add(buildingCosts.get(type).poll());
+            }
+        }
+
         group = new HorizontalGroup();
-        eatB.pad(5);
-        sleepB.pad(5);
-        recB.pad(5);
-        learnB.pad(5);
+        eatB.pad(0, 5, 0, 5);
+        sleepB.pad(0, 5, 0, 5);
+        recB.pad(0, 5, 0, 5);
+        learnB.pad(0, 5, 0, 5);
         group.addActor(eatB);
         group.addActor(sleepB);
         group.addActor(recB);
@@ -64,13 +77,13 @@ public class BuildingNavMenu {
         mainTable.add(content).expand().fill();
 
         ChangeListener listener = new ChangeListener() {
-        @Override
-        public void changed(ChangeEvent event, Actor actor) {
-            eatTable.setVisible(eatB.isChecked());
-            recTable.setVisible(recB.isChecked());
-            sleepTable.setVisible(sleepB.isChecked());
-            learnTable.setVisible(learnB.isChecked());
-        }
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                eatTable.setVisible(eatB.isChecked());
+                recTable.setVisible(recB.isChecked());
+                sleepTable.setVisible(sleepB.isChecked());
+                learnTable.setVisible(learnB.isChecked());
+            }
         };
 
         eatB.addListener(listener);
@@ -87,7 +100,11 @@ public class BuildingNavMenu {
         tabs.add(learnB);
     }
 
-    public void addBuilding(BuildingType type, Image buildingImage) {
+    public void addBuilding(BuildingType type, Image buildingImage, int cost) {
+        Label l = new Label("$" + cost, skin);
+        l.setAlignment(Align.center);
+        l.setAlignment(Align.top);
+        buildingCosts.get(type).add(l);
         buildingTypes.get(type).add(buildingImage);
     }
 
@@ -115,13 +132,12 @@ public class BuildingNavMenu {
     }
 
     public void resize(int width, int height) {
-        mainTable.setBounds(0, height * 0.01f, width, height * 0.1f);
+        mainTable.setBounds(0, height * 0.02f, width, height * 0.108f);
         Actor[] tables = content.getChildren().toArray();
         for (Actor a1 : tables) {
             Table table = (Table) a1;
             for (Actor a2 : table.getChildren()) {
-                Image buildingImage = (Image) a2;
-                Vector2 textureSize = new Vector2(buildingImage.getWidth(), buildingImage.getHeight());
+                Vector2 textureSize = new Vector2(a2.getWidth(), a2.getHeight());
                 table.getCell(a2).width(
                     height * 0.1f * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1)
                 ).height(
