@@ -457,9 +457,9 @@ public class World {
     buildingManager.placeBuilding(
       new Building(
         selectedBuilding.texture, selectedBuilding.textureScale, selectedBuilding.textureOffset,
-        selectedBuilding.location.getNewPoint(), selectedBuilding.size.getNewPoint(),
-        selectedBuilding.flipped, selectedBuilding.type, selectedBuilding.name,
-        selectedBuilding.capacity, selectedBuilding.cost
+        selectedBuilding.reverseOffset, selectedBuilding.location.getNewPoint(),
+        selectedBuilding.size.getNewPoint(), selectedBuilding.flipped, selectedBuilding.type,
+        selectedBuilding.name, selectedBuilding.capacity, selectedBuilding.cost
       )
     );
     achievementTracker.buildingsPlacedCount.put(selectedBuilding.texture,

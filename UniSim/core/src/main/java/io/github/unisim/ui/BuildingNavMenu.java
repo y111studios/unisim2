@@ -37,6 +37,10 @@ public class BuildingNavMenu {
     private final Button recB = new TextButton("Recreation", skin, "toggle");
     private final Button learnB = new TextButton("Learning", skin, "toggle");
 
+    /**
+     * Creates a new BuildingNavMenu with empty tables and linked lists for each building type
+     * @param buildings all the buildings
+     */
     public BuildingNavMenu(ArrayList<Building> buildings) {
         for (BuildingType type : BuildingType.values()) {
             buildingTypes.put(type, new Table());
@@ -44,7 +48,11 @@ public class BuildingNavMenu {
         }
     }
 
+    /**
+     * Creates the layout of the building type menu
+     */
     public void createTable() {
+        //add the cost label below each building
         for (BuildingType type : buildingTypes.keySet()) {
             buildingTypes.get(type).row();
             while (!buildingCosts.get(type).isEmpty()) {
@@ -79,6 +87,8 @@ public class BuildingNavMenu {
         ChangeListener listener = new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                //if the button for the type is pressed then the buildings
+                //become visible
                 eatTable.setVisible(eatB.isChecked());
                 recTable.setVisible(recB.isChecked());
                 sleepTable.setVisible(sleepB.isChecked());
@@ -91,6 +101,7 @@ public class BuildingNavMenu {
         sleepB.addListener(listener);
         learnB.addListener(listener);
 
+        //limits the number of buttons that can be pressed at once to 1
         ButtonGroup<Button> tabs = new ButtonGroup<>();
         tabs.setMinCheckCount(1);
         tabs.setMaxCheckCount(1);
@@ -100,6 +111,12 @@ public class BuildingNavMenu {
         tabs.add(learnB);
     }
 
+    /**
+     * Adds the image and cost of a building to the cost and image hashmaps
+     * @param type the type of building
+     * @param buildingImage the image of the building
+     * @param cost the cost of the building
+     */
     public void addBuilding(BuildingType type, Image buildingImage, int cost) {
         Label l = new Label("$" + cost, skin);
         l.setAlignment(Align.center);
@@ -112,6 +129,10 @@ public class BuildingNavMenu {
         return mainTable;
     }
 
+    /**
+     * Changes the building type displayed based on the key pressed
+     * @param i the number of the key pressed
+     */
     public void changeBuildingType(int i) {
         switch (i) {
             case 1:
@@ -131,6 +152,11 @@ public class BuildingNavMenu {
         }
     }
 
+    /**
+     * Resizes the elements of the building type menu
+     * @param width the screen width
+     * @param height the screen height
+     */
     public void resize(int width, int height) {
         mainTable.setBounds(0, height * 0.02f, width, height * 0.108f);
         Actor[] tables = content.getChildren().toArray();
