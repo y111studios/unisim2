@@ -214,11 +214,20 @@ public class BuildingManager {
    * @param batch - the SpriteBatch to draw into
    */
   public void drawBuilding(Building building, SpriteBatch batch) {
-    Vector3 btmLeftPos = new Vector3(
-        (float) building.location.x + building.textureOffset.x,
-        (float) building.location.y + building.textureOffset.y,
-        0f
-    );
+    Vector3 btmLeftPos;
+    if (!building.flipped) {
+      btmLeftPos = new Vector3(
+          (float) building.location.x + building.textureOffset.x,
+          (float) building.location.y + building.textureOffset.y,
+          0f
+      );
+    } else {
+      btmLeftPos = new Vector3(
+          (float) building.location.x + building.reverseOffset.x,
+          (float) building.location.y + building.reverseOffset.y,
+          0f
+      );
+    }
     Vector3 btmRightPos = new Vector3(btmLeftPos).add(new Vector3(building.size.x - 1, 0f, 0f));
     btmLeftPos.mul(isoTransform);
     btmRightPos.mul(isoTransform);

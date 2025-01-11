@@ -16,6 +16,7 @@ public class Building {
   public Point size;
   public float textureScale;
   public Vector2 textureOffset;
+  public Vector2 reverseOffset;
   public boolean flipped;
   public BuildingType type;
   public String name;
@@ -28,6 +29,7 @@ public class Building {
    * @param texture - The image to draw over the space the building occupies
    * @param textureScale - The scale of the image compared to the source file
    * @param textureOffset - The offset of the texture in grid tiles
+   * @param reverseOffset - The offset when the image is flipped
    * @param location - The (x, y) co-ordinates of the building on the map
    * @param size - The size (width, height) of the building in map tiles
    * @param flipped - Whether to render a flipped variant of the building
@@ -36,12 +38,13 @@ public class Building {
    * @param capacity - The number of people the building can hold
    * @param cost - The cost of the building in currency
    */
-  public Building(Texture texture, float textureScale, Vector2 textureOffset, Point location,
+  public Building(Texture texture, float textureScale, Vector2 textureOffset, Vector2 reverseOffset, Point location,
       Point size, Boolean flipped, BuildingType type, String name, int capacity, int cost) {
     this.texture = texture;
     this.location = location;
     this.size = size;
     this.textureScale = textureScale;
+    this.reverseOffset = reverseOffset;
     this.textureOffset = textureOffset;
     this.flipped = flipped;
     this.type = type;
