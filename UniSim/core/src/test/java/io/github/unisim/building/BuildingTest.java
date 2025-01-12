@@ -8,7 +8,7 @@ public class BuildingTest {
     // Testing constructor
     @Test
     public void testConstructor() {
-        Building building = new Building(null, 0.0f, null, null, null, null, false, BuildingType.RECREATION, "", 0, 50);
+        Building building = new Building(null, 0.0f, null, null, null, null, false, BuildingType.RECREATION, "", 0, 50, 3);
         assertEquals(BuildingType.RECREATION, building.type);
         assertEquals(50, building.cost);
         assertEquals(false, building.flipped);

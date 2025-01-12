@@ -41,6 +41,9 @@ public class SatisfactionNeeds {
             BuildingType type = building.type;
             capacityByType.put(type, capacityByType.getOrDefault(type, 0) + building.capacity);
             qualityByType.put(type, qualityByType.getOrDefault(type, 0f) + building.quality);
+            if(building.location == null) {
+                continue;
+            }
             pointsByType.get(type).add(new Point(building.location.x + building.size.x / 2, building.location.y + building.size.y / 2));
         }
 
@@ -48,7 +51,11 @@ public class SatisfactionNeeds {
 
         for (BuildingType type : BuildingType.values()) {
             int listSize = pointsByType.get(type).size();
-            qualityByType.put(type, qualityByType.getOrDefault(type, 0f) / listSize / 3);
+            if (listSize > 0) {
+                qualityByType.put(type, qualityByType.get(type) / listSize / 3);
+            } else {
+                qualityByType.put(type, 1f);
+            }
 
             if (type == BuildingType.SLEEPING) {
                 continue;
