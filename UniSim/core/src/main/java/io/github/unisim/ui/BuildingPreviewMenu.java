@@ -3,11 +3,14 @@ package io.github.unisim.ui;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.unisim.GameState;
 import io.github.unisim.building.Building;
@@ -47,12 +50,21 @@ public class BuildingPreviewMenu {
         Pixmap pixmap = new Pixmap(100, 100, Pixmap.Format.RGB888);
         pixmap.setColor(184 /255.0f,165/255.0f, 243/255.0f, 1.0f);
         pixmap.fill();
+        Pixmap borderPixmap = new Pixmap(110, 110, Pixmap.Format.RGBA8888);
+        borderPixmap.setColor(Color.BLACK); // Set the border color
+        borderPixmap.fillRectangle(0, 0, 110, 110); // Fill the entire box
+        borderPixmap.setColor(184 / 255.0f, 165 / 255.0f, 243 / 255.0f, 1.0f); // Set inner background color
+        borderPixmap.fillRectangle(5, 5, 100, 100); // Fill the inner area to simulate a border
+        Drawable borderDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(borderPixmap)));
+        borderPixmap.dispose(); // Dispose after use to prevent memory leaks
+        previewTable.setBackground(borderDrawable);
+
         background = new Image(new Texture(pixmap));
 
         final float boxSize = Math.min(stage.getWidth(), stage.getHeight());
 
         nameLabel = new Label("", new Label.LabelStyle(GameState.iconTextFont, Color.BLACK));
-        previewTable.add(nameLabel).padLeft(2.5f).colspan(2).center().row();
+        previewTable.add(nameLabel).padLeft(2.5f).padTop(8f).colspan(2).center().row();
 
         previewImage = new Image();
         previewCell = previewTable.add(previewImage).left().padLeft(2.5f).width(boxSize * normalisedWidth / 2.1f).height(boxSize * normalisedHeight / 1.5f);
@@ -64,9 +76,9 @@ public class BuildingPreviewMenu {
         capacityLabel = new Label("", new Label.LabelStyle(GameState.iconTextFont, Color.BLACK));
         costLabel = new Label("", new Label.LabelStyle(GameState.iconTextFont, Color.BLACK));
 
-        rightColumn.add(sizeLabel).left().padLeft(2.5f).row();
-        rightColumn.add(capacityLabel).left().padLeft(2.5f).row();
-        rightColumn.add(costLabel).left().padLeft(2.5f).row();
+        rightColumn.add(sizeLabel).left().padLeft(2.3f).row();
+        rightColumn.add(capacityLabel).left().padLeft(2.3f).row();
+        rightColumn.add(costLabel).left().padLeft(2.3f).row();
 
         resizableComponents = new ResizableComponents.Builder(boxSize, boxSize)
                 .addActor(previewTable)
@@ -101,6 +113,13 @@ public class BuildingPreviewMenu {
             return;
         }
         preview = building;
+        BitmapFont font = new BitmapFont();
+        font.getData().setScale(0.8f);
+        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
+        nameLabel.setStyle(labelStyle);
+        sizeLabel.setStyle(labelStyle);
+        capacityLabel.setStyle(labelStyle);
+        costLabel.setStyle(labelStyle);
         previewImage.setDrawable(new TextureRegionDrawable(building.texture));
         nameLabel.setText(building.name);
         sizeLabel.setText("Size: " + building.size.x + "x" + building.size.y);
