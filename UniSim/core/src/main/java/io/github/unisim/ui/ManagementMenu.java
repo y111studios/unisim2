@@ -23,6 +23,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import io.github.unisim.GameState;
@@ -49,6 +52,8 @@ public class ManagementMenu {
     private Table buildingCapacityTable;
     private Map<BuildingType, Label> buildingCapacityLabels;
     private Map<BuildingType, ProgressBar> buildingCapacityBars;
+    private TextButton enrollStudentsButton;
+    private TextButton syncStudentsButton;
 
     private ResizableComponents resizableComponents;
 
@@ -120,6 +125,25 @@ public class ManagementMenu {
             }
         });
         table.add(studentEnrollmentField).padLeft(25);
+
+        enrollStudentsButton = new TextButton("Enroll", skin);
+        enrollStudentsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                submitToWorld();
+            }
+        });
+        table.add(enrollStudentsButton);
+        table.row();
+
+        syncStudentsButton = new TextButton("Enroll All", skin);
+        syncStudentsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                world.setStudentEnrollment(world.getBuildingCapacities(BuildingType.SLEEPING));
+            }
+        });
+        table.add(syncStudentsButton);
 
         ResizableComponents.Builder resizeBuilder = new ResizableComponents.Builder(stage);
         resizableComponents = resizeBuilder
