@@ -32,6 +32,7 @@ public class BuildingPreviewMenu {
     private final Label sizeLabel;
     private final Label capacityLabel;
     private final Label costLabel;
+    private final Label qualityLabel;
 
     private Building preview;
 
@@ -63,10 +64,12 @@ public class BuildingPreviewMenu {
         sizeLabel = new Label("", new Label.LabelStyle(GameState.iconTextFont, Color.BLACK));
         capacityLabel = new Label("", new Label.LabelStyle(GameState.iconTextFont, Color.BLACK));
         costLabel = new Label("", new Label.LabelStyle(GameState.iconTextFont, Color.BLACK));
+        qualityLabel = new Label("", new Label.LabelStyle(GameState.iconTextFont, Color.BLACK));
 
         rightColumn.add(sizeLabel).left().padLeft(2.5f).row();
         rightColumn.add(capacityLabel).left().padLeft(2.5f).row();
         rightColumn.add(costLabel).left().padLeft(2.5f).row();
+        rightColumn.add(qualityLabel).left().padLeft(2.5f).row();
 
         resizableComponents = new ResizableComponents.Builder(boxSize, boxSize)
                 .addActor(previewTable)
@@ -106,6 +109,7 @@ public class BuildingPreviewMenu {
         sizeLabel.setText("Size: " + building.size.x + "x" + building.size.y);
         capacityLabel.setText("Capacity: " + building.capacity);
         costLabel.setText("Cost: $" + building.cost);
+        qualityLabel.setText("Quality: " + building.quality);
     }
 
     /**
@@ -121,6 +125,7 @@ public class BuildingPreviewMenu {
         sizeLabel.setText("");
         capacityLabel.setText("");
         costLabel.setText("");
+        qualityLabel.setText("");
     }
 
     public void resize(int width, int height) {

@@ -19,7 +19,9 @@ public class SatisfactionNeeds {
      * <p>
      * The satisfaction is calculated as the minimum of the satisfaction of the students in housing,
      * catering, and teaching buildings. There is a special case where no student can be satisfied if
-     * there are no buildings of a certain type or if there are no students, which returns 0.
+     * there are no buildings of a certain type or if there are no students, which returns 0. A modifier
+     * is then applied based on the proximity to the nearest housing building (for non housing buildings).
+     * An additional modifier is applied to the final satisfaction based on the quality of the buildings.
      * </p>
      *
      * @param buildings The buildings in the game.
@@ -28,6 +30,7 @@ public class SatisfactionNeeds {
      */
     public float getSatisfaction(Iterable<Building> buildings, int totalStudents) {
         HashMap<BuildingType, Integer> capacityByType = new HashMap<>(4);
+        HashMap<BuildingType, Float> qualityByType = new HashMap<>(4);
         HashMap<BuildingType, List<Point>> pointsByType = new HashMap<>(4);
 
         for (BuildingType type : BuildingType.values()) {
@@ -36,18 +39,21 @@ public class SatisfactionNeeds {
 
         for (Building building : buildings) {
             BuildingType type = building.type;
-            int capacity = building.capacity;
-            capacityByType.put(type, capacityByType.getOrDefault(type, 0) + capacity);
+            capacityByType.put(type, capacityByType.getOrDefault(type, 0) + building.capacity);
+            qualityByType.put(type, qualityByType.getOrDefault(type, 0f) + building.quality);
             pointsByType.get(type).add(new Point(building.location.x + building.size.x / 2, building.location.y + building.size.y / 2));
         }
 
         HashMap<BuildingType, Float> proximityModifiers = new HashMap<>(3);
 
         for (BuildingType type : BuildingType.values()) {
+            int listSize = pointsByType.get(type).size();
+            qualityByType.put(type, qualityByType.getOrDefault(type, 0f) / listSize / 3);
+
             if (type == BuildingType.SLEEPING) {
                 continue;
             }
-            if (pointsByType.get(type).size() == 0) {
+            if (listSize == 0) {
                 proximityModifiers.put(type, 1f);
                 continue;
             }
@@ -61,7 +67,7 @@ public class SatisfactionNeeds {
                 }
                 sum += distance;
             }
-            proximityModifiers.put(type, 5 / sum * pointsByType.get(type).size());
+            proximityModifiers.put(type, 5 / sum * listSize);
         }
 
         float housingCapacity = capacityByType.getOrDefault(BuildingType.SLEEPING, 0);
@@ -74,10 +80,10 @@ public class SatisfactionNeeds {
             return 0;
         }
 
-        float housingSatisfaction = Math.min(1, housingCapacity / totalStudents);
-        float cateringSatisfaction = Math.min(1, cateringCapacity / totalStudents);
-        float teachingSatisfaction = Math.min(1, teachingCapacity / totalStudents);
-        float recreationSatisfaction = Math.min(1, recreationCapacity / totalStudents);
+        float housingSatisfaction = Math.min(1, housingCapacity / totalStudents) * qualityByType.get(BuildingType.SLEEPING);
+        float cateringSatisfaction = Math.min(1, cateringCapacity / totalStudents) * qualityByType.get(BuildingType.EATING);
+        float teachingSatisfaction = Math.min(1, teachingCapacity / totalStudents) * qualityByType.get(BuildingType.LEARNING);
+        float recreationSatisfaction = Math.min(1, recreationCapacity / totalStudents) * qualityByType.get(BuildingType.RECREATION);
 
         return Math.min(housingSatisfaction, Math.min(cateringSatisfaction, Math.min(teachingSatisfaction, recreationSatisfaction)));
     }

@@ -22,6 +22,7 @@ public class Building {
   public String name;
   public int capacity;
   public int cost;
+  public int quality;
 
   /**
    * Create a new building to display in the building menu and place in the world.
@@ -39,7 +40,7 @@ public class Building {
    * @param cost - The cost of the building in currency
    */
   public Building(Texture texture, float textureScale, Vector2 textureOffset, Vector2 reverseOffset, Point location,
-      Point size, Boolean flipped, BuildingType type, String name, int capacity, int cost) {
+      Point size, Boolean flipped, BuildingType type, String name, int capacity, int cost, int quality) {
     this.texture = texture;
     this.location = location;
     this.size = size;
@@ -51,5 +52,6 @@ public class Building {
     this.name = name;
     this.capacity = capacity;
     this.cost = cost;
+    this.quality = quality;
   }
 }
