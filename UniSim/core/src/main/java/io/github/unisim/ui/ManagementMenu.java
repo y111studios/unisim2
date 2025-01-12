@@ -3,11 +3,13 @@ package io.github.unisim.ui;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -17,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -24,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
 import io.github.unisim.GameState;
 import io.github.unisim.building.BuildingType;
 import io.github.unisim.utils.ResizableComponents;
@@ -31,15 +35,16 @@ import io.github.unisim.world.World;
 
 public class ManagementMenu {
     private Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-    private ShapeActor background;
+    private Texture backgroundTexture;
+    private Image background;
     private Table table;
 
     private World world;
 
     private static final float normalisedWidth = 0.35f;
-    private static final float normalisedHeight = 0.85f;
+    private static final float normalisedHeight = 0.75f;
     private static final float normalisedLeftPadding = (0.975f - normalisedWidth);
-    private static final float normalisedTopPadding = (1 - normalisedHeight) / 2;
+    private static final float normalisedTopPadding = (1 - normalisedHeight) * 0.65f;
     private static final float normalisedHiddenPadding = 1;
 
     private Label studentEnrollmentLabel;
@@ -55,7 +60,9 @@ public class ManagementMenu {
     public ManagementMenu(Stage stage, World world) {
         this.world = world;
 
-        background = new ShapeActor(GameState.UIPrimaryColour);
+        backgroundTexture = new Texture("ui/management_menu.png");
+        background = new Image(backgroundTexture);
+        
         table = new Table();
 
         buildingCapacityTable = new Table();
