@@ -3,6 +3,7 @@ package io.github.unisim.ui;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -17,11 +18,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
 import io.github.unisim.GameState;
 import io.github.unisim.building.BuildingType;
 import io.github.unisim.utils.ResizableComponents;
@@ -51,7 +53,7 @@ public class ManagementMenu {
     public ManagementMenu(Stage stage, World world) {
         this.world = world;
 
-        background = new ShapeActor(GameState.UIPrimaryColour);
+        background = new ShapeActor(GameState.UISecondaryColour);
         table = new Table();
 
         buildingCapacityTable = new Table();
