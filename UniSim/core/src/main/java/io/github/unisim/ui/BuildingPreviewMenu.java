@@ -45,7 +45,7 @@ public class BuildingPreviewMenu {
 
         // Create solid white background
         Pixmap pixmap = new Pixmap(100, 100, Pixmap.Format.RGB888);
-        pixmap.setColor(Color.WHITE);
+        pixmap.setColor(184 /255.0f,165/255.0f, 243/255.0f, 1.0f);
         pixmap.fill();
         background = new Image(new Texture(pixmap));
 
