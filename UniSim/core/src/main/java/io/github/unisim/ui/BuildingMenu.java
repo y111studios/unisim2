@@ -124,7 +124,7 @@ public class BuildingMenu {
         false,
         BuildingType.RECREATION,
         "Basketball Court",
-        10,
+        30,
         500,
         3
     ));
@@ -138,7 +138,7 @@ public class BuildingMenu {
         false,
         BuildingType.RECREATION,
         "Swimming pool",
-        5,
+        20,
         250,
         4
     ));
@@ -152,7 +152,7 @@ public class BuildingMenu {
         false,
         BuildingType.RECREATION,
         "Tennis Court",
-        10,
+        40,
         500,
         2
     ));
@@ -168,7 +168,7 @@ public class BuildingMenu {
         "Student Accomodation",
         100,
         1000,
-        1
+        3
     ));
     buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/sleep_white.png")),
@@ -182,7 +182,7 @@ public class BuildingMenu {
         "Student Accomodation",
         150,
         1500,
-        3
+        5
     ));
 
     navMenu = new BuildingNavMenu(buildings);

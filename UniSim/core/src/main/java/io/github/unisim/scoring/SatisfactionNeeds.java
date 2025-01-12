@@ -67,7 +67,7 @@ public class SatisfactionNeeds {
                 }
                 sum += distance;
             }
-            proximityModifiers.put(type, 5 / sum * listSize);
+            proximityModifiers.put(type, 20 / sum * listSize);
         }
 
         float housingCapacity = capacityByType.getOrDefault(BuildingType.SLEEPING, 0);
