@@ -509,7 +509,7 @@ public class World {
     initIsometricTransform();
     buildingManager = new BuildingManager(isoTransform);
     selectedBuilding = null;
-    moneyTracker = new MoneyTracker(500);
+    moneyTracker = new MoneyTracker(1000);
     achievementManager.clearSessionAchievements();
   }
 
