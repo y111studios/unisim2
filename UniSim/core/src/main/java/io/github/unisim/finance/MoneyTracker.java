@@ -15,6 +15,10 @@ public class MoneyTracker {
      * The amount of money to increase by every {@link #MONEY_UPDATE_INTERVAL} per student.
      */
     static final int MONEY_UPDATE_AMOUNT_PER_STUDENT = 2;
+    /**
+     * How many students are needed to increase the money by {@link #MONEY_UPDATE_AMOUNT_PER_STUDENT}.
+     */
+    static final int STUDENT_GROUPING = 12;
 
     int money;
     Instant lastUpdateTime;
@@ -73,11 +77,10 @@ public class MoneyTracker {
      */
     public void updateMoney(int studentCount) {
         studentCount = Math.max(studentCount, 0); // Clamp negative values to 0
-        int studentGrouping = 12;
         Instant currentTime = Instant.now();
         Duration timeSinceLastUpdate = Duration.between(lastUpdateTime, currentTime);
         if (timeSinceLastUpdate.compareTo(MONEY_UPDATE_INTERVAL) >= 0) {
-            addMoney(MONEY_UPDATE_AMOUNT_PER_STUDENT * studentCount / studentGrouping);
+            addMoney(MONEY_UPDATE_AMOUNT_PER_STUDENT * studentCount / STUDENT_GROUPING);
             lastUpdateTime = currentTime;
         }
     }
