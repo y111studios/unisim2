@@ -459,7 +459,7 @@ public class World {
         selectedBuilding.texture, selectedBuilding.textureScale, selectedBuilding.textureOffset,
         selectedBuilding.reverseOffset, selectedBuilding.location.getNewPoint(),
         selectedBuilding.size.getNewPoint(), selectedBuilding.flipped, selectedBuilding.type,
-        selectedBuilding.name, selectedBuilding.capacity, selectedBuilding.cost
+        selectedBuilding.name, selectedBuilding.capacity, selectedBuilding.cost, selectedBuilding.quality
       )
     );
     achievementTracker.buildingsPlacedCount.put(selectedBuilding.texture,
