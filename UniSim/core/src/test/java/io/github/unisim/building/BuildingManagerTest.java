@@ -56,7 +56,7 @@ public class BuildingManagerTest {
         Matrix4 isoTransform = new Matrix4();
         buildingManager = new BuildingManager(isoTransform);
         batch = new SpriteBatch(1000, mockShader);
-        building = new Building(null, 0.0f, null, null, null, null, false, BuildingType.RECREATION, "", 0, 50);
+        building = new Building(null, 0.0f, null, null, null, null, false, BuildingType.RECREATION, "", 0, 50, 3);
     }
 
     private Object getPrivateField(Object object, String fieldName) throws Exception {
@@ -76,7 +76,7 @@ public class BuildingManagerTest {
     // Testing setPreviewBuilding
     @Test
     public void testSetPreviewBuilding() {
-        Building previewBuilding = new Building(null, 0.0f, null, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50);
+        Building previewBuilding = new Building(null, 0.0f, null, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50, 3);
         buildingManager.setPreviewBuilding(previewBuilding);
         assertNotNull(buildingManager.getPreviewBuilding());
         assertEquals(previewBuilding, buildingManager.getPreviewBuilding());
@@ -91,16 +91,16 @@ public class BuildingManagerTest {
     // Testing placeBuilding
     @Test
     public void testPlaceBuilding() {
-        Building building = new Building(null, 0.0f, null, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50);
+        Building building = new Building(null, 0.0f, null, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50, 3);
         buildingManager.placeBuilding(building);
         assertNotNull(buildingManager.getBuildings());
     }
 
     @Test
     public void testPlaceBuildingOrder() {
-        Building building1 = new Building(null, 0.0f, null, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50);
-        Building building2 = new Building(null, 0.0f, null, null, new Point(1,1), new Point(2,2), false, BuildingType.SLEEPING, "", 0, 50);
-        Building building3 = new Building(null, 0.0f, null, null, new Point(2,1), new Point(1,1), false, BuildingType.EATING, "", 0, 50);
+        Building building1 = new Building(null, 0.0f, null, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50, 3);
+        Building building2 = new Building(null, 0.0f, null, null, new Point(1,1), new Point(2,2), false, BuildingType.SLEEPING, "", 0, 50, 3);
+        Building building3 = new Building(null, 0.0f, null, null, new Point(2,1), new Point(1,1), false, BuildingType.EATING, "", 0, 50, 3);
         buildingManager.placeBuilding(building1);
         int count1 = buildingManager.placeBuilding(building2);
         assertEquals(1, count1);
@@ -111,7 +111,7 @@ public class BuildingManagerTest {
     // Testing removeBuilding
     @Test
     public void testRemoveBuilding() {
-        Building building = new Building(null, 0.0f, null, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50);
+        Building building = new Building(null, 0.0f, null, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 0, 50, 3);
         buildingManager.placeBuilding(building);
         boolean removed = buildingManager.removeBuilding(building);
         assertTrue(removed);
@@ -129,7 +129,7 @@ public class BuildingManagerTest {
     @Test
     public void testGetBuildingCount() {
         buildingType = BuildingType.SLEEPING;
-        Building building = new Building(null, 0.0f, null, null, new Point(1,1), new Point(1,1), false, BuildingType.SLEEPING, "", 0, 50);
+        Building building = new Building(null, 0.0f, null, null, new Point(1,1), new Point(1,1), false, BuildingType.SLEEPING, "", 0, 50, 3);
         assertEquals(0, buildingManager.getBuildingCount(buildingType));
         buildingManager.placeBuilding(building);
         assertEquals(1, buildingManager.getBuildingCount(buildingType));
@@ -166,7 +166,7 @@ public class BuildingManagerTest {
     // Testing getBuildingAt
     @Test
     public void testGetBuildingAt() {
-        Building building = new Building(null, 0.0f, null, null, new Point(1,1), new Point(3,3), false, BuildingType.RECREATION, "", 0, 50);
+        Building building = new Building(null, 0.0f, null, null, new Point(1,1), new Point(3,3), false, BuildingType.RECREATION, "", 0, 50, 3);
         buildingManager.placeBuilding(building);
         Building buildingAt = buildingManager.getBuildingAt(new Point(2,2));
         assertEquals(building, buildingAt);
@@ -181,9 +181,9 @@ public class BuildingManagerTest {
     // Testing getBuildingCapacities
     @Test
     public void testGetBuildingCapacities() {
-        Building building1 = new Building(null, 0.0f, null, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 50, 0);
-        Building building2 = new Building(null, 0.0f, null, null, new Point(1,1), new Point(2,2), false, BuildingType.SLEEPING, "", 50, 0);
-        Building building3 = new Building(null, 0.0f, null, null, new Point(2,1), new Point(1,1), false, BuildingType.EATING, "", 50, 0);
+        Building building1 = new Building(null, 0.0f, null, null, new Point(1,1), new Point(1,1), false, BuildingType.RECREATION, "", 50, 0, 3);
+        Building building2 = new Building(null, 0.0f, null, null, new Point(1,1), new Point(2,2), false, BuildingType.SLEEPING, "", 50, 0, 3);
+        Building building3 = new Building(null, 0.0f, null, null, new Point(2,1), new Point(1,1), false, BuildingType.EATING, "", 50, 0, 3);
         buildingManager.placeBuilding(building1);
         buildingManager.placeBuilding(building2);
         buildingManager.placeBuilding(building3);
@@ -240,7 +240,7 @@ public class BuildingManagerTest {
 
         @Test
         void testBuildingOverlap() {
-            Building building = new Building(null, 0.0f, null, null, new Point(1,1), new Point(2,3), false, BuildingType.RECREATION, "", 50, 0);
+            Building building = new Building(null, 0.0f, null, null, new Point(1,1), new Point(2,3), false, BuildingType.RECREATION, "", 50, 0, 3);
             buildingManager.placeBuilding(building);
             assertFalse(buildingManager.isBuildable(new Point(0, 0), new Point(1, 1), layer, buildableIds));
             assertFalse(buildingManager.isBuildable(new Point(1, 1), new Point(2, 2), layer, buildableIds));
@@ -249,7 +249,7 @@ public class BuildingManagerTest {
 
         @Test
         void testPreviewBuildingOverlap() {
-            Building building = new Building(null, 0.0f, null, null, new Point(1,1), new Point(2,3), false, BuildingType.RECREATION, "", 50, 0);
+            Building building = new Building(null, 0.0f, null, null, new Point(1,1), new Point(2,3), false, BuildingType.RECREATION, "", 50, 0, 3);
             buildingManager.setPreviewBuilding(building);
             assertTrue(buildingManager.isBuildable(new Point(0, 0), new Point(1, 1), layer, buildableIds));
             assertTrue(buildingManager.isBuildable(new Point(1, 1), new Point(2, 2), layer, buildableIds));

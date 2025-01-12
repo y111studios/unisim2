@@ -26,9 +26,10 @@ public class SatisfactionTrackerTest {
     public void setUp() {
         satisfactiontracker = new SatisfactionTracker();
         buildings = new ArrayList<>();
-        buildings.add(new Building(null, 0.0f, null, null, null, null, false, BuildingType.SLEEPING, "", 100, 0));
-        buildings.add(new Building(null, 0.0f, null, null, null, null, false, BuildingType.LEARNING, "", 100, 0));
-        buildings.add(new Building(null, 0.0f, null, null, null, null, false, BuildingType.EATING, "", 100, 0));
+        buildings.add(new Building(null, 0.0f, null, null, null, null, false, BuildingType.SLEEPING, "", 100, 0, 3));
+        buildings.add(new Building(null, 0.0f, null, null, null, null, false, BuildingType.LEARNING, "", 100, 0, 3));
+        buildings.add(new Building(null, 0.0f, null, null, null, null, false, BuildingType.EATING, "", 100, 0, 3));
+        buildings.add(new Building(null, 0.0f, null, null, null, null, false, BuildingType.RECREATION, "", 100, 0, 3));
     }
 
     // Testing initial satisfaction/constructor
@@ -53,7 +54,7 @@ public class SatisfactionTrackerTest {
 
     @Test
     public void testUpdateSatisfactionWithPreviewBuilding() {
-        Building previewBuilding = new Building(null, 0.0f, null, null, null, null, false, BuildingType.SLEEPING, "", 0, 100);
+        Building previewBuilding = new Building(null, 0.0f, null, null, null, null, false, BuildingType.SLEEPING, "", 0, 100, 3);
         buildings.add(previewBuilding);
         satisfactiontracker.updateSatisfaction(buildings, previewBuilding, 100);
         assertEquals(100, satisfactiontracker.getSatisfaction());
