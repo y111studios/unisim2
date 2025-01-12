@@ -58,7 +58,7 @@ div > a {
 
 .diagrams {
     width: 90vw;
-    height: 60vh;
+    height: 65vh;
     background-color: var(--background-secondary);
     margin-bottom: 5vh;
     margin-left: 5vw;
@@ -73,7 +73,7 @@ div > a {
 
 .oversize-diagrams {
     width: 90vw;
-    height: 80vh;
+    height: 85vh;
     background-color: var(--background-secondary);
     margin-bottom: 5vh;
     margin-left: 5vw;
