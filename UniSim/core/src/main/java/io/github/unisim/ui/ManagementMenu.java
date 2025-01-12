@@ -88,6 +88,7 @@ public class ManagementMenu {
         leftColumnTable.row().padTop(10);
         leftColumnTable.add(buildingCapacityBars.get(BuildingType.EATING));
         leftColumnTable.add(buildingCapacityLabels.get(BuildingType.EATING));
+        leftColumnTable.row().padTop(10);
         // Initialise the right column
         rightColumnTable.add(new Label("Teaching Capacity", skin)).left().colspan(2).center();
         rightColumnTable.row().padTop(10);
@@ -98,12 +99,21 @@ public class ManagementMenu {
         rightColumnTable.row().padTop(10);
         rightColumnTable.add(buildingCapacityBars.get(BuildingType.RECREATION));
         rightColumnTable.add(buildingCapacityLabels.get(BuildingType.RECREATION));
-
-        table.add(buildingCapacityTable).colspan(2).expandX().row();
-        table.row().padTop(10);
+        rightColumnTable.row().padTop(10);
 
         studentEnrollmentLabel = new Label("Student Enrollment", skin);
-        table.add(studentEnrollmentLabel);
+        leftColumnTable.add(studentEnrollmentLabel);
+        leftColumnTable.row().padTop(10);
+        syncStudentsButton = new TextButton("Enroll All", skin);
+        syncStudentsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                studentEnrollmentField.setText(Integer.toString(world.getBuildingCapacities(BuildingType.SLEEPING)));
+                submitToWorld();
+            }
+        });
+        leftColumnTable.add(syncStudentsButton);
+
         studentEnrollmentField = new TextField(Integer.toString(world.numberOfStudents), skin);
         studentEnrollmentField.setMessageText("Student Number");
         studentEnrollmentField.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
@@ -124,8 +134,8 @@ public class ManagementMenu {
                 return false;
             }
         });
-        table.add(studentEnrollmentField).padLeft(25);
-
+        rightColumnTable.add(studentEnrollmentField);
+        rightColumnTable.row().padTop(10);
         enrollStudentsButton = new TextButton("Enroll", skin);
         enrollStudentsButton.addListener(new ClickListener() {
             @Override
@@ -133,17 +143,10 @@ public class ManagementMenu {
                 submitToWorld();
             }
         });
-        table.add(enrollStudentsButton);
-        table.row();
+        rightColumnTable.add(enrollStudentsButton);
 
-        syncStudentsButton = new TextButton("Enroll All", skin);
-        syncStudentsButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                world.setStudentEnrollment(world.getBuildingCapacities(BuildingType.SLEEPING));
-            }
-        });
-        table.add(syncStudentsButton);
+        table.add(buildingCapacityTable).colspan(2).expandX().row();
+        table.row().padTop(10);
 
         ResizableComponents.Builder resizeBuilder = new ResizableComponents.Builder(stage);
         resizableComponents = resizeBuilder
