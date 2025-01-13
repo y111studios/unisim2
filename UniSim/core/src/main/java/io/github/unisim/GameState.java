@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import io.github.unisim.ui.GameScreen;
 import io.github.unisim.ui.PauseScreen;
-import io.github.unisim.ui.SettingsScreen;
+import io.github.unisim.ui.TutorialScreen;
 import io.github.unisim.ui.StartMenuScreen;
 import io.github.unisim.ui.ControlsScreen;
 
@@ -26,7 +26,7 @@ public class GameState {
   public static final InputProcessor fullscreenInputProcessor = new FullscreenInputProcessor();
   public static final Screen gameScreen = new GameScreen();
   public static final Screen startScreen = new StartMenuScreen();
-  public static final Screen settingScreen = new SettingsScreen();
+  public static final Screen tutorialScreen = new TutorialScreen();
   public static final Screen controlsScreen = new ControlsScreen(StartMenuScreen.achievementTracker);
   public static final Screen pauseScreen = new PauseScreen();
   public static boolean gameOver = false;

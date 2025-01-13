@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -22,6 +23,7 @@ public class StartMenuScreen implements Screen {
   private Stage stage;
   private Table table;
   private Skin skin;
+  private Label titleLabel;
   private TextButton playButton;
   private TextButton settingsButton;
   private TextButton controlsButton;
@@ -36,6 +38,10 @@ public class StartMenuScreen implements Screen {
     table = new Table();
     skin = GameState.defaultSkin;
 
+    // Title
+    titleLabel = new Label("UniSim", skin);
+    titleLabel.setFontScale(2f);
+
     // Play button
     playButton = new TextButton("Play", skin);
     playButton.addListener(new ClickListener() {
@@ -47,12 +53,12 @@ public class StartMenuScreen implements Screen {
     });
 
     // Settings button
-    settingsButton = new TextButton("Settings", skin);
+    settingsButton = new TextButton("How To Play", skin);
     settingsButton.addListener(new ClickListener() {
       @Override
       public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-        // Switch to the settings screen
-        GameState.currentScreen = GameState.settingScreen;
+        // Switch to the tutorial screen
+        GameState.currentScreen = GameState.tutorialScreen;
       }
     });
 
@@ -71,6 +77,7 @@ public class StartMenuScreen implements Screen {
     table.setFillParent(true);
     table.center().center();
     table.pad(100, 100, 100, 100);
+    table.add(titleLabel).center().padBottom(30).row();
     table.add(playButton).center().width(250).height(100).padBottom(10);
     table.row();
     table.add(settingsButton).center().width(250).height(67).padBottom(10);
