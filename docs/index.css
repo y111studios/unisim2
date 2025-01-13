@@ -37,9 +37,11 @@ body {
 }
 
 .header-item {
-    display: flexbox;
-    margin-left: 7vw;
+    display: flex;
+    align-items: center;
+    padding: 0px 35px;
     color: var(--text);
+    border-radius: 25px;
 }
 
 .header-item > p > a {
@@ -63,18 +65,22 @@ body {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: var(--background);
-    width: 10vw;
-    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 10px;
+    width: 15vw;
 }
 
 .dropdown-content > a {
     display: block;
-    text-decoration: none;
+    padding: 10px 35px;
+    margin: 5px 0;
+    background-color: var(--background);
     color: var(--text);
-    border-top: 1px solid var(--text);
-    border-bottom: 1px solid var(--text);
-    padding: 1vh;
+    border-radius: 10px;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.s ease;
 }
 
 .dropdown-content > a:hover {
@@ -85,6 +91,8 @@ body {
 }
 
 #gameplay-image {
-    width: 70vw;
-    padding-left: 15vw;
+    width: 75vw;
+    height: 85vh;
+    padding-left: 10vw;
+    align-items: center;
 }

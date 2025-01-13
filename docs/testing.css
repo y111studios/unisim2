@@ -19,12 +19,12 @@ div > a {
     color: var(--text);
 }
 
-#title {
+.title {
     text-align: center;
     color: var(--text);
 }
 
-.weekly-plan {
+.diagrams {
     width: 90vw;
     height: 50vh;
     background-color: var(--background-secondary);
@@ -33,13 +33,13 @@ div > a {
     border: 2px solid var(--background-tertiary);
 }
 
-.weekly-plan > .title {
+.diagrams > .title {
     color: var(--text);
     text-align: center;
     border-bottom: 1px solid var(--background-tertiary);
 }
 
-#back {
+#back, #link, #dl {
     display: inline-block;
     padding: 10px 20px;
     text-decoration: none;
@@ -52,6 +52,36 @@ div > a {
     transition: background-color 0.3s ease;
 }
 
-#back:hover {
+#back:hover, #link.hover, dl:hover {
     background-color: var(--secondary);
+}
+
+.diagrams {
+    width: 90vw;
+    height: 65vh;
+    background-color: var(--background-secondary);
+    margin-bottom: 5vh;
+    margin-left: 5vw;
+    border: 2px solid var(--background-tertiary);
+}
+
+.diagrams > .subtitle {
+    color: var(--text);
+    text-align: center;
+    border-bottom: 1px solid var(--background-tertiary);
+}
+
+.oversize-diagrams {
+    width: 90vw;
+    height: 85vh;
+    background-color: var(--background-secondary);
+    margin-bottom: 5vh;
+    margin-left: 5vw;
+    border: 2px solid var(--background-tertiary);
+}
+
+.oversize-diagrams > .subtitle {
+    color: var(--text);
+    text-align: center;
+    border-bottom: 1px solid var(--background-tertiary);
 }
