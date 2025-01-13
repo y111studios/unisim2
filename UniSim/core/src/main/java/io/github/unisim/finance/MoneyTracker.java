@@ -14,7 +14,7 @@ public class MoneyTracker {
     /**
      * The amount of money to increase by every {@link #MONEY_UPDATE_INTERVAL} per student.
      */
-    static final int MONEY_UPDATE_AMOUNT_PER_STUDENT = 2;
+    static final int MONEY_UPDATE_AMOUNT_PER_STUDENT = 5;
     /**
      * How many students are needed to increase the money by {@link #MONEY_UPDATE_AMOUNT_PER_STUDENT}.
      */
