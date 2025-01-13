@@ -15,7 +15,7 @@ public enum DefinedAchievements {
         true),
     Capitalist("Capitalist", "Earn 10,000 money", ScoreModifierTemplate.ADD, 100f,
         false),
-    LoveUni("I  Uni", "Satisfaction remained above 75% for 3 minutes", ScoreModifierTemplate.MUL, 1.1f,
+    LoveUni("I Love Uni", "Satisfaction remained above 75% for 3 minutes", ScoreModifierTemplate.MUL, 1.1f,
         false),
     Minimalist("Minimalist", "Place 5 buildings or less", ScoreModifierTemplate.ADD, 10f,
         true),
