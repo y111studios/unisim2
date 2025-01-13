@@ -1,0 +1,98 @@
+:root {
+    --background: #121212;
+    --background-secondary: #1F1B24;
+    --primary: #42a5f5;
+    --secondary: #ab47bc;
+    --text: #fff;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-secondary);
+}
+
+#title-container {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 5vh;
+    background-color: var(--background);
+    color: var(--text);
+}
+
+#title {
+    display: flexbox;
+}
+
+#header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    height: 5vh;
+    background-color: var(--background);
+}
+
+.header-item {
+    display: flex;
+    align-items: center;
+    padding: 0px 35px;
+    color: var(--text);
+    border-radius: 25px;
+}
+
+.header-item > p > a {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.header-item:hover {
+    background-color: var(--primary);
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 10px;
+    width: 15vw;
+}
+
+.dropdown-content > a {
+    display: block;
+    padding: 10px 35px;
+    margin: 5px 0;
+    background-color: var(--background);
+    color: var(--text);
+    border-radius: 10px;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.s ease;
+}
+
+.dropdown-content > a:hover {
+    background-color: var(--primary);
+}
+.dropdown-content > a:last-child, a:first-child {
+    border: none;
+}
+
+#gameplay-image {
+    width: 75vw;
+    height: 85vh;
+    padding-left: 10vw;
+    align-items: center;
+}
